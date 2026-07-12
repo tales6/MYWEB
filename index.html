@@ -128,7 +128,7 @@ body.dark .vol-slider input[type="range"]::-webkit-slider-thumb { background: va
   #splash {
     position: fixed; inset: 0; z-index: 9999;
     display: flex; align-items: center; justify-content: center;
-    background: url(bg.png) center/cover no-repeat fixed;
+    background: url(assets/bg.png) center/cover no-repeat fixed;
     transition: opacity 1s ease, visibility 1s ease;
   }
   #splash::before {
@@ -222,7 +222,7 @@ body.dark .vol-slider input[type="range"]::-webkit-slider-thumb { background: va
     min-height: 100vh;
     display: flex; align-items: center; justify-content: center;
     position: relative;
-    background: url(bg.png) center/cover no-repeat fixed;
+    background: url(assets/bg.png) center/cover no-repeat fixed;
     padding: 100px 24px 80px;
   }
   /* overlay removed for cleaner look */
@@ -979,7 +979,7 @@ body.dark .bmb-time { color: #8899aa; }
     <!-- Left: avatar + name + badge -->
     <div class="hero-left">
       <div class="hero-avatar-wrap reveal">
-        <img src="avatar.jpg" alt="tales avatar" />
+        <img src="assets/avatar.jpg" alt="tales avatar" />
       </div>
       <h1 class="reveal reveal-delay-1">tales</h1>
       <p class="tagline reveal reveal-delay-2">嵌入式开发 · 万物皆可嵌</p>
@@ -1047,7 +1047,7 @@ body.dark .bmb-time { color: #8899aa; }
     <div class="project-grid">
 
       <!-- Project 1: FreeRTOS Weather -->
-      <div class="project-card reveal reveal-delay-1" onclick='return loadPage("freertos-weather-docs.html")'>
+      <div class="project-card reveal reveal-delay-1" onclick='return loadPage("projects/freertos-weather/docs.html")'>
         <div class="card-header">
           <span class="icon">🌤️</span>
           <h3>FreeRTOS 物联网天气站</h3>
@@ -1061,7 +1061,7 @@ body.dark .bmb-time { color: #8899aa; }
       </div>
 
       <!-- Project 2: Smart Watering -->
-      <div class="project-card reveal reveal-delay-2" onclick='return loadPage("stm32-smart-watering.html")'>
+      <div class="project-card reveal reveal-delay-2" onclick='return loadPage("projects/stm32-smart-watering/docs.html")'>
         <div class="card-header">
           <span class="icon">🌱</span>
           <h3>STM32 智能浇花系统</h3>
@@ -1238,11 +1238,11 @@ body.dark .bmb-time { color: #8899aa; }
   // ===== Music Player =====
   (function() {
     const tracks = [
-      { src: 'music/track01.flac', name: 'Undertale', artist: 'Toby Fox' },
-      { src: 'music/track02.mp3', name: 'making an entrance', artist: 'nobody' },
-      { src: 'music/KAII - __.mp3', name: '__', artist: 'KAII' },
-      { src: 'music/\u5c71\u5ca1\u6643 - Promise.mp3', name: 'Promise', artist: '\u5c71\u5ca1\u6643' },
-      { src: 'music/Luke Pickman - Mystery of Love.mp3', name: 'Mystery of Love', artist: 'Luke Pickman' },
+      { src: 'assets/music/track01.flac', name: 'Undertale', artist: 'Toby Fox' },
+      { src: 'assets/music/track02.mp3', name: 'making an entrance', artist: 'nobody' },
+      { src: 'assets/music/KAII - __.mp3', name: '__', artist: 'KAII' },
+      { src: 'assets/music/\u5c71\u5ca1\u6643 - Promise.mp3', name: 'Promise', artist: '\u5c71\u5ca1\u6643' },
+      { src: 'assets/music/Luke Pickman - Mystery of Love.mp3', name: 'Mystery of Love', artist: 'Luke Pickman' },
     ];
 
     let currentTrack = 0;
