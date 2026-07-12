@@ -69,14 +69,13 @@
 
   body.dark { --text: #e8eef5; --text-sec: #b0c4d8; --text-light: #8899aa; }
   body.dark { background: var(--bg); }
-  body.dark::before { content: ""; position: fixed; inset: 0; background: rgba(0,0,0,0.15); pointer-events: none; z-index: 0; }
+  body.dark #hero::before { content: ""; position: absolute; inset: 0; background: rgba(0,0,0,0.5); pointer-events: none; z-index: 0; }
+  body.dark #splash::before { background: rgba(10,10,12,0.65); }
   body.dark .music-player .ctrl-btn { color: #d0dce8; }
   body.dark .music-player .ctrl-btn:hover { color: #fff; }
   body.dark .nav-links a, body.dark .nav-links button { color: #c8d4e0; }
   body.dark .nav-links a:hover { color: #fff; }
-  body.dark .mini-music-btn { color: #c8d4e0; }
-  body.dark .mini-music-btn:hover { color: #fff; }
-  body.dark .mini-track-name { color: #8899aa; }
+
   body.dark .track-select-btn { background: rgba(30,40,55,0.8); color: #c8d4e0; border-color: rgba(255,255,255,0.08); }
   body.dark .track-select-btn:hover { background: rgba(40,55,75,0.9); }
   body.dark .track-list { background: rgba(20,25,35,0.95); border-color: rgba(255,255,255,0.06); }
@@ -88,6 +87,14 @@
   body.dark #playBtn, body.dark .play-main { background: var(--accent); color: #fff; }
   body.dark .ctrl-btn, body.dark .controls button { color: #c8d4e0; }
   body.dark .vol-btn { color: #c8d4e0; }
+body.dark .music-player .track-info .meta .artist { color: #90a0b0; }
+body.dark .music-player .controls button { background: rgba(40,55,75,0.4); color: #d0dce8; }
+body.dark .music-player .controls button:hover { background: rgba(60,80,110,0.5); }
+body.dark .music-player .controls .play-main { background: var(--accent); color: #fff; }
+body.dark .music-player .controls .progress-area .time { color: #90a0b0; }
+body.dark .vol-slider { background: rgba(20,28,40,0.95); border-color: rgba(255,255,255,0.06); }
+body.dark .vol-slider input[type="range"] { background: rgba(60,80,110,0.3); }
+body.dark .vol-slider input[type="range"]::-webkit-slider-thumb { background: var(--accent); }
   body.dark .clock-time { color: #e0e8f0; }
   body.dark .clock-date { color: #8899aa; }
   body.dark .hero-badges a, body.dark .hero-badges span { border-color: rgba(255,255,255,0.08); color: #c8d4e0; }
@@ -96,6 +103,7 @@
   body.dark .game-card:hover .play-tag { background: var(--accent-dark); color: #fff; }
   body.dark .project-card { background: rgba(25,30,40,0.6); }
   body.dark .tagline { color: #8899aa; }
+  body.dark .badge-gh, body.dark .badge-qq { background: rgba(0,0,0,0.4); color: #e0e8f4; }
 
 
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -745,6 +753,9 @@
 }
 .sticky-nav a { padding: 4px 14px; border-radius: 16px; font-size: 0.8rem; font-weight: 500; color: var(--text-secondary); transition: all 0.3s; }
 .sticky-nav a:hover { background: rgba(107,143,113,0.1); color: var(--accent-dark); }
+body.dark .sticky-nav { background: rgba(12,12,16,0.9); border-color: rgba(255,255,255,0.04); }
+body.dark .sticky-nav a { color: #b0c4d8; }
+body.dark .sticky-nav a:hover { color: #fff; background: rgba(40,55,75,0.3); }
 
 .content-wrap { max-width: 800px; margin: 0 auto; padding: 32px 24px 60px; position: relative; overflow: visible; }
 
@@ -771,8 +782,8 @@
 
 section.doc-section {
   background: var(--card-bg); backdrop-filter: blur(12px);
-  border: 0.5px solid var(--border); border-radius: 16px;
-  padding: 28px 30px; margin-bottom: 24px;
+  border: 0.5px solid var(--border); border-radius: 14px;
+  padding: 20px 24px; margin-bottom: 16px;
 }
 section.doc-section h2 { font-size: 1.25rem; font-weight: 700; color: var(--text); border-left: 3px solid var(--accent-light); padding-left: 14px; margin-bottom: 18px; }
 section.doc-section h3 { font-size: 1.05rem; font-weight: 600; color: var(--accent-dark); margin: 20px 0 10px; }
@@ -809,18 +820,74 @@ tbody tr:hover { background: rgba(107,143,113,.06); }
 .decl { background: rgba(255,255,255,.4); border: 1px solid rgba(107,143,113,.2); border-radius: 6px; padding: 10px 14px; font-family: Consolas,monospace; font-size: .85rem; margin: 10px 0 16px; white-space: pre-wrap; }
 
 
-/* ===== Mini Music Controller ===== */
-.nav-music { display: flex; align-items: center; gap: 4px; margin-left: 8px; }
-.mini-music-btn {
+/* ===== Bottom Music Bar ===== */
+.bmb-wrap {
+  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+  z-index: 200;
+  background: rgba(255,255,255,0.75);
+  backdrop-filter: blur(28px) saturate(1.6);
+  -webkit-backdrop-filter: blur(28px) saturate(1.6);
+  border: 0.5px solid rgba(0,0,0,0.06);
+  border-radius: 50px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.04);
+  padding: 10px 28px;
+  transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s;
+  opacity: 0; transform: translateX(-50%) translateY(24px);
+  pointer-events: none;
+}
+.bmb-wrap.show {
+  opacity: 1; transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+.bmb-wrap:hover {
+  padding: 12px 32px;
+  box-shadow: 0 8px 36px rgba(0,0,0,0.08);
+}
+.bmb-inner {
+  display: flex; align-items: center; gap: 20px;
+}
+.bmb-left {
+  display: flex; align-items: center; gap: 10px;
+}
+.bmb-icon { font-size: 1.1rem; }
+.bmb-name {
+  font-size: 0.85rem; font-weight: 500;
+  color: var(--text);
+  max-width: 130px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.bmb-right {
+  display: flex; align-items: center; gap: 6px;
+}
+.bmb-btn {
   background: none; border: none; cursor: pointer;
-  font-size: 0.85rem; padding: 2px 4px; line-height: 1;
-  color: var(--text-sec); transition: color 0.3s;
+  width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.9rem; color: var(--text-sec);
+  transition: all 0.2s;
 }
-.mini-music-btn:hover { color: var(--accent); }
-.mini-track-name {
-  font-size: 0.68rem; color: var(--text-light);
-  max-width: 80px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+.bmb-btn:hover { background: rgba(0,0,0,0.06); color: var(--accent-dark); }
+.bmb-btn.bmb-play {
+  width: 36px; height: 36px;
+  background: var(--accent-dark); color: #fff;
+  font-size: 1rem;
 }
+.bmb-btn.bmb-play:hover { background: var(--accent); }
+.bmb-time {
+  font-size: 0.7rem; color: var(--text-light);
+  font-variant-numeric: tabular-nums;
+  min-width: 65px; text-align: right;
+  margin-left: 4px;
+}
+body.dark .bmb-wrap {
+  background: rgba(20,25,35,0.75);
+  border-color: rgba(255,255,255,0.06);
+}
+body.dark .bmb-btn { color: #b0c4d8; }
+body.dark .bmb-btn:hover { background: rgba(40,55,75,0.4); color: #fff; }
+body.dark .bmb-btn.bmb-play { background: var(--accent); color: #fff; }
+body.dark .bmb-btn.bmb-play:hover { background: var(--accent-light); }
+body.dark .bmb-name { color: #e0e8f4; }
+body.dark .bmb-time { color: #8899aa; }
 @media(max-width:900px){
   .side-nav{position:static;width:100%;flex-direction:row;flex-wrap:wrap;gap:6px;padding:10px 16px;background:var(--bg-side);border:.5px solid var(--border);border-radius:14px;align-items:center;justify-content:center;margin-bottom:24px}
   .side-nav a{width:auto;height:auto;border-radius:100px;padding:4px 14px;font-size:.72rem;font-weight:500;color:var(--text-secondary);background:transparent;border:.5px solid var(--border)}
@@ -1062,6 +1129,22 @@ tbody tr:hover { background: rgba(107,143,113,.06); }
 <footer>
   <p>&copy; 2026 <a href="https://github.com/tales6" target="_blank">tales</a> · 用代码创造物理世界</p>
 </footer>
+
+<!-- ===== Bottom Music Bar ===== -->
+<div class="bmb-wrap" id="bottomMusicBar">
+  <div class="bmb-inner">
+    <div class="bmb-left">
+      <span class="bmb-icon">🎵</span>
+      <span class="bmb-name" id="bmbTrackName">未播放</span>
+    </div>
+    <div class="bmb-right">
+      <button class="bmb-btn" id="bmbPrevBtn" title="上一首">⏮</button>
+      <button class="bmb-btn bmb-play" id="bmbPlayBtn" title="播放/暂停">▶</button>
+      <button class="bmb-btn" id="bmbNextBtn" title="下一首">⏭</button>
+      <span class="bmb-time" id="bmbTime">0:00 / 0:00</span>
+    </div>
+  </div>
+</div>
 
 <script>
   // ===== Theme Toggle =====
@@ -1349,26 +1432,37 @@ tbody tr:hover { background: rgba(107,143,113,.06); }
     window.__musicNext = nextTrack;
     window.__musicSelect = selectTrack;
 
-    // Mini player update
-    function updateMiniPlayer() {
-      var btn = document.getElementById("miniPlayBtn");
-      var nameEl = document.getElementById("miniTrackName");
+    // Bottom bar update
+    function updateBottomBar() {
+      var bar = document.getElementById("bottomMusicBar");
+      var btn = document.getElementById("bmbPlayBtn");
+      var nameEl = document.getElementById("bmbTrackName");
+      var timeEl = document.getElementById("bmbTime");
       if (btn) btn.textContent = isPlaying ? "\u23f8" : "\u25b6";
       if (nameEl && tracks[currentTrack]) nameEl.textContent = tracks[currentTrack].name;
+      if (timeEl) timeEl.textContent = formatTime(audio.currentTime) + " / " + formatTime(audio.duration);
+      if (bar) bar.classList.add("show");
     }
-    var miniBtn = document.getElementById("miniPlayBtn");
-    if (miniBtn) miniBtn.addEventListener("click", togglePlay);
-    // Patch updatePlayBtn to also update mini player
+    document.getElementById("bmbPlayBtn").addEventListener("click", togglePlay);
+    document.getElementById("bmbPrevBtn").addEventListener("click", function() { closeTrackList(); prevTrack(); });
+    document.getElementById("bmbNextBtn").addEventListener("click", function() { closeTrackList(); nextTrack(); });
+    audio.addEventListener("timeupdate", updateBottomBar);
+    audio.addEventListener("loadedmetadata", updateBottomBar);
+    // Patch updatePlayBtn to also update bottom bar
     var origUpdate = updatePlayBtn;
     updatePlayBtn = function() {
       origUpdate();
-      updateMiniPlayer();
+      updateBottomBar();
     };
-    updateMiniPlayer();
+    updateBottomBar();
   })();
 
   // ===== SPA Navigation =====
-  function absUrl(u) { return u.startsWith("/") ? u : "/" + u; }
+  function absUrl(u) {
+    if (u.startsWith("/")) return u;
+    var base = location.pathname.replace(/\/[^/]*$/, "/").replace(/^\/+/, "/");
+    return base.replace(/\/$/, "") + "/" + u;
+  }
 
   async function loadPage(url) {
     var mainView = document.getElementById("main-view");
