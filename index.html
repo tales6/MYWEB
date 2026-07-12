@@ -1490,6 +1490,10 @@ body.dark .bmb-time { color: #8899aa; }
       var parser = new DOMParser();
       var doc = parser.parseFromString(text, "text/html");
       var content = "";
+      // 提取子页面的 <style> 标签内容，确保 SPA 注入后样式正确（无需刷新）
+      var styles = doc.querySelectorAll("style");
+      var styleHTML = "";
+      styles.forEach(function(s) { styleHTML += s.outerHTML; });
       var header = doc.querySelector(".page-header");
       if (header) content += header.outerHTML;
       var sNav = doc.querySelector(".side-nav") || doc.querySelector(".sticky-nav");
@@ -1501,7 +1505,7 @@ body.dark .bmb-time { color: #8899aa; }
         var container = doc.querySelector(".container");
         if (container) content += container.outerHTML;
       }
-      subView.innerHTML = '<div style="max-width:1000px;margin:0 auto;padding:24px">' +
+      subView.innerHTML = styleHTML + '<div style="max-width:1000px;margin:0 auto;padding:24px">' +
         '<button class="back-btn" onclick="goHome()">\u2190 \u8fd4\u56de\u9996\u9875</button>' +
         "</div>" + content;
       history.pushState({ url: url, action: "page" }, "", absUrl(url));
