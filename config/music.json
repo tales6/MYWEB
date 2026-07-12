@@ -1,0 +1,7 @@
+[
+  { "src": "assets/music/track01.flac", "name": "Undertale", "artist": "Toby Fox" },
+  { "src": "assets/music/track02.mp3", "name": "making an entrance", "artist": "nobody" },
+  { "src": "assets/music/KAII - __.mp3", "name": "__", "artist": "KAII" },
+  { "src": "assets/music/山岡晃 - Promise.mp3", "name": "Promise", "artist": "山岡晃" },
+  { "src": "assets/music/Luke Pickman - Mystery of Love.mp3", "name": "Mystery of Love", "artist": "Luke Pickman" }
+]

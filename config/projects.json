@@ -1,0 +1,24 @@
+[
+  {
+    "id": "freertos-weather",
+    "icon": "🌤️",
+    "title": "FreeRTOS 物联网天气站",
+    "shortTitle": "FreeRTOS 天气站",
+    "desc": "基于 STM32F103C8T6 + FreeRTOS，ESP8266 获取天气数据，OLED 实时显示。",
+    "dropdownDesc": "STM32 + FreeRTOS + ESP8266",
+    "tags": ["STM32", "FreeRTOS", "ESP8266"],
+    "docs": "projects/freertos-weather/docs.html",
+    "github": "https://github.com/tales6/FREERTOS_WEATHER"
+  },
+  {
+    "id": "stm32-smart-watering",
+    "icon": "🌱",
+    "title": "STM32 智能浇花系统",
+    "shortTitle": "智能浇花系统",
+    "desc": "土壤湿度检测 + 自动浇水 + OLED，接入 OneNet 云平台，微信小程序远程监控。",
+    "dropdownDesc": "STM32 + OneNet + 微信小程序",
+    "tags": ["STM32", "ESP8266", "OneNet", "微信小程序"],
+    "docs": "projects/stm32-smart-watering/docs.html",
+    "github": "https://github.com/tales6/stm32-esp8266-onenet-wechat"
+  }
+]

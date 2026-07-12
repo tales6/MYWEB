@@ -6,249 +6,26 @@
 <link rel="icon" type="image/jpeg" href="../../../assets/avatar.jpg">
 <link rel="apple-touch-icon" href="../../../assets/avatar.jpg">
 <title>ESP8266 WiFi 驱动模块详解</title>
-<style>:root {
-  --bg: #f5f0ea;
-  --bg-card: rgba(255,255,255,0.6);
-  --bg-nav: rgba(245,240,234,0.85);
-  --bg-side: rgba(245,240,234,0.6);
-  --text: #1e2d24;
-  --text-secondary: #5a7a5a;
-  --text-light: #7a9a7a;
-  --text-lighter: #6a8a6a;
-  --border: rgba(0,0,0,0.04);
-  --border-strong: rgba(0,0,0,0.1);
-  --accent: #3a6b4a;
-  --accent-light: #6b8f71;
-  --accent-dark: #2d5a4a;
-  --hover: #2d5a4a;
-  --header-bg: linear-gradient(135deg,#1e2d24,#3a6b4a);
-  --pre-bg: #1e1e2e;
-  --pre-color: #cdd6f4;
-}
-body.dark {
-  --bg: #121212;
-  --bg-card: rgba(30,30,40,0.7);
-  --bg-nav: rgba(18,18,18,0.85);
-  --bg-side: rgba(20,20,28,0.7);
-  --text: #e2e8f0;
-  --text-secondary: #94a3b8;
-  --text-light: #64748b;
-  --text-lighter: #788898;
-  --border: rgba(255,255,255,0.04);
-  --border-strong: rgba(255,255,255,0.08);
-  --accent: #6b8f71;
-  --accent-light: #8baa8a;
-  --accent-dark: #6b8f71;
-  --hover: #8baa8a;
-  --header-bg: linear-gradient(135deg,#0a0a0a,#1a2a1a);
-  --pre-bg: #0d1117;
-  --pre-color: #c9d1d9;
-}
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;transition:background .4s,color .4s}
-::-webkit-scrollbar{width:5px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--accent-light);border-radius:3px}
-a{color:inherit;text-decoration:none}
-nav.top-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 0;background:var(--bg-nav);backdrop-filter:blur(20px);border-bottom:.5px solid var(--border);transition:background .4s}
-nav.top-nav .inner{max-width:1000px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between}
-.nav-brand{font-size:1.05rem;font-weight:700;color:var(--accent);letter-spacing:.05em}
-.nav-brand span{color:var(--accent-light)}
-.nav-links{display:flex;gap:20px;list-style:none;align-items:center}
-.nav-links a{font-size:.85rem;color:var(--text-secondary);transition:color .3s}
-.nav-links a:hover{color:var(--hover)}
-.theme-btn{width:34px;height:34px;border-radius:50%;border:.5px solid var(--border-strong);background:transparent;color:var(--text-secondary);font-size:1rem;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.theme-btn:hover{background:rgba(107,143,113,.08);border-color:var(--accent-light)}
-.page-header{margin-top:68px;padding:48px 24px;background:var(--header-bg);color:#fff;text-align:center;transition:background .4s}
-.page-header h1{font-size:clamp(1.3rem,2.8vw,1.7rem);font-weight:700}
-.page-header .sub{margin-top:8px;font-size:.88rem;opacity:.7}
-.content-wrap { max-width: 800px; margin: 0 auto; padding: 32px 24px 60px; }
-.container { max-width: 100%; }
-.side-nav {
-  position: fixed; left: calc(50% + 430px); top: 50%; transform: translateY(-50%);
-  width: 18px; z-index: 5;
-  display: flex; flex-direction: column; align-items: center; gap: 10px;
-  background: var(--bg-side); border: 0.5px solid var(--border); border-radius: 20px;
-  padding: 14px 0; max-height: 70vh; overflow-y: auto;
-  transition: all 0.3s ease;
-}
-.side-nav:hover { width: 200px; background: var(--bg-side); backdrop-filter: blur(12px); border-radius: 14px; padding: 12px; align-items: stretch; }
-.side-nav a {
-  display: block; width: 10px; height: 10px; border-radius: 50%;
-  background: var(--accent-light); opacity: 0.5;
-  flex-shrink: 0; overflow: hidden; white-space: nowrap;
-  padding: 0; font-size: 0; border: none;
-  transition: all 0.3s ease 0.05s; line-height: 1.4;
-}
-.side-nav:hover a { width: auto; height: auto; border-radius: 8px; opacity: 1; padding: 6px 12px; font-size: 0.75rem; font-weight: 500; color: var(--text-secondary); background: transparent; border-left: 2px solid transparent; }
-.side-nav a:hover { color: var(--hover); background: rgba(107,143,113,0.05); }
-.side-nav a.active { width: 12px; height: 12px; background: var(--accent); opacity: 1; box-shadow: 0 0 8px rgba(107,143,113,0.4); }
-.side-nav:hover a.active { width: auto; height: auto; color: var(--accent); background: rgba(107,143,113,0.1); border-left-color: var(--accent-light); font-weight: 600; box-shadow: none; }
-section.doc-section {
-  background:var(--bg-card); backdrop-filter:blur(12px);
-  border:0.5px solid var(--border); border-radius:16px;
-  padding:28px 30px; margin-bottom:24px;
-  transition:background 0.4s,border-color 0.4s;
-}
-section.doc-section h2{font-size:1.25rem;font-weight:700;color:var(--text);border-left:3px solid var(--accent-light);padding-left:14px;margin-bottom:18px}
-section.doc-section h3{font-size:1.05rem;font-weight:600;color:var(--accent-dark);margin:20px 0 10px}
-section.doc-section h4{font-size:.95rem;font-weight:600;color:var(--text-secondary);margin:14px 0 8px}
-section.doc-section p{margin-bottom:14px;font-size:.92rem;color:var(--text-secondary)}
-section.doc-section ul,section.doc-section ol{margin-bottom:14px;padding-left:24px}
-section.doc-section li{margin-bottom:4px;font-size:.92rem;color:var(--text-secondary)}
-section.doc-section strong{color:var(--text)}
-pre{background:var(--pre-bg);color:var(--pre-color);border-radius:10px;padding:16px 20px;overflow-x:auto;font-family:'Cascadia Code','Fira Code','JetBrains Mono',Consolas,monospace;font-size:.82rem;line-height:1.6;margin:12px 0 18px}
-pre .kw{color:#cba6f7}pre .fn{color:#89b4fa}pre .str{color:#a6e3a1}pre .cm{color:#6c7086}pre .num{color:#fab387}pre .tp{color:#f5c2e7}pre .mp{color:#f9e2af}pre .op{color:#89dceb}
-table{width:100%;border-collapse:collapse;margin:14px 0 18px;font-size:.88rem}
-thead th{background:var(--accent-dark);color:#fff;padding:9px 12px;text-align:left;font-weight:600}
-tbody td{padding:7px 12px;border-bottom:1px solid var(--border)}
-tbody tr:nth-child(even){background:rgba(107,143,113,.03)}
-tbody tr:hover{background:rgba(107,143,113,.06)}
-.callout{border-left:4px solid;border-radius:0 8px 8px 0;padding:12px 16px;margin:16px 0;font-size:.88rem}
-.callout.info{background:rgba(99,143,200,.08);border-color:#4a8fc0}
-.callout.warn{background:rgba(200,160,80,.08);border-color:#c4a050}
-.callout.ok{background:rgba(107,143,113,.08);border-color:var(--accent-light)}
-.callout-red{background:rgba(200,80,80,.06);border-color:#c05050}
-.callout-green{background:rgba(107,143,113,.08);border-color:var(--accent-light)}
-.callout-amber{background:rgba(200,160,80,.08);border-color:#c4a050}
-.tag{display:inline-block;padding:0 8px;background:rgba(107,143,113,.08);color:var(--accent);border-radius:4px;font-size:.72rem;font-weight:600;margin-right:3px}
-.step-box{background:rgba(255,255,255,.4);border-radius:8px;padding:12px 16px;margin:8px 0}
-.step-num{display:inline-block;background:var(--accent-light);color:#fff;border-radius:50%;width:22px;height:22px;text-align:center;line-height:22px;font-size:.75rem;font-weight:700;margin-right:8px}
-.flow{text-align:center;padding:12px;background:rgba(255,255,255,.3);border-radius:8px;margin:8px 0;font-size:.82rem;color:var(--text-secondary)}
-.flow .arrow{color:var(--accent-light);font-weight:700}
-.table-wrap{overflow-x:auto}
-.file-badge{font-family:monospace;background:rgba(0,0,0,.04);padding:1px 6px;border-radius:3px;font-size:.8rem}
-.decl{background:rgba(255,255,255,.4);border:1px solid rgba(107,143,113,.2);border-radius:6px;padding:10px 14px;font-family:Consolas,monospace;font-size:.85rem;margin:10px 0 16px;white-space:pre-wrap}
-footer{text-align:center;padding:32px 24px;border-top:.5px solid var(--border);color:var(--text-light);font-size:.82rem;transition:border .4s}
-footer a{color:var(--accent);transition:color .3s}
-footer a:hover{color:#d4a96a}
-.reveal{opacity:0;transform:translateY(30px);transition:opacity .6s,transform .6s}
-.reveal.visible{opacity:1;transform:translateY(0)}
-
-
-@media(max-width:900px){
-  .side-nav{position:static;width:100%;flex-direction:row;flex-wrap:wrap;gap:6px;padding:10px 16px;background:var(--bg-side);border:.5px solid var(--border);border-radius:14px;align-items:center;justify-content:center;margin-bottom:24px}
-  .side-nav a{width:auto;height:auto;border-radius:100px;padding:4px 14px;font-size:.72rem;font-weight:500;color:var(--text-secondary);background:transparent;border:.5px solid var(--border)}
-  .side-nav a.active{color:var(--accent);background:rgba(107,143,113,.1);border-color:var(--accent-light)}
-}
-@media(max-width:640px){
-  .page-header{padding:36px 20px;margin-top:60px}
-  .content-wrap{padding:24px 12px 40px}
-  section.doc-section{padding:20px 16px}
-}
-
-/* ===== Dropdown Menu ===== */
-.nav-dropdown {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-.nav-dropdown > a {
-  cursor: pointer;
-}
-.dropdown-menu {
-  position: absolute;
-  top: calc(100% + 12px);
-  left: 50%;
-  transform: translateX(-50%) translateY(-8px);
-  min-width: 260px;
-  background: var(--bg-card);
-  backdrop-filter: blur(20px) saturate(1.5);
-  -webkit-backdrop-filter: blur(20px) saturate(1.5);
-  border: 0.5px solid var(--border);
-  border-radius: 14px;
-  padding: 8px;
-  box-shadow: 0 12px 40px rgba(0,0,0,0.08);
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.25s ease;
-  z-index: 200;
-}
-.nav-dropdown:hover .dropdown-menu {
-  opacity: 1;
-  visibility: visible;
-  transform: translateX(-50%) translateY(0);
-}
-.dropdown-menu::before {
-  content: '';
-  position: absolute;
-  top: -6px;
-  left: 50%;
-  transform: translateX(-50%) rotate(45deg);
-  width: 12px;
-  height: 12px;
-  background: var(--bg-card);
-  border-left: 0.5px solid var(--border);
-  border-top: 0.5px solid var(--border);
-}
-.dropdown-menu a {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 14px;
-  border-radius: 10px;
-  text-decoration: none;
-  transition: background 0.2s;
-}
-.dropdown-menu a:hover {
-  background: rgba(107,143,113,0.08);
-}
-.dropdown-menu .dd-icon {
-  font-size: 1.4rem;
-  flex-shrink: 0;
-}
-.dropdown-menu .dd-text {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-.dropdown-menu .dd-title {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--text);
-}
-.dropdown-menu .dd-desc {
-  font-size: 0.72rem;
-  color: var(--text-light);
-}
-body.dark .dropdown-menu { background: rgba(25,30,40,0.9); border-color: rgba(255,255,255,0.06); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
-body.dark .dropdown-menu::before { background: rgba(25,30,40,0.9); border-color: rgba(255,255,255,0.06); }
-body.dark .dropdown-menu a:hover { background: rgba(107,143,113,0.12); }
-body.dark .dropdown-menu .dd-title { color: #e2e8f0; }
-body.dark .dropdown-menu .dd-desc { color: #94a3b8; }
-
-</style>
+<link rel="stylesheet" href="../../../assets/css/common.css">
 </head>
 <body>
 
-<nav class=top-nav>
-  <div class=inner>
-    <span class=nav-brand><a href=../../../index.html><span>✦</span> tales</a></span>
-    <ul class=nav-links>
-      <li><a href=../../../index.html>首页</a></li>
-      <li class=nav-dropdown>
-        <a href=../../../index.html#projects>项目 ▾</a>
-        <div class=dropdown-menu>
-          <a href="javascript:void(0)" onclick="loadPage('projects/freertos-weather/docs.html')">
-            <span class=dd-icon>🌤️</span>
-            <span class=dd-text>
-              <span class=dd-title>FreeRTOS 天气站</span>
-              <span class=dd-desc>STM32 + FreeRTOS + ESP8266</span>
-            </span>
-          </a>
-          <a href="javascript:void(0)" onclick="loadPage('projects/stm32-smart-watering/docs.html')">
-            <span class=dd-icon>🌱</span>
-            <span class=dd-text>
-              <span class=dd-title>智能浇花系统</span>
-              <span class=dd-desc>STM32 + OneNet + 微信小程序</span>
-            </span>
-          </a>
-        </div>
+<nav class="top-nav">
+  <div class="inner">
+    <span class="nav-brand"><a href="../../../index.html"><span>✦</span> tales</a></span>
+    <ul class="nav-links">
+      <li><a href="../../../index.html">首页</a></li>
+      <li class="nav-dropdown">
+        <a href="javascript:void(0)">项目 ▾</a>
+        <div class="dropdown-menu nav-projects-dropdown"></div>
       </li>
-      <li><a href=https://github.com/tales6 target=_blank>GitHub</a></li>
-      <li><a href=https://qm.qq.com/cgi-bin/qm/qr?k=2416829925 target=_blank>QQ</a></li>
-      <button class=theme-btn id=themeBtn>🌙</button>
+      <li class="nav-dropdown">
+        <a href="javascript:void(0)">小游戏 ▾</a>
+        <div class="dropdown-menu nav-games-dropdown"></div>
+      </li>
+      <li><a href="https://github.com/tales6" target="_blank">GitHub</a></li>
+      <li><a href="https://qm.qq.com/cgi-bin/qm/qr?k=2416829925" target="_blank">QQ</a></li>
+      <button class="theme-btn">🌙</button>
     </ul>
   </div>
 </nav>
@@ -726,78 +503,10 @@ body.dark .dropdown-menu .dd-desc { color: #94a3b8; }
   Built with <a href="https://github.com/tales6">tales</a>
 </footer>
 
-<script>
-(function() {
-  var btn = document.getElementById('themeBtn');
-  var saved = localStorage.getItem('tales-theme');
-  if (saved === 'dark') document.body.classList.add('dark');
-  btn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
-  btn.addEventListener('click', function() {
-    document.body.classList.toggle('dark');
-    btn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
-    localStorage.setItem('tales-theme', document.body.classList.contains('dark') ? 'dark' : 'light');
-  });
-
-  var ro = new IntersectionObserver(function(entries) {
-    entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('visible'); });
-  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-  document.querySelectorAll('.reveal').forEach(function(el) { ro.observe(el); });
-
-  var navLinks = document.querySelectorAll('#sideNav a');
-  var secObs = new IntersectionObserver(function(entries) {
-    entries.forEach(function(e) {
-      if (e.isIntersecting) {
-        navLinks.forEach(function(a) { a.classList.remove('active'); });
-        var active = document.querySelector('#sideNav a[data-section="' + e.target.id + '"]');
-        if (active) active.classList.add('active');
-      }
-    });
-  }, { threshold: 0.2, rootMargin: '-60px 0px -40% 0px' });
-  document.querySelectorAll('.doc-section').forEach(function(el) { secObs.observe(el); });
-})();
-</script>
-
-<!-- iframe-detector -->
-<script>
-(function() {
-  if (window.top === window.self) return;
-  // 定义全局函数，供 onclick 调用
-  window.loadPage = function(url) {
-    parent.postMessage({ action: "loadPage", url: url }, "*");
-  };
-  window.goHome = function() {
-    parent.postMessage({ action: "goHome" }, "*");
-  };
-  window.loadGame = function(url) {
-    parent.postMessage({ action: "loadPage", url: url }, "*");
-  };
-  // 拦截 <a> 链接点击
-  document.addEventListener("click", function(e) {
-    var a = e.target.closest("a");
-    if (!a) return;
-    var href = a.getAttribute("href");
-    if (!href) return;
-    if (href.startsWith("http") || href.startsWith("//")) return;
-    if (href.startsWith("#")) {
-      e.preventDefault();
-      var id = href.slice(1);
-      var el = document.getElementById(id);
-      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-      return;
-    }
-    if (href.includes("index.html")) {
-      e.preventDefault();
-      var hash = href.split("#")[1] || "";
-      parent.postMessage({ action: "goHome", hash: hash }, "*");
-      return;
-    }
-    var hrefNoHash = href.split("#")[0];
-    if (hrefNoHash.endsWith(".html") || hrefNoHash.endsWith("/")) {
-      e.preventDefault();
-      parent.postMessage({ action: "loadPage", url: href }, "*");
-    }
-  });
-})();
-</script>
+<script src="../../../assets/js/config.js"></script>
+<script src="../../../assets/js/theme.js"></script>
+<script src="../../../assets/js/nav.js"></script>
+<script src="../../../assets/js/reveal.js"></script>
+<script src="../../../assets/js/iframe-detector.js"></script>
 </body>
 </html>

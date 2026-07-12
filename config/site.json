@@ -1,0 +1,14 @@
+{
+  "title": "tales 个人主页",
+  "brand": "✦ tales",
+  "author": "tales",
+  "year": 2026,
+  "footer": "用代码创造物理世界",
+  "links": {
+    "github": "https://github.com/tales6",
+    "qq": "https://qm.qq.com/cgi-bin/qm/qr?k=2416829925"
+  },
+  "avatar": "assets/avatar.jpg",
+  "background": "assets/bg.png",
+  "tagline": "嵌入式 / 物联网 / 全栈开发"
+}
