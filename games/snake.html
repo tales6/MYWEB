@@ -202,7 +202,7 @@ canvas.addEventListener('touchend',e=>{
   else if(Math.abs(dy)>20){const nd=dy>0?{x:0,y:1}:{x:0,y:-1};if(nd.x!==-dir.x||nd.y!==-dir.y)nextDir=nd;}
 });
 
-function goBack(){window.location.href='../index.html';}
+function goBack() { sessionStorage.setItem("splashShown","1"); window.location.href = "../index.html"; }
 resetGame();
 </script>
 </body>

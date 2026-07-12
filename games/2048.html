@@ -161,7 +161,7 @@ document.addEventListener('touchend', e => {
   else move(dy > 0 ? 3 : 2);
 });
 
-function goBack() { window.location.href = '../index.html'; }
+function goBack() { sessionStorage.setItem("splashShown","1"); window.location.href = "../index.html"; }
 resetGame();
 </script>
 </body>

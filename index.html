@@ -35,7 +35,7 @@
     --tag-bg: rgba(107,143,113,0.08);
   }
   body.dark {
-    --bg: #121212;
+    --bg: #0c0c0e;
     --text: #e2e8f0;
     --text-sec: #94a3b8;
     --text-light: #64748b;
@@ -63,6 +63,41 @@
     --pre-bg: #0d1117;
     --pre-color: #c9d1d9;
   }
+
+  body.dark #sub-view .page-header,
+  body.dark #main-view .page-header { background: linear-gradient(135deg, #0a0a0a, #1a2a1a) !important; }
+
+  body.dark { --text: #e8eef5; --text-sec: #b0c4d8; --text-light: #8899aa; }
+  body.dark { background: var(--bg); }
+  body.dark::before { content: ""; position: fixed; inset: 0; background: rgba(0,0,0,0.15); pointer-events: none; z-index: 0; }
+  body.dark .music-player .ctrl-btn { color: #d0dce8; }
+  body.dark .music-player .ctrl-btn:hover { color: #fff; }
+  body.dark .nav-links a, body.dark .nav-links button { color: #c8d4e0; }
+  body.dark .nav-links a:hover { color: #fff; }
+  body.dark .mini-music-btn { color: #c8d4e0; }
+  body.dark .mini-music-btn:hover { color: #fff; }
+  body.dark .mini-track-name { color: #8899aa; }
+  body.dark .track-select-btn { background: rgba(30,40,55,0.8); color: #c8d4e0; border-color: rgba(255,255,255,0.08); }
+  body.dark .track-select-btn:hover { background: rgba(40,55,75,0.9); }
+  body.dark .track-list { background: rgba(20,25,35,0.95); border-color: rgba(255,255,255,0.06); }
+  body.dark .track-item { color: #b0c4d8; }
+  body.dark .track-item:hover { background: rgba(40,55,75,0.5); color: #fff; }
+  body.dark .track-item.active { background: rgba(60,80,110,0.4); color: #fff; }
+  body.dark .theme-btn { color: #d0dce8; border-color: rgba(255,255,255,0.1); }
+  body.dark .theme-btn:hover { background: rgba(60,80,110,0.3); }
+  body.dark #playBtn, body.dark .play-main { background: var(--accent); color: #fff; }
+  body.dark .ctrl-btn, body.dark .controls button { color: #c8d4e0; }
+  body.dark .vol-btn { color: #c8d4e0; }
+  body.dark .clock-time { color: #e0e8f0; }
+  body.dark .clock-date { color: #8899aa; }
+  body.dark .hero-badges a, body.dark .hero-badges span { border-color: rgba(255,255,255,0.08); color: #c8d4e0; }
+  body.dark .game-card { background: rgba(25,30,40,0.6); }
+  body.dark .game-card .play-tag { background: rgba(60,80,110,0.2); color: #b0c4d8; }
+  body.dark .game-card:hover .play-tag { background: var(--accent-dark); color: #fff; }
+  body.dark .project-card { background: rgba(25,30,40,0.6); }
+  body.dark .tagline { color: #8899aa; }
+
+
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
   html { scroll-behavior: smooth; }
 
@@ -656,13 +691,13 @@
 }
 .page-header .github-link:hover { background: rgba(255,255,255,0.2); }
 
-.container { max-width: 1000px; margin: 0 auto; padding: 40px 24px 60px; }
+.container { max-width: 1000px; margin: 0 auto; padding: 28px 24px 40px; overflow: visible; }
 
 .overview-card {
   background: var(--card-bg); backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 0.5px solid var(--border); border-radius: 20px;
-  padding: 32px 28px; margin-bottom: 40px;
+  padding: 28px 24px; margin-bottom: 24px;
 }
 .overview-card h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 12px; color: var(--text); }
 .overview-card p { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.8; }
@@ -686,7 +721,7 @@
 .card p { font-size: 0.82rem; color: var(--text-lighter); }
 .card .tag { display: inline-block; font-size: 0.68rem; padding: 1px 8px; border-radius: 10px; background: var(--tag-bg); color: var(--accent); margin-top: 8px; }
 
-.res-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 48px; }
+.res-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 32px; }
 .res-item {
   display: flex; align-items: center; gap: 14px;
   padding: 14px 18px; background: var(--card-bg);
@@ -711,7 +746,7 @@
 .sticky-nav a { padding: 4px 14px; border-radius: 16px; font-size: 0.8rem; font-weight: 500; color: var(--text-secondary); transition: all 0.3s; }
 .sticky-nav a:hover { background: rgba(107,143,113,0.1); color: var(--accent-dark); }
 
-.content-wrap { max-width: 800px; margin: 0 auto; padding: 32px 24px 60px; }
+.content-wrap { max-width: 800px; margin: 0 auto; padding: 32px 24px 60px; position: relative; overflow: visible; }
 
 .side-nav {
   position: fixed; left: calc(50% + 430px); top: 50%; transform: translateY(-50%);
@@ -773,6 +808,19 @@ tbody tr:hover { background: rgba(107,143,113,.06); }
 .file-badge { font-family: monospace; background: rgba(0,0,0,.04); padding: 1px 6px; border-radius: 3px; font-size: .8rem; }
 .decl { background: rgba(255,255,255,.4); border: 1px solid rgba(107,143,113,.2); border-radius: 6px; padding: 10px 14px; font-family: Consolas,monospace; font-size: .85rem; margin: 10px 0 16px; white-space: pre-wrap; }
 
+
+/* ===== Mini Music Controller ===== */
+.nav-music { display: flex; align-items: center; gap: 4px; margin-left: 8px; }
+.mini-music-btn {
+  background: none; border: none; cursor: pointer;
+  font-size: 0.85rem; padding: 2px 4px; line-height: 1;
+  color: var(--text-sec); transition: color 0.3s;
+}
+.mini-music-btn:hover { color: var(--accent); }
+.mini-track-name {
+  font-size: 0.68rem; color: var(--text-light);
+  max-width: 80px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
 @media(max-width:900px){
   .side-nav{position:static;width:100%;flex-direction:row;flex-wrap:wrap;gap:6px;padding:10px 16px;background:var(--bg-side);border:.5px solid var(--border);border-radius:14px;align-items:center;justify-content:center;margin-bottom:24px}
   .side-nav a{width:auto;height:auto;border-radius:100px;padding:4px 14px;font-size:.72rem;font-weight:500;color:var(--text-secondary);background:transparent;border:.5px solid var(--border)}
@@ -985,19 +1033,19 @@ tbody tr:hover { background: rgba(107,143,113,.06); }
       <p class="section-desc">敲代码累了？来玩会儿放松一下。</p>
     </div>
     <div class="game-grid">
-      <a href="games/snake.html" class="game-card reveal reveal-delay-1">
+      <a href="games/snake.html" class="game-card reveal reveal-delay-1" onclick="event.preventDefault();loadGame('games/snake.html')">
         <span class="icon">🐍</span>
         <h3>贪吃蛇</h3>
         <p>经典诺基亚风格，键盘方向键控制。</p>
         <span class="play-tag">Play →</span>
       </a>
-      <a href="games/2048.html" class="game-card reveal reveal-delay-2">
+      <a href="games/2048.html" class="game-card reveal reveal-delay-2" onclick="event.preventDefault();loadGame('games/2048.html')">
         <span class="icon">🧩</span>
         <h3>2048</h3>
         <p>合并方块，挑战 2048！</p>
         <span class="play-tag">Play →</span>
       </a>
-      <a href="games/breakout.html" class="game-card reveal reveal-delay-3">
+      <a href="games/breakout.html" class="game-card reveal reveal-delay-3" onclick="event.preventDefault();loadGame('games/breakout.html')">
         <span class="icon">🕹️</span>
         <h3>俄罗斯方块</h3>
         <p>经典益智消除，堆叠方块消除行。</p>
@@ -1294,22 +1342,47 @@ tbody tr:hover { background: rgba(107,143,113,.06); }
 
     renderTrackList();
     loadTrack(0);
+
+    // Expose music API globally
+    window.__musicToggle = togglePlay;
+    window.__musicPrev = prevTrack;
+    window.__musicNext = nextTrack;
+    window.__musicSelect = selectTrack;
+
+    // Mini player update
+    function updateMiniPlayer() {
+      var btn = document.getElementById("miniPlayBtn");
+      var nameEl = document.getElementById("miniTrackName");
+      if (btn) btn.textContent = isPlaying ? "\u23f8" : "\u25b6";
+      if (nameEl && tracks[currentTrack]) nameEl.textContent = tracks[currentTrack].name;
+    }
+    var miniBtn = document.getElementById("miniPlayBtn");
+    if (miniBtn) miniBtn.addEventListener("click", togglePlay);
+    // Patch updatePlayBtn to also update mini player
+    var origUpdate = updatePlayBtn;
+    updatePlayBtn = function() {
+      origUpdate();
+      updateMiniPlayer();
+    };
+    updateMiniPlayer();
   })();
 
   // ===== SPA Navigation =====
+  function absUrl(u) { return u.startsWith("/") ? u : "/" + u; }
+
   async function loadPage(url) {
-    const mainView = document.getElementById("main-view");
-    const subView = document.getElementById("sub-view");
+    var mainView = document.getElementById("main-view");
+    var subView = document.getElementById("sub-view");
     subView.innerHTML = '<div style="text-align:center;padding:80px 24px;color:var(--text-sec)">\u52a0\u8f7d\u4e2d...</div>';
     mainView.style.display = "none";
     subView.style.display = "block";
     window.scrollTo(0, 0);
     try {
-      const res = await fetch(url);
+      var res = await fetch(absUrl(url));
       if (!res.ok) throw new Error("HTTP " + res.status);
-      const text = await res.text();
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(text, "text/html");
+      var text = await res.text();
+      var parser = new DOMParser();
+      var doc = parser.parseFromString(text, "text/html");
       var content = "";
       var header = doc.querySelector(".page-header");
       if (header) content += header.outerHTML;
@@ -1322,23 +1395,35 @@ tbody tr:hover { background: rgba(107,143,113,.06); }
         var container = doc.querySelector(".container");
         if (container) content += container.outerHTML;
       }
+      var sideNav = doc.querySelector(".side-nav");
+      if (sideNav) content += sideNav.outerHTML;
       subView.innerHTML = '<div style="max-width:1000px;margin:0 auto;padding:24px">' +
         '<button class="back-btn" onclick="goHome()">\u2190 \u8fd4\u56de\u9996\u9875</button>' +
         "</div>" + content;
-      history.pushState({ url: url, action: "page" }, "", url);
-      // Init reveal for new content
+      history.pushState({ url: url, action: "page" }, "", absUrl(url));
       subView.querySelectorAll(".reveal").forEach(function(el) { el.classList.add("visible"); });
-      // Init side-nav scroll tracking
       initSideNav();
     } catch (e) {
-      subView.innerHTML = '<div style="text-align:center;padding:80px 24px;color:var(--text-sec)">\u52a0\u8f7d\u5931\u8d25: ' + e.message + "</div>";
+      subView.innerHTML = '<div style="text-align:center;padding:40px 24px;color:var(--text-sec)">\u52a0\u8f7d\u5931\u8d25: ' + e.message + '</div>';
     }
   }
 
   function goHome() {
     document.getElementById("main-view").style.display = "";
     document.getElementById("sub-view").style.display = "none";
-    history.pushState({ action: "home" }, "", "index.html");
+    history.pushState({ action: "home" }, "", "/index.html");
+    window.scrollTo(0, 0);
+  }
+
+  function loadGame(url) {
+    var mainView = document.getElementById("main-view");
+    var subView = document.getElementById("sub-view");
+    subView.innerHTML = '<div style="max-width:1000px;margin:0 auto;padding:24px">' +
+      '<button class="back-btn" onclick="goHome()">\u2190 \u8fd4\u56de\u9996\u9875</button></div>' +
+      '<div style="max-width:600px;margin:0 auto;padding:0 24px 60px"><iframe src="' + absUrl(url) + '" style="width:100%;border:none;min-height:80vh;border-radius:16px;background:var(--bg)" allow="autoplay"></iframe></div>';
+    mainView.style.display = "none";
+    subView.style.display = "block";
+    history.pushState({ url: url, action: "game" }, "", absUrl(url));
     window.scrollTo(0, 0);
   }
 
@@ -1377,6 +1462,8 @@ tbody tr:hover { background: rgba(107,143,113,.06); }
     if (e.state && e.state.action === "home") {
       document.getElementById("main-view").style.display = "";
       document.getElementById("sub-view").style.display = "none";
+    } else if (e.state && e.state.action === "game") {
+      loadGame(e.state.url);
     } else if (e.state && e.state.url) {
       loadPage(e.state.url);
     }
