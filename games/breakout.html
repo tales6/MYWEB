@@ -296,7 +296,7 @@ canvas.addEventListener('touchend',e=>{
   else rotate();
 });
 
-function goBack() { sessionStorage.setItem("splashShown","1"); window.location.href = "../index.html"; }
+function goBack() { if (window.parent && window.parent.goHome) { window.parent.goHome(); } else { sessionStorage.setItem("splashShown","1"); window.location.href = "../index.html"; } }
 resetGame();
 </script>
 </body>

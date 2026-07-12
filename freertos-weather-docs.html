@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>tales 个人主页</title>
+<title>FreeRTOS 物联网天气站 · 文档总览 · tales</title>
 <style>
   :root {
     --bg: #f5f0ea;
@@ -16,26 +16,14 @@
     --accent-light: #6b8f71;
     --accent-lighter: #8baa8a;
     --accent-dark: #2d5a4a;
-    --nav-bg: rgba(245,240,234,0.7);
+    --nav-bg: rgba(245,240,234,0.85);
     --card-bg: rgba(255,255,255,0.6);
-    --card-bg-2: rgba(255,255,255,0.5);
     --border: rgba(0,0,0,0.04);
-    --border-strong: rgba(30,45,36,0.06);
-    --border-soft: rgba(30,45,36,0.04);
-    --text-secondary: #5a7a5a;
-    --bg-side: rgba(245,240,234,0.6);
-    --bg-nav: rgba(245,240,234,0.85);
-    --hover: #2d5a4a;
-    --header-bg: linear-gradient(135deg, #1e2d24 0%, #3a6b4a 100%);
-    --pre-bg: #1e1e2e;
-    --pre-color: #cdd6f4;
-    --border-softer: rgba(30,45,36,0.012);
-    --shadow: rgba(30,45,36,0.1);
-    --shadow-strong: rgba(30,45,36,0.2);
     --tag-bg: rgba(107,143,113,0.08);
+    --header-bg: linear-gradient(135deg, #1e2d24 0%, #3a6b4a 100%);
   }
   body.dark {
-    --bg: #0c0c0e;
+    --bg: #121212;
     --text: #e2e8f0;
     --text-sec: #94a3b8;
     --text-light: #64748b;
@@ -45,150 +33,27 @@
     --accent-light: #8baa8a;
     --accent-lighter: #9bb89a;
     --accent-dark: #6b8f71;
-    --nav-bg: rgba(18,18,18,0.8);
+    --nav-bg: rgba(18,18,18,0.85);
     --card-bg: rgba(30,30,40,0.6);
-    --card-bg-2: rgba(30,30,40,0.5);
     --border: rgba(255,255,255,0.04);
-    --border-strong: rgba(255,255,255,0.06);
-    --border-soft: rgba(255,255,255,0.04);
-    --border-softer: rgba(255,255,255,0.012);
-    --shadow: rgba(0,0,0,0.3);
-    --shadow-strong: rgba(0,0,0,0.4);
     --tag-bg: rgba(107,143,113,0.12);
-    --text-secondary: #94a3b8;
-    --bg-side: rgba(20,20,28,0.7);
-    --bg-nav: rgba(18,18,18,0.85);
-    --hover: #8baa8a;
     --header-bg: linear-gradient(135deg, #0a0a0a, #1a2a1a);
-    --pre-bg: #0d1117;
-    --pre-color: #c9d1d9;
   }
-
-  body.dark #sub-view .page-header,
-  body.dark #main-view .page-header { background: linear-gradient(135deg, #0a0a0a, #1a2a1a) !important; }
-
-  body.dark { --text: #e8eef5; --text-sec: #b0c4d8; --text-light: #8899aa; }
-  body.dark { background: var(--bg); }
-  body.dark::before { content: ""; position: fixed; inset: 0; background: rgba(0,0,0,0.45); pointer-events: none; z-index: 0; }
-  body.dark .music-player .ctrl-btn { color: #d0dce8; }
-  body.dark .music-player .ctrl-btn:hover { color: #fff; }
-  body.dark .nav-links a, body.dark .nav-links button { color: #c8d4e0; }
-  body.dark .nav-links a:hover { color: #fff; }
-  body.dark .mini-music-btn { color: #c8d4e0; }
-  body.dark .mini-music-btn:hover { color: #fff; }
-  body.dark .mini-track-name { color: #8899aa; }
-  body.dark .track-select-btn { background: rgba(30,40,55,0.8); color: #c8d4e0; border-color: rgba(255,255,255,0.08); }
-  body.dark .track-select-btn:hover { background: rgba(40,55,75,0.9); }
-  body.dark .track-list { background: rgba(20,25,35,0.95); border-color: rgba(255,255,255,0.06); }
-  body.dark .track-item { color: #b0c4d8; }
-  body.dark .track-item:hover { background: rgba(40,55,75,0.5); color: #fff; }
-  body.dark .track-item.active { background: rgba(60,80,110,0.4); color: #fff; }
-  body.dark .theme-btn { color: #d0dce8; border-color: rgba(255,255,255,0.1); }
-  body.dark { --bg: #0a0a0c; --text: #eef2f8; --text-sec: #c0d0e0; --text-light: #90a0b0; --text-lighter: #8090a0; }
-  body.dark .tagline { color: #b0c0d0 !important; }
-  body.dark .clock-time { color: #e0e8f4; }
-  body.dark .clock-date { color: #90a0b0; }
-  body.dark .hero-badges a, body.dark .hero-badges span { color: #c8d4e0; border-color: rgba(255,255,255,0.08); }
-  body.dark .music-player .track-info .meta .artist { color: #90a0b0; }
-  body.dark .music-player .controls button { background: rgba(40,55,75,0.4); color: #d0dce8; }
-  body.dark .music-player .controls button:hover { background: rgba(60,80,110,0.5); }
-  body.dark .music-player .controls .play-main { background: var(--accent); color: #fff; }
-  body.dark .music-player .controls .progress-area .time { color: #90a0b0; }
-  body.dark .vol-btn { color: #c8d4e0; }
-  body.dark .vol-slider { background: rgba(20,28,40,0.95); border-color: rgba(255,255,255,0.06); }
-  body.dark .vol-slider input[type="range"] { background: rgba(60,80,110,0.3); }
-  body.dark .vol-slider input[type="range"]::-webkit-slider-thumb { background: var(--accent); }
-
-  body.dark .theme-btn:hover { background: rgba(60,80,110,0.3); }
-  body.dark #playBtn, body.dark .play-main { background: var(--accent); color: #fff; }
-  body.dark .ctrl-btn, body.dark .controls button { color: #c8d4e0; }
-  body.dark .vol-btn { color: #c8d4e0; }
-  body.dark .clock-time { color: #e0e8f0; }
-  body.dark .clock-date { color: #8899aa; }
-  body.dark .hero-badges a, body.dark .hero-badges span { border-color: rgba(255,255,255,0.08); color: #c8d4e0; }
-  body.dark .game-card { background: rgba(25,30,40,0.6); }
-  body.dark .game-card .play-tag { background: rgba(60,80,110,0.2); color: #b0c4d8; }
-  body.dark .game-card:hover .play-tag { background: var(--accent-dark); color: #fff; }
-  body.dark .project-card { background: rgba(25,30,40,0.6); }
-  body.dark .tagline { color: #8899aa; }
-
-
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
   html { scroll-behavior: smooth; }
-
-
-  body {
+  body { transition: background 0.4s, color 0.4s;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans SC', sans-serif;
     background: var(--bg);
     color: var(--text);
     line-height: 1.7;
-    overflow-x: hidden;
-    transition: background 0.4s, color 0.4s;
   }
   ::-webkit-scrollbar { width: 5px; }
   ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: var(--accent-lighter); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb { background: #8baa8a; border-radius: 3px; }
 
   a { color: inherit; text-decoration: none; }
 
-  /* ===== Splash ===== */
-  #splash {
-    position: fixed; inset: 0; z-index: 9999;
-    display: flex; align-items: center; justify-content: center;
-    background: url(bg.png) center/cover no-repeat fixed;
-    transition: opacity 1s ease, visibility 1s ease;
-  }
-  #splash::before {
-    content: ''; position: absolute; inset: 0;
-    background: rgba(30, 45, 36, 0.55);
-  }
-  #splash.hide { opacity: 0; visibility: hidden; pointer-events: none; }
-  .splash-card {
-    position: relative; z-index: 1;
-    max-width: 680px; width: 88%;
-    padding: 48px 40px;
-    background: rgba(255,255,255,0.08);
-    backdrop-filter: blur(24px) saturate(1.4);
-    -webkit-backdrop-filter: blur(24px) saturate(1.4);
-    border: 0.5px solid rgba(255,255,255,0.12);
-    border-radius: 24px;
-    text-align: center;
-    opacity: 0; transform: translateY(24px);
-    animation: splashIn 1s cubic-bezier(0.16,1,0.3,1) 0.3s forwards;
-    box-shadow: 0 24px 80px rgba(0,0,0,0.15);
-  }
-  @keyframes splashIn { to { opacity: 1; transform: translateY(0); } }
-  .splash-card .icon {
-    font-size: 2.4rem; margin-bottom: 20px;
-    display: block;
-  }
-  .splash-card .quote-text {
-    font-size: clamp(1.2rem, 2.8vw, 1.7rem);
-    font-weight: 500;
-    color: #fff;
-    line-height: 1.8;
-    letter-spacing: 0.02em;
-  }
-  .splash-card .quote-author {
-    display: block; margin-top: 16px;
-    font-size: 0.85rem; color: rgba(255,255,255,0.55);
-    font-weight: 400;
-  }
-  .splash-bar {
-    margin: 32px auto 0;
-    width: 120px; height: 2px;
-    border-radius: 1px;
-    background: rgba(255,255,255,0.1);
-    overflow: hidden;
-  }
-  .splash-bar .fill {
-    height: 100%; width: 0;
-    background: linear-gradient(90deg, var(--accent-lighter), #d4a96a);
-    animation: barFill 3.2s cubic-bezier(0.25,0.46,0.45,0.94) forwards;
-  }
-  @keyframes barFill { to { width: 100%; } }
-
-  /* ===== Navigation ===== */
+  /* ===== Nav ===== */
   nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
     padding: 16px 0;
@@ -196,7 +61,6 @@
     backdrop-filter: blur(20px) saturate(1.5);
     -webkit-backdrop-filter: blur(20px) saturate(1.5);
     border-bottom: 0.5px solid var(--border);
-    transition: background 0.3s;
   }
   nav .inner {
     max-width: 1000px; margin: 0 auto;
@@ -204,664 +68,193 @@
     display: flex; align-items: center; justify-content: space-between;
   }
   .nav-brand {
-    font-size: 1.1rem; font-weight: 700;
-    color: var(--accent);
+    font-size: 1.05rem; font-weight: 700; color: var(--accent);
     letter-spacing: 0.05em;
   }
-  .nav-links { display: flex; align-items: center; gap: 24px; list-style: none; }
+  .nav-links { display: flex; gap: 20px; list-style: none; }
   .nav-links a {
-    font-size: 0.85rem; color: var(--text-sec);
-    transition: color 0.3s;
-    position: relative;
-  }
-  .nav-links a::after {
-    content: ''; position: absolute;
-    bottom: -3px; left: 0;
-    width: 0; height: 1.5px;
-    background: var(--accent-light);
-    transition: width 0.3s;
+    font-size: 0.85rem; color: var(--text-sec); transition: color 0.3s;
   }
   .nav-links a:hover { color: var(--accent-dark); }
-  .nav-links a:hover::after { width: 100%; }
 
-  /* ===== Hero Section ===== */
-  #hero {
-    min-height: 100vh;
-    display: flex; align-items: center; justify-content: center;
-    position: relative;
-    background: url(bg.png) center/cover no-repeat fixed;
-    padding: 100px 24px 80px;
-  }
-  /* overlay removed for cleaner look */
-  .hero-content {
-    position: relative; z-index: 1;
-    width: 100%; max-width: 960px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 48px;
-    align-items: start;
-  }
-
-  /* Entrance animation */
-  .hero-left, .hero-right {
-    opacity: 0;
-    transition: all 0.9s cubic-bezier(0.16,1,0.3,1);
-  }
-  .hero-left { transform: translateX(-50px); }
-  .hero-right { transform: translateX(50px); }
-  .hero-content.loaded .hero-left,
-  .hero-content.loaded .hero-right {
-    opacity: 1;
-    transform: translateX(0);
-  }
-
-  .hero-left {
-    display: flex; flex-direction: column; align-items: center;
+  /* ===== Header ===== */
+  .page-header {
+    margin-top: 68px;
+    padding: 48px 24px;
+    background: linear-gradient(135deg, #1a3a2a 0%, #2d7a4a 100%);
+    color: #fff;
     text-align: center;
   }
-  .hero-right {
-    display: flex; flex-direction: column; align-items: center;
+  .page-header h1 {
+    font-size: clamp(1.4rem, 3vw, 1.8rem);
+    font-weight: 700;
+    letter-spacing: 0.02em;
   }
-
-  .hero-avatar-wrap {
-    width: 120px; height: 120px;
-    border-radius: 50%;
-    padding: 3.5px;
-    background: linear-gradient(135deg, var(--accent-light), #d4a96a, #c9a96e);
-    box-shadow: 0 0 40px rgba(107, 143, 113, 0.2);
-    margin-bottom: 24px;
-    transition: transform 0.5s;
+  .page-header p {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    opacity: 0.7;
   }
-  .hero-avatar-wrap:hover { transform: scale(1.06); }
-  .hero-avatar-wrap img {
-    width: 100%; height: 100%;
-    border-radius: 50%; object-fit: cover;
-  }
-  .hero-left h1 {
-    font-size: clamp(2.4rem, 5vw, 3.6rem);
-    font-weight: 800;
-    color: var(--text);
-    letter-spacing: -0.02em;
-    margin-bottom: 8px;
-  }
-  .hero-left .tagline {
-    font-size: 1.1rem;
-    color: var(--text-sec);
-    margin-bottom: 32px;
-    font-weight: 400;
-  }
-  .hero-badges {
-    display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;
-  }
-  .hero-badges a, .hero-badges span {
+  .page-header .github-link {
     display: inline-flex; align-items: center; gap: 6px;
+    margin-top: 16px;
     padding: 8px 20px;
     border-radius: 30px;
-    font-size: 0.85rem; font-weight: 500;
-    transition: all 0.3s;
-  }
-  .badge-gh {
-    background: var(--text); color: var(--bg);
-    box-shadow: 0 2px 12px var(--shadow);
-  }
-  .badge-gh:hover { transform: translateY(-2px); box-shadow: 0 4px 20px var(--shadow-strong); }
-  .badge-qq {
-    background: var(--text); color: var(--bg);
-    box-shadow: 0 2px 12px var(--shadow);
-  }
-  .badge-qq:hover { transform: translateY(-2px); box-shadow: 0 4px 20px var(--shadow-strong); }
-  .badge-outline {
-    border: 1px solid rgba(30,45,36,0.12);
-    color: #3a5a4a;
-  }
-
-  /* ===== Digital Clock ===== */
-  .digital-clock {
-    text-align: center;
-    margin-bottom: 32px;
-    padding: 16px 0;
-  }
-  .digital-clock .clock-time {
-    font-size: clamp(2.8rem, 6vw, 4.2rem);
-    font-weight: 300;
-    font-variant-numeric: tabular-nums;
-    color: var(--accent-dark);
-    letter-spacing: 0.06em;
-    line-height: 1.2;
-    text-shadow: 0 2px 12px rgba(45,90,74,0.06);
-  }
-  .digital-clock .clock-date {
-    font-size: 0.85rem;
-    color: var(--text-light);
-    margin-top: 4px;
-    letter-spacing: 0.04em;
-  }
-
-  /* ===== Games ===== */
-  #games { background: rgba(107,143,113,0.03); }
-  .game-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 20px;
-  }
-  .game-card {
-    display: block;
-    background: var(--card-bg-2);
-    backdrop-filter: blur(12px);
-    border: 0.5px solid var(--border);
-    border-radius: 20px;
-    padding: 32px 24px;
-    text-align: center;
-    transition: all 0.3s;
-    cursor: pointer;
-  }
-  .game-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 36px var(--border-soft);
-  }
-  .game-card .icon {
-    font-size: 2.6rem;
-    margin-bottom: 12px;
-    display: block;
-  }
-  .game-card h3 {
-    font-size: 1rem; font-weight: 700;
-    color: var(--text); margin-bottom: 6px;
-  }
-  .game-card p {
-    font-size: 0.8rem; color: var(--text-lighter);
-    margin-bottom: 14px;
-  }
-  .game-card .play-tag {
-    display: inline-block;
-    padding: 4px 16px;
-    border-radius: 100px;
-    font-size: 0.72rem; font-weight: 600;
-    background: rgba(45,90,74,0.08);
-    color: var(--accent-dark);
-    transition: all 0.3s;
-  }
-  .game-card:hover .play-tag {
-    background: var(--accent-dark);
+    background: rgba(255,255,255,0.1);
     color: #fff;
+    font-size: 0.82rem; font-weight: 500;
+    transition: background 0.3s;
   }
+  .page-header .github-link:hover { background: rgba(255,255,255,0.2); }
 
-  /* ===== Music Player ===== */
-  .music-player {
-    width: 100%; max-width: 480px;
-    padding: 20px 24px;
-    background: var(--card-bg-2);
-    backdrop-filter: blur(20px) saturate(1.4);
-    -webkit-backdrop-filter: blur(20px) saturate(1.4);
-    border: 0.5px solid var(--card-bg);
-    border-radius: 20px;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.02);
-  }
-  .music-player .track-info {
-    display: flex; align-items: center; gap: 14px;
-    margin-bottom: 14px;
-  }
-  .music-player .track-info .cover {
-    width: 42px; height: 42px; border-radius: 10px;
-    background: linear-gradient(135deg, var(--accent-light), var(--accent-lighter));
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.2rem; flex-shrink: 0;
-  }
-  .music-player .track-info .meta { flex: 1; min-width: 0; }
-  .music-player .track-info .meta .name {
-    font-size: 0.9rem; font-weight: 600; color: var(--text);
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  }
-  .music-player .track-info .meta .artist {
-    font-size: 0.75rem; color: var(--text-lighter);
-  }
-  .music-player .controls {
-    display: flex; align-items: center; gap: 12px;
-  }
-  .music-player .controls button {
-    width: 36px; height: 36px; border-radius: 50%;
-    border: none; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 0.9rem; transition: all 0.2s;
-    background: var(--border-strong);
-    color: var(--accent-dark);
-    flex-shrink: 0;
-  }
-  .music-player .controls button:hover {
-    background: rgba(30,45,36,0.12);
-    transform: scale(1.05);
-  }
-  .music-player .controls button.play-main {
-    width: 42px; height: 42px;
-    background: var(--accent-dark); color: #fff;
-    font-size: 1rem;
-  }
-  .music-player .controls button.play-main:hover {
-    background: var(--accent); transform: scale(1.06);
-  }
-  .music-player .controls .progress-area {
-    flex: 1; display: flex; align-items: center; gap: 8px;
-  }
-  .music-player .controls .track-select-btn {
-    width: 30px; height: 30px; font-size: 0.8rem;
-    background: var(--border-strong); color: var(--accent-dark);
-  }
-  .music-player .controls .track-select-btn:hover {
-    background: rgba(30,45,36,0.12); transform: scale(1.05);
-  }
-  .music-player .controls .progress-area .time {
-    font-size: 0.7rem; color: var(--text-light);
-    font-variant-numeric: tabular-nums;
-    min-width: 32px;
-  }
-  .music-player .controls .progress-area .bar-wrap {
-    flex: 1; height: 3px; border-radius: 2px;
-    background: var(--border-strong);
-    cursor: pointer; position: relative;
-  }
-  .music-player .controls .progress-area .bar-wrap .fill {
-    height: 100%; width: 0;
-    background: linear-gradient(90deg, var(--accent-light), #d4a96a);
-    border-radius: 2px;
-    transition: width 0.1s linear;
-  }
-  .vol-wrap {
-    position: relative; display: flex; align-items: center;
-  }
-  .vol-wrap .vol-btn {
-    font-size: 0.85rem; width: 30px; height: 30px;
-    border-radius: 50%; border: none; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.2s;
-    background: var(--border-strong); color: var(--accent-dark);
-    flex-shrink: 0;
-  }
-  .vol-wrap .vol-btn:hover { background: rgba(30,45,36,0.12); transform: scale(1.05); }
-  .vol-slider {
-    position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
-    width: 32px; height: 100px;
-    background: rgba(255,255,255,0.9);
-    backdrop-filter: blur(12px);
-    border: 0.5px solid rgba(0,0,0,0.06);
-    border-radius: 16px;
-    display: none;
-    align-items: center; justify-content: center;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
-    padding: 8px 0;
-  }
-  .vol-slider.show { display: flex; }
-  .vol-slider input[type="range"] {
-    -webkit-appearance: none; appearance: none;
-    width: 80px; height: 3px;
-    border-radius: 2px;
-    background: rgba(30,45,36,0.08);
-    outline: none;
-    transform: rotate(-90deg);
-  }
-  .vol-slider input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 14px; height: 14px;
-    border-radius: 50%;
-    background: var(--accent-dark);
-    cursor: pointer;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-  }
-  .vol-slider input[type="range"]::-moz-range-thumb {
-    width: 14px; height: 14px;
-    border-radius: 50%;
-    background: var(--accent-dark);
-    cursor: pointer;
-    border: none;
-  }
+  /* ===== Container ===== */
+  .container { max-width: 1000px; margin: 0 auto; padding: 40px 24px 60px; }
 
-  /* ===== Track Selector ===== */
-  .track-info { cursor: pointer; position: relative; }
-  .track-list {
-    position: absolute; top: calc(100% + 6px); left: 0; right: 0;
-    background: rgba(255,255,255,0.95);
-    backdrop-filter: blur(12px);
-    border: 0.5px solid var(--border);
-    border-radius: 12px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.06);
-    overflow: hidden;
-    display: none; z-index: 10;
-  }
-  .track-list.show { display: block; }
-  .track-list .item {
-    padding: 10px 14px; font-size: 0.82rem;
-    transition: background 0.2s;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .track-list .item:hover { background: rgba(107,143,113,0.06); }
-  .track-list .item .idx {
-    width: 20px; height: 20px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 0.65rem; font-weight: 700;
-    background: rgba(107,143,113,0.1); color: var(--accent); flex-shrink: 0;
-  }
-  .track-list .item.active .idx { background: var(--accent-dark); color: #fff; }
-  .track-list .item .info { flex: 1; min-width: 0; }
-  .track-list .item .info .tname { font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .track-list .item .info .tartist { font-size: 0.72rem; color: var(--text-footer); }
-  .track-list .item .check { color: var(--accent-dark); font-size: 0.75rem; opacity: 0; }
-  .track-list .item.active .check { opacity: 1; }
-
-  /* ===== Section Common ===== */
-  section { padding: 100px 24px; }
-  .section-inner { max-width: 1000px; margin: 0 auto; }
-  .section-label {
-    display: inline-block;
-    font-size: 0.75rem; font-weight: 600;
-    letter-spacing: 0.12em; text-transform: uppercase;
-    color: var(--accent-lighter); margin-bottom: 8px;
-  }
-  .section-title {
-    font-size: clamp(1.6rem, 3.5vw, 2.2rem);
-    font-weight: 700;
-    margin-bottom: 12px;
-    color: var(--text);
-  }
-  .section-desc {
-    color: var(--text-sec);
-    max-width: 520px;
-    margin-bottom: 48px;
-    font-size: 0.95rem;
-  }
-
-  /* ===== Section Divider ===== */
-  .section-divider {
-    border: none;
-    height: 0.5px;
-    background: var(--border);
-    margin: 0;
-  }
-
-  /* ===== Projects ===== */
-  #projects { background: var(--bg); }
-  .project-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
-  }
-  .project-card {
+  /* ===== Overview ===== */
+  .overview-card {
     background: var(--card-bg);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 0.5px solid var(--border);
     border-radius: 20px;
-    padding: 28px;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
+    padding: 32px 28px;
+    margin-bottom: 40px;
   }
-  .project-card .links { margin-top: auto; }
-  .project-card::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-    background: linear-gradient(90deg, var(--accent-light), #d4a96a);
-    opacity: 0; transition: opacity 0.4s;
+  .overview-card h2 {
+    font-size: 1.3rem; font-weight: 700;
+    margin-bottom: 12px; color: var(--text);
   }
-  .project-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 16px 48px var(--border-strong);
+  .overview-card p {
+    font-size: 0.9rem; color: #4a6a4a;
+    line-height: 1.8;
   }
-  .project-card:hover::before { opacity: 1; }
+  .overview-card p + p { margin-top: 10px; }
 
-  .project-card .card-header {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-bottom: 10px;
+  /* ===== Section ===== */
+  .section-label {
+    display: inline-block;
+    font-size: 0.72rem; font-weight: 600;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--accent-lighter); margin-bottom: 16px;
   }
-  .project-card .card-header .icon {
-    font-size: 1.6rem;
-    display: block;
-    flex-shrink: 0;
+
+  /* ===== Card Grid ===== */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin-bottom: 48px;
   }
-  .project-card .card-header h3 {
-    font-size: 1.1rem; font-weight: 700;
-    color: var(--text);
+  .card {
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 0.5px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    transition: all 0.35s;
   }
-  .project-card .tags {
-    display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px;
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.04);
+    border-color: var(--accent-light);
   }
-  .project-card .tags span {
-    padding: 2px 10px; border-radius: 100px;
-    font-size: 0.7rem; font-weight: 500;
+  .card .icon { font-size: 1.6rem; margin-bottom: 10px; display: block; }
+  .card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+  .card h3 a { color: var(--accent-dark); transition: color 0.3s; }
+  .card h3 a:hover { color: #d4a96a; }
+  .card p { font-size: 0.82rem; color: var(--text-lighter); }
+  .card .tag {
+    display: inline-block;
+    font-size: 0.68rem;
+    padding: 1px 8px;
+    border-radius: 10px;
     background: var(--tag-bg);
     color: var(--accent);
-  }
-  .project-card p {
-    font-size: 0.85rem; color: var(--text-lighter);
-    margin-bottom: 16px; line-height: 1.6;
-  }
-  .project-card .links {
-    display: flex; gap: 16px;
-  }
-  .project-card .links a {
-    font-size: 0.8rem; font-weight: 600;
-    color: var(--accent); transition: color 0.3s;
-  }
-  .project-card .links a:hover { color: #d4a96a; }
-  .project-card.placeholder { opacity: 0.5; cursor: default; }
-  .project-card.placeholder:hover {
-    transform: none; box-shadow: none;
-  }
-  .project-card.placeholder::before { display: none; }
-  .project-card.placeholder .plus-icon {
-    font-size: 2.4rem; margin-bottom: 12px; display: block;
-    color: var(--accent-lighter);
+    margin-top: 8px;
   }
 
-  /* ===== Scroll Animations ===== */
-  .reveal {
-    opacity: 0; transform: translateY(40px) scale(0.97);
-    transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
-                transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+  /* ===== Resource List ===== */
+  .res-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 48px; }
+  .res-item {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 18px;
+    background: var(--card-bg);
+    backdrop-filter: blur(8px);
+    border: 0.5px solid var(--border);
+    border-radius: 12px;
+    transition: all 0.3s;
   }
-  .reveal.visible { opacity: 1; transform: translateY(0) scale(1); }
-  .reveal-delay-1 { transition-delay: 0.08s; }
-  .reveal-delay-2 { transition-delay: 0.16s; }
-  .reveal-delay-3 { transition-delay: 0.24s; }
-  .reveal-delay-4 { transition-delay: 0.32s; }
-  .reveal-delay-5 { transition-delay: 0.40s; }
+  .res-item:hover {
+    background: rgba(255,255,255,0.8);
+    transform: translateX(4px);
+  }
+  .res-item .icon { font-size: 1.2rem; flex-shrink: 0; }
+  .res-item .info { flex: 1; }
+  .res-item .info a {
+    font-weight: 600; font-size: 0.9rem; color: var(--accent-dark);
+    transition: color 0.3s;
+  }
+  .res-item .info a:hover { color: #d4a96a; }
+  .res-item .info span {
+    display: block; font-size: 0.78rem; color: var(--text-light);
+  }
+
+  /* ===== Screenshot Grid ===== */
+  .screenshot-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+  .screenshot-item {
+    background: var(--card-bg);
+    border: 0.5px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.35s;
+  }
+  .screenshot-item:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,0.06); }
+  .screenshot-item img { width: 100%; display: block; }
+  .screenshot-item .caption { padding: 10px 16px; font-size: 0.8rem; color: var(--text-light); text-align: center; }
 
   /* ===== Footer ===== */
   footer {
-    text-align: center; padding: 48px 24px;
+    text-align: center; padding: 32px 24px;
     border-top: 0.5px solid var(--border);
     color: var(--text-footer); font-size: 0.82rem;
   }
   footer a { color: var(--accent); transition: color 0.3s; }
   footer a:hover { color: #d4a96a; }
 
-  /* ===== Responsive ===== */
-  
-/* ===== Off-canvas navigation ===== */
-.back-btn {
-  display: inline-flex; align-items: center; gap: 6px;
-  margin-bottom: 24px; padding: 6px 16px; font-size: 0.82rem;
-  color: var(--text-sec); background: var(--card-bg);
-  border: 0.5px solid var(--border); border-radius: 30px;
-  cursor: pointer; transition: all 0.3s;
-}
-.back-btn:hover { color: var(--accent); border-color: var(--accent-light); }
-
-/* ===== 子页面公用 ===== */
-.page-header {
-  margin-top: 68px; padding: 48px 24px;
-  background: var(--header-bg); color: #fff; text-align: center;
-  transition: background .4s;
-}
-.page-header h1 { font-size: clamp(1.4rem, 3vw, 1.8rem); font-weight: 700; letter-spacing: 0.02em; }
-.page-header .sub { margin-top: 8px; font-size: .88rem; opacity: .7; }
-.page-header p { margin-top: 10px; font-size: 0.9rem; opacity: 0.7; }
-.page-header .github-link {
-  display: inline-flex; align-items: center; gap: 6px;
-  margin-top: 16px; padding: 8px 20px; border-radius: 30px;
-  background: rgba(255,255,255,0.1); color: #fff;
-  font-size: 0.82rem; font-weight: 500; transition: background 0.3s;
-}
-.page-header .github-link:hover { background: rgba(255,255,255,0.2); }
-
-.container { max-width: 1000px; margin: 0 auto; padding: 28px 24px 40px; overflow: visible; }
-
-.overview-card {
-  background: var(--card-bg); backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 0.5px solid var(--border); border-radius: 20px;
-  padding: 28px 24px; margin-bottom: 24px;
-}
-.overview-card h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 12px; color: var(--text); }
-.overview-card p { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.8; }
-.overview-card p + p { margin-top: 10px; }
-
-.card-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 16px; margin-bottom: 48px;
-}
-.card {
-  background: var(--card-bg); backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 0.5px solid var(--border); border-radius: 16px;
-  padding: 20px; transition: all 0.35s;
-}
-.card:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,0.04); border-color: var(--accent-light); }
-.card .icon { font-size: 1.6rem; margin-bottom: 10px; display: block; }
-.card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
-.card h3 a { color: var(--accent-dark); transition: color 0.3s; }
-.card h3 a:hover { color: #d4a96a; }
-.card p { font-size: 0.82rem; color: var(--text-lighter); }
-.card .tag { display: inline-block; font-size: 0.68rem; padding: 1px 8px; border-radius: 10px; background: var(--tag-bg); color: var(--accent); margin-top: 8px; }
-
-.res-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 20px; }
-.res-item {
-  display: flex; align-items: center; gap: 14px;
-  padding: 14px 18px; background: var(--card-bg);
-  backdrop-filter: blur(8px); border: 0.5px solid var(--border);
-  border-radius: 12px; transition: all 0.3s;
-}
-.res-item:hover { background: rgba(255,255,255,0.8); transform: translateX(4px); }
-.res-item .icon { font-size: 1.2rem; flex-shrink: 0; }
-.res-item .info { flex: 1; }
-.res-item .info a { font-weight: 600; font-size: 0.9rem; color: var(--accent-dark); transition: color 0.3s; }
-.res-item .info a:hover { color: #d4a96a; }
-.res-item .info span { display: block; font-size: 0.78rem; color: var(--text-light); }
-
-.sticky-nav {
-  position: sticky; top: 58px; z-index: 50;
-  background: rgba(245,240,234,0.9); backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-bottom: 0.5px solid var(--border);
-  padding: 10px 24px; display: flex; gap: 8px; flex-wrap: wrap;
-  justify-content: center; margin-top: -1px;
-}
-.sticky-nav a { padding: 4px 14px; border-radius: 16px; font-size: 0.8rem; font-weight: 500; color: var(--text-secondary); transition: all 0.3s; }
-.sticky-nav a:hover { background: rgba(107,143,113,0.1); color: var(--accent-dark); }
-
-.content-wrap { max-width: 800px; margin: 0 auto; padding: 32px 24px 60px; position: relative; overflow: visible; }
-
-.side-nav {
-  position: fixed; left: calc(50% + 430px); top: 50%; transform: translateY(-50%);
-  width: 18px; z-index: 5;
-  display: flex; flex-direction: column; align-items: center; gap: 10px;
-  background: var(--bg-side); border: 0.5px solid var(--border); border-radius: 20px;
-  padding: 14px 0; max-height: 70vh; overflow-y: auto;
-  transition: background 0.3s ease;
-}
-.side-nav:hover { width: 200px; background: var(--bg-side); backdrop-filter: blur(12px); border-radius: 14px; padding: 12px; align-items: stretch; }
-.side-nav a {
-  display: block; width: 10px; height: 10px; border-radius: 50%;
-  background: var(--accent-light); opacity: 0.5;
-  flex-shrink: 0; overflow: hidden; white-space: nowrap;
-  padding: 0; font-size: 0; border: none;
-  transition: all 0.25s ease; line-height: 1.4;
-}
-.side-nav:hover a { width: auto; height: auto; border-radius: 8px; opacity: 1; padding: 6px 12px; font-size: 0.75rem; font-weight: 500; color: var(--text-secondary); background: transparent; border-left: 2px solid transparent; }
-.side-nav a:hover { color: var(--hover); background: rgba(107,143,113,0.05); }
-.side-nav a.active { width: 12px; height: 12px; background: var(--accent); opacity: 1; box-shadow: 0 0 8px rgba(107,143,113,0.4); }
-.side-nav:hover a.active { width: auto; height: auto; color: var(--accent); background: rgba(107,143,113,0.1); border-left-color: var(--accent-light); font-weight: 600; box-shadow: none; }
-
-section.doc-section {
-  background: var(--card-bg); backdrop-filter: blur(12px);
-  border: 0.5px solid var(--border); border-radius: 16px;
-  padding: 28px 30px; margin-bottom: 24px;
-}
-section.doc-section h2 { font-size: 1.15rem; font-weight: 700; color: var(--text); border-left: 3px solid var(--accent-light); padding-left: 12px; margin-bottom: 12px; }
-section.doc-section h3 { font-size: 1.05rem; font-weight: 600; color: var(--accent-dark); margin: 20px 0 10px; }
-section.doc-section h4 { font-size: .95rem; font-weight: 600; color: var(--text-secondary); margin: 14px 0 8px; }
-section.doc-section p { margin-bottom: 14px; font-size: .92rem; color: var(--text-secondary); }
-section.doc-section ul, section.doc-section ol { margin-bottom: 14px; padding-left: 24px; }
-section.doc-section li { margin-bottom: 4px; font-size: .92rem; color: var(--text-secondary); }
-section.doc-section strong { color: var(--text); }
-
-pre { background: var(--pre-bg); color: var(--pre-color); border-radius: 10px; padding: 16px 20px; overflow-x: auto; font-family: "Cascadia Code","Fira Code","JetBrains Mono",Consolas,monospace; font-size: .82rem; line-height: 1.6; margin: 12px 0 18px; }
-pre .kw { color: #cba6f7; } pre .fn { color: #89b4fa; } pre .str { color: #a6e3a1; } pre .cm { color: #6c7086; } pre .num { color: #fab387; } pre .tp { color: #f5c2e7; } pre .mp { color: #f9e2af; } pre .op { color: #89dceb; }
-
-table { width: 100%; border-collapse: collapse; margin: 14px 0 18px; font-size: .88rem; }
-thead th { background: var(--accent-dark); color: #fff; padding: 9px 12px; text-align: left; font-weight: 600; }
-tbody td { padding: 7px 12px; border-bottom: 1px solid var(--border); }
-tbody tr:nth-child(even) { background: rgba(107,143,113,.03); }
-tbody tr:hover { background: rgba(107,143,113,.06); }
-
-.callout { border-left: 4px solid; border-radius: 0 8px 8px 0; padding: 12px 16px; margin: 16px 0; font-size: .88rem; }
-.callout.info { background: rgba(99,143,200,.08); border-color: #4a8fc0; }
-.callout.warn { background: rgba(200,160,80,.08); border-color: #c4a050; }
-.callout.ok { background: rgba(107,143,113,.08); border-color: var(--accent-light); }
-.callout-red { background: rgba(200,80,80,.06); border-color: #c05050; }
-.callout-green { background: rgba(107,143,113,.08); border-color: var(--accent-light); }
-.callout-amber { background: rgba(200,160,80,.08); border-color: #c4a050; }
-
-.tag { display: inline-block; padding: 0 8px; background: rgba(107,143,113,.08); color: var(--accent); border-radius: 4px; font-size: .72rem; font-weight: 600; margin-right: 3px; }
-.step-box { background: rgba(255,255,255,.4); border-radius: 8px; padding: 12px 16px; margin: 8px 0; }
-.step-num { display: inline-block; background: var(--accent-light); color: #fff; border-radius: 50%; width: 22px; height: 22px; text-align: center; line-height: 22px; font-size: .75rem; font-weight: 700; margin-right: 8px; }
-.flow { text-align: center; padding: 12px; background: rgba(255,255,255,.3); border-radius: 8px; margin: 8px 0; font-size: .82rem; color: var(--text-secondary); }
-.flow .arrow { color: var(--accent-light); font-weight: 700; }
-.table-wrap { overflow-x: auto; }
-.file-badge { font-family: monospace; background: rgba(0,0,0,.04); padding: 1px 6px; border-radius: 3px; font-size: .8rem; }
-.decl { background: rgba(255,255,255,.4); border: 1px solid rgba(107,143,113,.2); border-radius: 6px; padding: 10px 14px; font-family: Consolas,monospace; font-size: .85rem; margin: 10px 0 16px; white-space: pre-wrap; }
-
-
-/* ===== Mini Music Controller ===== */
-.nav-music { display: flex; align-items: center; gap: 4px; margin-left: 8px; }
-.mini-music-btn {
-  background: none; border: none; cursor: pointer;
-  font-size: 0.85rem; padding: 2px 4px; line-height: 1;
-  color: var(--text-sec); transition: color 0.3s;
-}
-.mini-music-btn:hover { color: var(--accent); }
-.mini-track-name {
-  font-size: 0.68rem; color: var(--text-light);
-  max-width: 80px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-}
-@media(max-width:900px){
-  .side-nav{position:static;width:100%;flex-direction:row;flex-wrap:wrap;gap:6px;padding:10px 16px;background:var(--bg-side);border:.5px solid var(--border);border-radius:14px;align-items:center;justify-content:center;margin-bottom:24px}
-  .side-nav a{width:auto;height:auto;border-radius:100px;padding:4px 14px;font-size:.72rem;font-weight:500;color:var(--text-secondary);background:transparent;border:.5px solid var(--border)}
-  .side-nav a.active{color:var(--accent);background:rgba(107,143,113,.1);border-color:var(--accent-light)}
-}
-@media(max-width:640px){
-  .page-header{padding:36px 20px;margin-top:60px}
-  .container{padding:24px 16px 40px}
-  .card-grid{grid-template-columns:1fr}
-  .overview-card{padding:24px 20px}
-  .content-wrap{padding:24px 12px 40px}
-  section.doc-section{padding:20px 16px}
-}
-@media (max-width: 768px) {
-    .hero-content {
-      grid-template-columns: 1fr;
-      gap: 32px;
-    }
-    .hero-left { transform: translateY(-30px); }
-    .hero-right { transform: translateY(30px); }
-    .hero-content.loaded .hero-left,
-    .hero-content.loaded .hero-right {
-      transform: translateY(0);
-    }
+  /* ===== Sticky Nav (section jump) ===== */
+  .sticky-nav {
+    position: sticky; top: 58px; z-index: 50;
+    background: rgba(245, 240, 234, 0.9);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 0.5px solid var(--border);
+    padding: 10px 24px;
+    display: flex; gap: 8px; flex-wrap: wrap;
+    justify-content: center;
+    margin-top: -1px;
   }
-  
+  .sticky-nav a {
+    padding: 4px 14px; border-radius: 16px;
+    font-size: 0.8rem; font-weight: 500; color: var(--text-sec);
+    transition: all 0.3s;
+  }
+  .sticky-nav a:hover { background: rgba(107,143,113,0.1); color: var(--accent-dark); }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 640px) {
+    .page-header { padding: 36px 20px; margin-top: 60px; }
+    .container { padding: 24px 16px 40px; }
+    .card-grid { grid-template-columns: 1fr; }
+    .overview-card { padding: 24px 20px; }
+    .screenshot-grid { grid-template-columns: 1fr; }
+  }
+
   .theme-btn {
     width:34px; height:34px; border-radius:50%; border:0.5px solid var(--border);
     background:transparent; color:var(--text-sec); font-size:1rem;
@@ -869,652 +262,180 @@ tbody tr:hover { background: rgba(107,143,113,.06); }
     align-items:center; justify-content:center; flex-shrink:0;
   }
   .theme-btn:hover { background:var(--tag-bg); border-color:var(--accent-light); }
+  .reveal { opacity:0; transform:translateY(24px); transition:opacity 0.6s ease,transform 0.6s ease; }
+  .reveal.visible { opacity:1; transform:translateY(0); }
+  body.dark nav { background: rgba(15,15,18,0.85); border-color: rgba(255,255,255,0.04); }
+  body.dark .nav-links a, body.dark .nav-links button { color: #c8d4e0; }
+  body.dark .nav-links a:hover { color: #fff; }
+  body.dark .sticky-nav { background: rgba(15,15,18,0.85); }
+  body.dark .sticky-nav a { color: #b0c4d8; }
+  body.dark .sticky-nav a:hover { color: #fff; }
+  body.dark .card { background: rgba(25,30,40,0.6); }
+  body.dark .overview-card { background: rgba(25,30,40,0.6); }
+  body.dark .res-item { background: rgba(25,30,40,0.5); }
+  body.dark .screenshot-item { background: rgba(25,30,40,0.5); }
+  body.dark .theme-btn { color: #d0dce8; border-color: rgba(255,255,255,0.08); }
 
-  @media (max-width: 640px) {
-    #hero { padding: 80px 20px 60px; }
-    .splash-card { padding: 36px 24px; }
-    .hero-left h1 { font-size: 2rem; }
-    .hero-badges { gap: 8px; }
-    .hero-badges a, .hero-badges span { font-size: 0.8rem; padding: 6px 14px; }
-    .music-player { padding: 16px; }
-    .music-player .controls { flex-wrap: wrap; }
-    .music-player .controls .progress-area { order: 1; width: 100%; margin-top: 4px; }
-    section { padding: 60px 20px; }
-    .project-grid { grid-template-columns: 1fr; }
-    .game-grid { grid-template-columns: 1fr; }
-    .nav-links { gap: 16px; }
-    .nav-links a { font-size: 0.8rem; }
-  }
-
-
-
-
-body.dark .sticky-nav { background: rgba(12,12,16,0.9); border-color: rgba(255,255,255,0.04); }
-body.dark .sticky-nav a { color: #b0c4d8; }
-body.dark .sticky-nav a:hover { color: #fff; background: rgba(40,55,75,0.3); }
+body.dark::before { content: ""; position: fixed; inset: 0; background: rgba(0,0,0,0.45); pointer-events: none; z-index: 0; }
 </style>
 </head>
 <body>
 
-<!-- ===== Splash ===== -->
-<div id="splash">
-  <div class="splash-card">
-    <span class="icon">✦</span>
-    <div class="quote-text" id="splashQuote"></div>
-    <span class="quote-author" id="splashAuthor"></span>
-    <div class="splash-bar"><div class="fill"></div></div>
-  </div>
-</div>
-
-<!-- ===== Navigation ===== -->
 <nav>
   <div class="inner">
     <span class="nav-brand">✦ tales</span>
     <ul class="nav-links">
-      <li><a href="#hero">首页</a></li>
-      <li><a href="#projects">项目</a></li>
-      <li><a href="#games">小游戏</a></li>
+      <li><a href="index.html">首页</a></li>
+      <li><a href="index.html#projects">项目</a></li>
       <li><a href="https://github.com/tales6" target="_blank">GitHub</a></li>
       <li><a href="https://qm.qq.com/cgi-bin/qm/qr?k=2416829925" target="_blank">QQ</a></li>
-      <li class="nav-music">
-        <button class="mini-music-btn" id="miniPlayBtn" title="播放/暂停">▶</button>
-        <span class="mini-track-name" id="miniTrackName">未播放</span>
-      </li>
-      <li><button class="theme-btn" id="themeBtn" style="margin-left:4px">🌙</button></li>
+      <button class="theme-btn" id="themeBtn">🌙</button>
     </ul>
   </div>
 </nav>
 
-<!-- ===== Hero ===== -->
-<div id="main-view">
-<section id="hero">
-  <div class="hero-content" id="heroContent">
-    <!-- Left: avatar + name + badge -->
-    <div class="hero-left">
-      <div class="hero-avatar-wrap reveal">
-        <img src="avatar.jpg" alt="tales avatar" />
-      </div>
-      <h1 class="reveal reveal-delay-1">tales</h1>
-      <p class="tagline reveal reveal-delay-2">嵌入式开发 · 万物皆可嵌</p>
-      <div class="hero-badges reveal reveal-delay-3">
-        <a href="https://github.com/tales6" target="_blank" class="badge-gh">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-          GitHub
-        </a>
-        <a href="https://qm.qq.com/cgi-bin/qm/qr?k=2416829925" target="_blank" class="badge-qq">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.12.02-1.96 1.25-5.54 3.66-.52.36-1 .53-1.42.52-.47-.01-1.37-.26-2.03-.48-.82-.27-1.47-.42-1.41-.88.03-.24.36-.49.99-.74 3.96-1.72 6.6-2.86 7.93-3.41 3.78-1.56 4.56-1.83 5.07-1.84.11 0 .36.03.52.17.18.16.23.38.21.52z"/></svg>
-          QQ 2416829925
-        </a>
-        <span class="badge-outline">📍 中国</span>
-      </div>
-    </div>
-
-    <!-- Right: clock + music player -->
-    <div class="hero-right">
-      <div class="digital-clock reveal reveal-delay-4" id="digitalClock">
-        <div class="clock-time">00:00:00</div>
-        <div class="clock-date">----年--月--日 星期-</div>
-      </div>
-
-      <div class="music-player reveal reveal-delay-4" id="musicPlayer">
-        <div class="track-info" id="trackInfo">
-          <div class="cover" id="musicIcon">🎵</div>
-          <div class="meta">
-            <div class="name" id="trackName">加载中...</div>
-            <div class="artist" id="trackArtist">tales 收藏</div>
-          </div>
-          <div class="track-list" id="trackList"></div>
-        </div>
-        <div class="controls">
-          <button id="prevBtn" title="上一首">⏮</button>
-          <button class="play-main" id="playBtn" title="播放/暂停">▶</button>
-          <button id="nextBtn" title="下一首">⏭</button>
-          <button class="track-select-btn" id="trackSelectBtn" title="曲目列表">☰</button>
-          <div class="progress-area">
-            <span class="time" id="currentTime">0:00</span>
-            <div class="bar-wrap" id="progressBar">
-              <div class="fill" id="progressFill"></div>
-            </div>
-            <span class="time" id="totalTime">0:00</span>
-          </div>
-          <div class="vol-wrap">
-            <button class="vol-btn" id="volBtn" title="音量">🔊</button>
-            <div class="vol-slider" id="volSlider">
-              <input type="range" id="volRange" min="0" max="1" step="0.01" value="0.5" />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== Projects ===== -->
-<section id="projects">
-  <div class="section-inner">
-    <div class="reveal">
-      <span class="section-label">/ 作品</span>
-      <h2 class="section-title">项目集</h2>
-      <p class="section-desc">每一个项目都是一次探索，未来还会有更多。</p>
-    </div>
-    <div class="project-grid">
-
-      <!-- Project 1: FreeRTOS Weather -->
-      <div class="project-card reveal reveal-delay-1" onclick='return loadPage("freertos-weather-docs.html")'>
-        <div class="card-header">
-          <span class="icon">🌤️</span>
-          <h3>FreeRTOS 物联网天气站</h3>
-        </div>
-        <div class="tags"><span>STM32</span><span>FreeRTOS</span><span>ESP8266</span></div>
-        <p>基于 STM32F103C8T6 + FreeRTOS，ESP8266 获取天气数据，OLED 实时显示。</p>
-        <div class="links" onclick="event.stopPropagation()">
-          <a href="https://github.com/tales6/FREERTOS_WEATHER" target="_blank">GitHub →</a>
-          <a href="freertos-weather-docs.html" target="_blank">文档 →</a>
-        </div>
-      </div>
-
-      <!-- Project 2: Smart Watering -->
-      <div class="project-card reveal reveal-delay-2" onclick='return loadPage("stm32-smart-watering.html")'>
-        <div class="card-header">
-          <span class="icon">🌱</span>
-          <h3>STM32 智能浇花系统</h3>
-        </div>
-        <div class="tags"><span>STM32</span><span>ESP8266</span><span>OneNet</span><span>微信小程序</span></div>
-        <p>土壤湿度检测 + 自动浇水 + OLED，接入 OneNet 云平台，微信小程序远程监控。</p>
-        <div class="links" onclick="event.stopPropagation()">
-          <a href="https://github.com/tales6/stm32-esp8266-onenet-wechat" target="_blank">GitHub →</a>
-          <a href="stm32-smart-watering.html" target="_blank">文档 →</a>
-        </div>
-      </div>
-
-      <!-- Placeholder 1 -->
-      <div class="project-card placeholder reveal reveal-delay-3">
-        <span class="plus-icon">＋</span>
-        <h3 style="color:#8a9a8a;">未来项目</h3>
-        <p style="color:#9aaa9a;">这里将展示你的下一个精彩作品。</p>
-      </div>
-
-      <!-- Placeholder 2 -->
-      <div class="project-card placeholder reveal reveal-delay-3">
-        <span class="plus-icon">＋</span>
-        <h3 style="color:#8a9a8a;">未来项目</h3>
-        <p style="color:#9aaa9a;">等你来填满这个位置。</p>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<hr class="section-divider">
-
-<!-- ===== Mini Games ===== -->
-<section id="games">
-  <div class="section-inner">
-    <div class="reveal">
-      <span class="section-label">/ 小游戏</span>
-      <h2 class="section-title">玩玩</h2>
-      <p class="section-desc">敲代码累了？来玩会儿放松一下。</p>
-    </div>
-    <div class="game-grid">
-      <a href="games/snake.html" class="game-card reveal reveal-delay-1" onclick="event.preventDefault();loadGame('games/snake.html')">
-        <span class="icon">🐍</span>
-        <h3>贪吃蛇</h3>
-        <p>经典诺基亚风格，键盘方向键控制。</p>
-        <span class="play-tag">Play →</span>
-      </a>
-      <a href="games/2048.html" class="game-card reveal reveal-delay-2" onclick="event.preventDefault();loadGame('games/2048.html')">
-        <span class="icon">🧩</span>
-        <h3>2048</h3>
-        <p>合并方块，挑战 2048！</p>
-        <span class="play-tag">Play →</span>
-      </a>
-      <a href="games/breakout.html" class="game-card reveal reveal-delay-3" onclick="event.preventDefault();loadGame('games/breakout.html')">
-        <span class="icon">🕹️</span>
-        <h3>俄罗斯方块</h3>
-        <p>经典益智消除，堆叠方块消除行。</p>
-        <span class="play-tag">Play →</span>
-      </a>
-    </div>
-  </div>
-</section>
+<div class="page-header">
+  <h1>🌤️ FreeRTOS 物联网天气站</h1>
+  <p>STM32F103C8T6 + FreeRTOS + ESP8266 + OLED</p>
+  <a class="github-link" href="https://github.com/tales6/FREERTOS_WEATHER" target="_blank">
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+    GitHub 仓库
+  </a>
 </div>
 
-<div id="sub-view" style="display:none"></div>
+<!-- Sticky section nav -->
+<nav class="sticky-nav">
+  <a href="#intro">项目概述</a>
+  <a href="#code">代码详解</a>
+  <a href="#report">设计报告</a>
+  <a href="#hardware">接线图与截图</a>
+  <a href="#video">演示视频</a>
+</nav>
 
-<!-- ===== Footer ===== -->
+<div class="container">
+
+  <!-- ===== Intro ===== -->
+  <section id="intro">
+    <div class="overview-card">
+      <h2>项目概述</h2>
+      <p>本设计基于 <strong>STM32F103C8T6</strong> 主控芯片，运行 <strong>FreeRTOS</strong> 实时操作系统，通过 <strong>ESP8266</strong> WiFi 模块连接网络，获取实时天气数据与 NTP 时间同步，在 <strong>OLED</strong> 屏幕上显示天气信息和时钟。</p>
+      <p>系统采用多任务架构，将网络通信、数据解析、显示刷新等功能分离为独立任务，通过 FreeRTOS 的任务调度实现高效并发运行，充分展现了嵌入式实时操作系统的设计思想。</p>
+    </div>
+  </section>
+
+  <!-- ===== Code Details ===== -->
+  <section id="code">
+    <div class="section-label">📘 代码详解</div>
+    <div class="card-grid">
+      <div class="card reveal">
+        <span class="icon">📋</span>
+        <h3><a href="freertos-weather/代码详解/代码详解_概要.html" target="_blank">代码详解概要</a></h3>
+        <p>系统整体架构、任务划分与 FreeRTOS 配置概览。</p>
+        <span class="tag">架构</span>
+      </div>
+      <div class="card reveal">
+        <span class="icon">🔌</span>
+        <h3><a href="freertos-weather/代码详解/详解_ESP8266驱动.html" target="_blank">ESP8266 驱动详解</a></h3>
+        <p>AT 指令封装、WiFi 连接、HTTP 请求天气数据全流程。</p>
+        <span class="tag">ESP8266</span>
+      </div>
+      <div class="card reveal">
+        <span class="icon">🕐</span>
+        <h3><a href="freertos-weather/代码详解/详解_NTP时钟同步.html" target="_blank">NTP 时钟同步详解</a></h3>
+        <p>NTP 协议原理、时间戳解析与本地时钟校准实现。</p>
+        <span class="tag">NTP</span>
+      </div>
+      <div class="card reveal">
+        <span class="icon">📊</span>
+        <h3><a href="freertos-weather/代码详解/详解_数据处理解析.html" target="_blank">数据处理解析详解</a></h3>
+        <p>JSON 天气数据解析、温度湿度提取与格式化显示。</p>
+        <span class="tag">JSON</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Design Report ===== -->
+  <section id="report">
+    <div class="section-label">📋 设计报告</div>
+    <div class="res-list">
+      <div class="res-item reveal">
+        <span class="icon">📄</span>
+        <div class="info">
+          <a href="freertos-weather/设计报告/基于FreeRTOS的STM32物联网天气站.docx" target="_blank">基于FreeRTOS的STM32物联网天气站.docx</a>
+          <span>完整设计报告，包含需求分析、系统设计、测试验证等。</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Hardware: Wiring & Screenshots ===== -->
+  <section id="hardware">
+    <div class="section-label">🔌 接线图</div>
+    <div class="res-list">
+      <div class="res-item reveal">
+        <span class="icon">📐</span>
+        <div class="info">
+          <a href="freertos-weather/接线图/接线图.png" target="_blank">接线图.png</a>
+          <span>STM32 与 ESP8266、OLED 等模块的完整接线示意图。</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-label">🖥️ 运行截图</div>
+    <div class="screenshot-grid">
+      <div class="screenshot-item reveal">
+        <img src="freertos-weather/运行截图/运行截图_1.jpg" alt="运行截图1" loading="lazy" />
+        <div class="caption">运行截图 1</div>
+      </div>
+      <div class="screenshot-item reveal">
+        <img src="freertos-weather/运行截图/运行截图_2.jpg" alt="运行截图2" loading="lazy" />
+        <div class="caption">运行截图 2</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Video ===== -->
+  <section id="video">
+    <div class="section-label">🎬 实物演示</div>
+    <div class="res-list">
+      <div class="res-item reveal">
+        <span class="icon">▶️</span>
+        <div class="info">
+          <a href="freertos-weather/演示视频/演示视频.mp4" target="_blank">演示视频.mp4</a>
+          <span>完整功能演示：天气获取、NTP 同步、OLED 显示。</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
 <footer>
-  <p>&copy; 2026 <a href="https://github.com/tales6" target="_blank">tales</a> · 用代码创造物理世界</p>
+  <p>&copy; 2026 <a href="https://github.com/tales6" target="_blank">tales</a> · <a href="index.html">返回主页</a></p>
 </footer>
 
 <script>
-  // ===== Theme Toggle =====
-  (function() {
-    const btn = document.getElementById('themeBtn');
-    const saved = localStorage.getItem('tales-theme');
-    if (saved === 'dark') document.body.classList.add('dark');
-    btn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
-    btn.addEventListener('click', () => {
-      document.body.classList.toggle('dark');
-      const isDark = document.body.classList.contains('dark');
-      btn.textContent = isDark ? '☀️' : '🌙';
-      localStorage.setItem('tales-theme', isDark ? 'dark' : 'light');
-    });
-  })();
-
-  // ===== Splash Quotes =====
-  (function() {
-    const quotes = [
-      { t: '人生如逆旅，我亦是行人。', a: '— 苏轼' },
-      { t: '愿你出走半生，归来仍是少年。', a: '' },
-      { t: '世界上只有一种真正的英雄主义，那就是在认清生活的真相后依然热爱生活。', a: '— 罗曼·罗兰' },
-      { t: '有些鸟儿是关不住的，它们的羽毛太鲜亮了。', a: '— 《肖申克的救赎》' },
-      { t: '我们一路奋战，不是为了改变世界，而是为了不让世界改变我们。', a: '— 《熔炉》' },
-      { t: '及时行乐，孩子们，让你的生命超凡脱俗。', o: 'Carpe diem — seize the day, boys, make your lives extraordinary.', a: '— 《死亡诗社》' },
-      { t: '星星发亮是为了让每一个人有一天都能找到属于自己的星星。', a: '— 《小王子》' },
-      { t: '夜色难免黑凉，前行必有曙光。', a: '' },
-      { t: '道阻且长，行则将至；行而不辍，未来可期。', a: '— 《荀子·修身》' },
-      { t: '山不让尘，川不辞盈。', a: '— 晋·张华《励志诗》' },
-      { t: '追风赶月莫停留，平芜尽处是春山。', a: '' },
-      { t: '且视他人之疑目如盏盏鬼火，大胆去走你的夜路。', a: '— 史铁生' },
-      { t: '心有猛虎，细嗅蔷薇。', a: '— 西格里夫·萨松' },
-      { t: '万物皆有裂痕，那是光照进来的地方。', a: '— 莱昂纳德·科恩' },
-      { t: '所谓无底深渊，下去，也是前程万里。', a: '— 木心' },
-      { t: '一尘不染不是没有尘埃，而是尘埃任它飞扬，我自做我的阳光。', a: '— 林清玄' },
-      { t: '错过了落日余晖，还可以静待满天星辰。', a: '' },
-      { t: '花店不开了，花继续开。', a: '— 蔡仁伟《伪诗集》' },
-      { t: 'Life is like a box of chocolates, you never know what you\'re gonna get.', a: '— Forrest Gump' },
-      { t: '保持热爱，奔赴山海。', a: '' },
-      { t: '愿你三冬暖，愿你春不寒，愿你天黑有灯，下雨有伞。', a: '' },
-    ];
-
-    const q = quotes[Math.floor(Math.random() * quotes.length)];
-    document.getElementById('splashQuote').innerHTML = q.o ? '「' + q.o + '」<br>&emsp;' + q.t : '「' + q.t + '」';
-    document.getElementById('splashAuthor').textContent = q.a;
-
-    setTimeout(() => {
-      document.getElementById('splash').classList.add('hide');
-      document.getElementById('heroContent').classList.add('loaded');
-      sessionStorage.setItem('splashShown', '1');
-    }, 3600);
-  })();
-
-  // ===== Scroll Reveal =====
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-      }
-    });
-  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-  // ===== Digital Clock =====
-  (function() {
-    const clockTime = document.querySelector('.clock-time');
-    const clockDate = document.querySelector('.clock-date');
-    const weekDays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
-    function updateClock() {
-      const now = new Date();
-      const h = String(now.getHours()).padStart(2, '0');
-      const m = String(now.getMinutes()).padStart(2, '0');
-      const s = String(now.getSeconds()).padStart(2, '0');
-      clockTime.textContent = h + ':' + m + ':' + s;
-      clockDate.textContent = now.getFullYear() + '年' + (now.getMonth()+1) + '月' + now.getDate() + '日 ' + weekDays[now.getDay()];
-    }
-    updateClock();
-    setInterval(updateClock, 1000);
-  })();
-
-  // ===== Music Player =====
-  (function() {
-    const tracks = [
-      { src: 'music/track01.flac', name: 'Undertale', artist: 'Toby Fox' },
-      { src: 'music/track02.mp3', name: 'making an entrance', artist: 'nobody' },
-      { src: 'music/KAII - __.mp3', name: '__', artist: 'KAII' },
-      { src: 'music/\u5c71\u5ca1\u6643 - Promise.mp3', name: 'Promise', artist: '\u5c71\u5ca1\u6643' },
-      { src: 'music/Luke Pickman - Mystery of Love.mp3', name: 'Mystery of Love', artist: 'Luke Pickman' },
-    ];
-
-    let currentTrack = 0;
-    let isPlaying = false;
-    const audio = new Audio();
-    audio.volume = 0.5;
-
-    
-
-    const playBtn = document.getElementById('playBtn');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const trackName = document.getElementById('trackName');
-    const trackArtist = document.getElementById('trackArtist');
-    const currentTimeEl = document.getElementById('currentTime');
-    const totalTimeEl = document.getElementById('totalTime');
-    const progressFill = document.getElementById('progressFill');
-    const progressBar = document.getElementById('progressBar');
-    const volBtn = document.getElementById('volBtn');
-    const volSlider = document.getElementById('volSlider');
-    const volRange = document.getElementById('volRange');
-    const trackList = document.getElementById('trackList');
-    const trackInfo = document.getElementById('trackInfo');
-    const trackSelectBtn = document.getElementById('trackSelectBtn');
-
-    function loadTrack(idx) {
-      const t = tracks[idx];
-      audio.src = t.src;
-      trackName.textContent = t.name;
-      trackArtist.textContent = t.artist;
-      audio.load();
-      if (isPlaying) {
-        audio.play().catch(() => { isPlaying = false; playBtn.textContent = '▶'; });
-      }
-      updatePlayBtn();
-      renderTrackList();
-    }
-
-    function updatePlayBtn() {
-      playBtn.textContent = isPlaying ? '⏸' : '▶';
-    }
-
-    function togglePlay() {
-      if (isPlaying) {
-        audio.pause();
-      } else {
-        audio.play().catch(() => {});
-      }
-      isPlaying = !isPlaying;
-      updatePlayBtn();
-    }
-
-    function nextTrack() {
-      currentTrack = (currentTrack + 1) % tracks.length;
-      loadTrack(currentTrack);
-    }
-
-    function prevTrack() {
-      currentTrack = (currentTrack - 1 + tracks.length) % tracks.length;
-      loadTrack(currentTrack);
-    }
-
-    function selectTrack(idx) {
-      if (idx === currentTrack && isPlaying) return;
-      currentTrack = idx;
-      loadTrack(currentTrack);
-      if (!isPlaying) { isPlaying = true; audio.play().catch(() => {}); updatePlayBtn(); }
-      closeTrackList();
-    }
-
-    function formatTime(s) {
-      if (isNaN(s) || !isFinite(s)) return '0:00';
-      const m = Math.floor(s / 60);
-      const sec = Math.floor(s % 60);
-      return m + ':' + String(sec).padStart(2, '0');
-    }
-
-    function renderTrackList() {
-      trackList.innerHTML = '';
-      tracks.forEach((t, i) => {
-        const div = document.createElement('div');
-        div.className = 'item' + (i === currentTrack ? ' active' : '');
-        div.innerHTML = '<span class="idx">' + (i + 1) + '</span><div class="info"><div class="tname">' + t.name + '</div><div class="tartist">' + t.artist + '</div></div><span class="check">✓</span>';
-        div.addEventListener('click', (e) => { e.stopPropagation(); selectTrack(i); });
-        trackList.appendChild(div);
-      });
-    }
-
-    function toggleTrackList(e) {
-      e.stopPropagation();
-      trackList.classList.toggle('show');
-      volSlider.classList.remove('show');
-    }
-
-    function closeTrackList() {
-      trackList.classList.remove('show');
-    }
-
-    audio.addEventListener('loadedmetadata', () => {
-      totalTimeEl.textContent = formatTime(audio.duration);
-    });
-
-    audio.addEventListener('timeupdate', () => {
-      if (audio.duration) {
-        const pct = (audio.currentTime / audio.duration) * 100;
-        progressFill.style.width = pct + '%';
-        currentTimeEl.textContent = formatTime(audio.currentTime);
-      }
-    });
-
-    audio.addEventListener('ended', () => {
-      nextTrack();
-    });
-
-    progressBar.addEventListener('click', (e) => {
-      if (!audio.duration) return;
-      const rect = progressBar.getBoundingClientRect();
-      const pct = (e.clientX - rect.left) / rect.width;
-      audio.currentTime = pct * audio.duration;
-    });
-
-    playBtn.addEventListener('click', togglePlay);
-    nextBtn.addEventListener('click', () => { closeTrackList(); nextTrack(); });
-    prevBtn.addEventListener('click', () => { closeTrackList(); prevTrack(); });
-    trackSelectBtn.addEventListener('click', toggleTrackList);
-    trackInfo.addEventListener('click', (e) => {
-      if (!e.target.closest('.track-list') && !e.target.closest('.cover')) {
-        toggleTrackList(e);
-      }
-    });
-
-    let volHoverTimer = null;
-    volBtn.addEventListener('mouseenter', () => {
-      clearTimeout(volHoverTimer);
-      volSlider.classList.add('show');
-    });
-    volSlider.addEventListener('mouseenter', () => {
-      clearTimeout(volHoverTimer);
-    });
-    volBtn.addEventListener('mouseleave', () => {
-      volHoverTimer = setTimeout(() => volSlider.classList.remove('show'), 300);
-    });
-    volSlider.addEventListener('mouseleave', () => {
-      volHoverTimer = setTimeout(() => volSlider.classList.remove('show'), 300);
-    });
-
-    volRange.addEventListener('input', () => {
-      const v = parseFloat(volRange.value);
-      audio.volume = v;
-      volBtn.textContent = v === 0 ? '🔇' : v < 0.3 ? '🔈' : v < 0.7 ? '🔉' : '🔊';
-    });
-
-    let volMuted = false;
-    let prevVol = 0.5;
-    volBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      volMuted = !volMuted;
-      if (volMuted) {
-        prevVol = audio.volume;
-        audio.volume = 0;
-        volRange.value = 0;
-        volBtn.textContent = '🔇';
-      } else {
-        audio.volume = prevVol;
-        volRange.value = prevVol;
-        volBtn.textContent = prevVol === 0 ? '🔇' : prevVol < 0.3 ? '🔈' : prevVol < 0.7 ? '🔉' : '🔊';
-      }
-    });
-
-    audio.addEventListener('volumechange', () => {
-      volRange.value = audio.volume;
-      if (audio.volume === 0) volBtn.textContent = '🔇';
-      else if (audio.volume < 0.3) volBtn.textContent = '🔈';
-      else if (audio.volume < 0.7) volBtn.textContent = '🔉';
-      else volBtn.textContent = '🔊';
-    });
-
-    document.addEventListener('click', (e) => {
-      if (!e.target.closest('.track-info')) closeTrackList();
-      if (!e.target.closest('.vol-wrap')) volSlider.classList.remove('show');
-    });
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === ' ' && e.target === document.body) {
-        e.preventDefault();
-        togglePlay();
-      }
-    });
-
-    renderTrackList();
-    loadTrack(0);
-
-    // Expose music API globally
-    window.__musicToggle = togglePlay;
-    window.__musicPrev = prevTrack;
-    window.__musicNext = nextTrack;
-    window.__musicSelect = selectTrack;
-
-    // Mini player update
-    function updateMiniPlayer() {
-      var btn = document.getElementById("miniPlayBtn");
-      var nameEl = document.getElementById("miniTrackName");
-      if (btn) btn.textContent = isPlaying ? "\u23f8" : "\u25b6";
-      if (nameEl && tracks[currentTrack]) nameEl.textContent = tracks[currentTrack].name;
-    }
-    var miniBtn = document.getElementById("miniPlayBtn");
-    if (miniBtn) miniBtn.addEventListener("click", togglePlay);
-    // Patch updatePlayBtn to also update mini player
-    var origUpdate = updatePlayBtn;
-    updatePlayBtn = function() {
-      origUpdate();
-      updateMiniPlayer();
-    };
-    updateMiniPlayer();
-  })();
-
-  // ===== SPA Navigation =====
-  function absUrl(u) { return u.startsWith("/") ? u : "/" + u; }
-
-  async function loadPage(url) {
-    var mainView = document.getElementById("main-view");
-    var subView = document.getElementById("sub-view");
-    subView.innerHTML = '<div style="text-align:center;padding:80px 24px;color:var(--text-sec)">\u52a0\u8f7d\u4e2d...</div>';
-    mainView.style.display = "none";
-    subView.style.display = "block";
-    window.scrollTo(0, 0);
-    try {
-      var res = await fetch(absUrl(url));
-      if (!res.ok) throw new Error("HTTP " + res.status);
-      var text = await res.text();
-      var parser = new DOMParser();
-      var doc = parser.parseFromString(text, "text/html");
-      var content = "";
-      var header = doc.querySelector(".page-header");
-      if (header) content += header.outerHTML;
-      var sNav = doc.querySelector(".sticky-nav");
-      if (sNav) content += sNav.outerHTML;
-      var cWrap = doc.querySelector(".content-wrap");
-      if (cWrap) {
-        content += cWrap.outerHTML;
-      } else {
-        var container = doc.querySelector(".container");
-        if (container) content += container.outerHTML;
-      }
-      var sideNav = doc.querySelector(".side-nav");
-      if (sideNav) content += sideNav.outerHTML;
-      subView.innerHTML = '<div style="max-width:1000px;margin:0 auto;padding:24px">' +
-        '<button class="back-btn" onclick="goHome()">\u2190 \u8fd4\u56de\u9996\u9875</button>' +
-        "</div>" + content;
-      history.pushState({ url: url, action: "page" }, "", absUrl(url));
-      subView.querySelectorAll(".reveal").forEach(function(el) { el.classList.add("visible"); });
-      initSideNav();
-    } catch (e) {
-      subView.innerHTML = '<div style="text-align:center;padding:40px 24px;color:var(--text-sec)">\u52a0\u8f7d\u5931\u8d25: ' + e.message + '</div>';
-    }
-  }
-
-  function goHome() {
-    document.getElementById("main-view").style.display = "";
-    document.getElementById("sub-view").style.display = "none";
-    history.pushState({ action: "home" }, "", "/index.html");
-    window.scrollTo(0, 0);
-  }
-
-  function loadGame(url) {
-    var mainView = document.getElementById("main-view");
-    var subView = document.getElementById("sub-view");
-    subView.innerHTML = '<div style="max-width:1000px;margin:0 auto;padding:24px">' +
-      '<button class="back-btn" onclick="goHome()">\u2190 \u8fd4\u56de\u9996\u9875</button></div>' +
-      '<div style="max-width:600px;margin:0 auto;padding:0 24px 60px"><iframe src="' + absUrl(url) + '" style="width:100%;border:none;min-height:80vh;border-radius:16px;background:var(--bg)" allow="autoplay"></iframe></div>';
-    mainView.style.display = "none";
-    subView.style.display = "block";
-    history.pushState({ url: url, action: "game" }, "", absUrl(url));
-    window.scrollTo(0, 0);
-  }
-
-  function goToSection(sectionId) {
-    if (document.getElementById("sub-view").style.display !== "none") {
-      goHome();
-    }
-    setTimeout(function() {
-      var el = document.getElementById(sectionId);
-      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 50);
-  }
-
-  // Override top nav hash links for SPA
-  document.querySelectorAll("nav a[href^='#']").forEach(function(a) {
-    a.addEventListener("click", function(e) {
-      e.preventDefault();
-      var id = this.getAttribute("href").slice(1);
-      goToSection(id);
-    });
+(function() {
+  const btn = document.getElementById('themeBtn');
+  if (!btn) return;
+  const saved = localStorage.getItem('tales-theme');
+  if (saved === 'dark') document.body.classList.add('dark');
+  btn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+  btn.addEventListener('click', () => {
+    document.body.classList.toggle('dark');
+    const isDark = document.body.classList.contains('dark');
+    btn.textContent = isDark ? '☀️' : '🌙';
+    localStorage.setItem('tales-theme', isDark ? 'dark' : 'light');
   });
-
-  // Intercept internal links in sub-view (delegated)
-  document.addEventListener("click", function(e) {
-    var a = e.target.closest("a");
-    if (!a) return;
-    var href = a.getAttribute("href");
-    if (!href || href.startsWith("#") || href.startsWith("http") || href.startsWith("//") || href.startsWith("javascript")) return;
-    if (!a.closest("#sub-view")) return;
-    e.preventDefault();
-    loadPage(href);
+  // Reveal observer
+  document.querySelectorAll('.reveal').forEach(el => {
+    const ro = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); ro.unobserve(e.target); } });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    ro.observe(el);
   });
-
-  // Browser back/forward
-  window.addEventListener("popstate", function(e) {
-    if (e.state && e.state.action === "home") {
-      document.getElementById("main-view").style.display = "";
-      document.getElementById("sub-view").style.display = "none";
-    } else if (e.state && e.state.action === "game") {
-      loadGame(e.state.url);
-    } else if (e.state && e.state.url) {
-      loadPage(e.state.url);
-    }
-  });
-
-  function initSideNav() {
-    var nav = document.getElementById("sub-view").querySelector(".side-nav");
-    if (!nav) return;
-    var links = nav.querySelectorAll("a");
-    var sections = [];
-    links.forEach(function(a) {
-      var id = a.getAttribute("data-section") || a.getAttribute("href").slice(1);
-      var sec = document.getElementById("sub-view").querySelector("#" + CSS.escape(id));
-      if (sec) sections.push({ el: a, section: sec });
-    });
-    if (sections.length === 0) return;
-    var obs = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (entry.isIntersecting) {
-          links.forEach(function(l) { l.classList.remove("active"); });
-          var match = sections.find(function(s) { return s.section === entry.target; });
-          if (match) match.el.classList.add("active");
-        }
-      });
-    }, { rootMargin: "-60px 0px -40%", threshold: 0.2 });
-    sections.forEach(function(s) { obs.observe(s.section); });
-  }
-
+})();
 </script>
+
 </body>
 </html>

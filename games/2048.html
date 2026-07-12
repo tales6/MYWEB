@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -161,7 +161,7 @@ document.addEventListener('touchend', e => {
   else move(dy > 0 ? 3 : 2);
 });
 
-function goBack() { sessionStorage.setItem("splashShown","1"); window.location.href = "../index.html"; }
+function goBack() { if (window.parent && window.parent.goHome) { window.parent.goHome(); } else { sessionStorage.setItem("splashShown","1"); window.location.href = "../index.html"; } }
 resetGame();
 </script>
 </body>
