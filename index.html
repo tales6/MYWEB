@@ -25,6 +25,7 @@
     --text-secondary: #5a7a5a;
     --bg-side: rgba(245,240,234,0.6);
     --bg-nav: rgba(245,240,234,0.85);
+    --bg-card: rgba(255,255,255,0.6);
     --hover: #2d5a4a;
     --header-bg: linear-gradient(135deg, #1e2d24 0%, #3a6b4a 100%);
     --pre-bg: #1e1e2e;
@@ -58,6 +59,7 @@
     --text-secondary: #94a3b8;
     --bg-side: rgba(20,20,28,0.7);
     --bg-nav: rgba(18,18,18,0.85);
+    --bg-card: rgba(30,30,40,0.7);
     --hover: #8baa8a;
     --header-bg: linear-gradient(135deg, #0a0a0a, #1a2a1a);
     --pre-bg: #0d1117;
@@ -1191,7 +1193,7 @@ body.dark .bmb-time { color: #8899aa; }
       { t: '一尘不染不是没有尘埃，而是尘埃任它飞扬，我自做我的阳光。', a: '— 林清玄' },
       { t: '错过了落日余晖，还可以静待满天星辰。', a: '' },
       { t: '花店不开了，花继续开。', a: '— 蔡仁伟《伪诗集》' },
-      { t: 'Life is like a box of chocolates, you never know what you\'re gonna get.', a: '— Forrest Gump' },
+      { t: '生活就像一盒巧克力，你永远不知道下一颗是什么味道。', o: 'Life is like a box of chocolates, you never know what you\'re gonna get.', a: '— 阿甘正传' },
       { t: '保持热爱，奔赴山海。', a: '' },
       { t: '愿你三冬暖，愿你春不寒，愿你天黑有灯，下雨有伞。', a: '' },
     ];
@@ -1557,11 +1559,19 @@ body.dark .bmb-time { color: #8899aa; }
     if (!href || href.startsWith("#") || href.startsWith("http") || href.startsWith("//") || href.startsWith("javascript")) return;
     if (!a.closest("#sub-view")) return;
     // 非HTML文件(docx/mp4/png/epro2等)放行,让浏览器默认处理(新标签打开)
-    if (!href.endsWith(".html") && !href.endsWith(".html#projects") && !href.endsWith("/")) return;
+    var hrefNoHash = href.split("#")[0];
+    if (!hrefNoHash.endsWith(".html") && !hrefNoHash.endsWith("/")) return;
     e.preventDefault();
-    // 返回首页链接(含 ../ 或指向 index.html)直接调 goHome()
+    // 返回首页链接(指向 index.html)直接调 goHome()，#projects 则 goHome 后滚动到 projects
     if (href.includes("index.html")) {
+      var hash = href.split("#")[1];
       goHome();
+      if (hash) {
+        setTimeout(function() {
+          var el = document.getElementById(hash);
+          if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 100);
+      }
       return;
     }
     loadPage(href);
