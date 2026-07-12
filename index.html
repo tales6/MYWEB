@@ -1476,53 +1476,20 @@ body.dark .bmb-time { color: #8899aa; }
     return SITE_ROOT + "/" + u;
   }
 
-  async function loadPage(url) {
+  function loadPage(url) {
     var mainView = document.getElementById("main-view");
     var subView = document.getElementById("sub-view");
-    subView.innerHTML = '<div style="text-align:center;padding:80px 24px;color:var(--text-sec)">\u52a0\u8f7d\u4e2d...</div>';
     mainView.style.display = "none";
     subView.style.display = "block";
     window.scrollTo(0, 0);
-    try {
-      var res = await fetch(absUrl(url));
-      if (!res.ok) throw new Error("HTTP " + res.status);
-      var text = await res.text();
-      var parser = new DOMParser();
-      var doc = parser.parseFromString(text, "text/html");
-      var content = "";
-      var styles = doc.querySelectorAll("style");
-      var styleHTML = "";
-      styles.forEach(function(s) { styleHTML += s.outerHTML; });
-      var topNav = doc.querySelector("nav.top-nav");
-      if (topNav) content += topNav.outerHTML;
-      var header = doc.querySelector(".page-header");
-      if (header) content += header.outerHTML;
-      var sNav = doc.querySelector(".side-nav") || doc.querySelector(".sticky-nav");
-      if (sNav) content += sNav.outerHTML;
-      var cWrap = doc.querySelector(".content-wrap");
-      if (cWrap) {
-        content += cWrap.outerHTML;
-      } else {
-        var container = doc.querySelector(".container");
-        if (container) content += container.outerHTML;
-      }
-      subView.innerHTML = styleHTML + '<div style="max-width:1000px;margin:0 auto;padding:24px">' +
-        '<button class="back-btn" onclick="goHome()">\u2190 \u8fd4\u56de\u9996\u9875</button>' +
-        "</div>" + content;
-      document.querySelector("nav").style.display = "none";
-      history.pushState({ url: url, action: "page" }, "", absUrl(url));
-      subView.querySelectorAll(".reveal").forEach(function(el) { el.classList.add("visible"); });
-      initSideNav();
-      if (window.updateThemeBtns) window.updateThemeBtns();
-    } catch (e) {
-      subView.innerHTML = '<div style="text-align:center;padding:40px 24px;color:var(--text-sec)">\u52a0\u8f7d\u5931\u8d25: ' + e.message + '</div>';
-    }
+    subView.innerHTML = '<div style="position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg);z-index:50;display:flex;align-items:center;justify-content:center;color:var(--text-sec)">\u52a0\u8f7d\u4e2d...</div>' +
+      '<iframe id="page-iframe" src="' + absUrl(url) + '" style="width:100%;border:none;min-height:calc(100vh - 80px);display:block" onload="this.style.display=\'block\';this.previousElementSibling.style.display=\'none\'"></iframe>';
+    history.pushState({ url: url, action: "page" }, "", absUrl(url));
   }
 
   function goHome() {
     document.getElementById("main-view").style.display = "";
     document.getElementById("sub-view").style.display = "none";
-    document.querySelector("nav").style.display = "";
     history.pushState({ action: "home" }, "", SITE_ROOT + "/index.html");
     window.scrollTo(0, 0);
   }
@@ -1558,30 +1525,20 @@ body.dark .bmb-time { color: #8899aa; }
     });
   });
 
-  // Intercept internal links in sub-view (delegated)
-  document.addEventListener("click", function(e) {
-    var a = e.target.closest("a");
-    if (!a) return;
-    var href = a.getAttribute("href");
-    if (!href || href.startsWith("#") || href.startsWith("http") || href.startsWith("//") || href.startsWith("javascript")) return;
-    if (!a.closest("#sub-view")) return;
-    // 非HTML文件(docx/mp4/png/epro2等)放行,让浏览器默认处理(新标签打开)
-    var hrefNoHash = href.split("#")[0];
-    if (!hrefNoHash.endsWith(".html") && !hrefNoHash.endsWith("/")) return;
-    e.preventDefault();
-    // 返回首页链接(指向 index.html)直接调 goHome()，#projects 则 goHome 后滚动到 projects
-    if (href.includes("index.html")) {
-      var hash = href.split("#")[1];
+  // 接收 iframe 发来的消息（首页跳转等）
+  window.addEventListener("message", function(e) {
+    if (!e.data) return;
+    if (e.data.action === "goHome") {
       goHome();
-      if (hash) {
+      if (e.data.hash) {
         setTimeout(function() {
-          var el = document.getElementById(hash);
+          var el = document.getElementById(e.data.hash);
           if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
         }, 100);
       }
-      return;
+    } else if (e.data.action === "loadPage") {
+      loadPage(e.data.url);
     }
-    loadPage(href);
   });
 
   // Browser back/forward
