@@ -421,6 +421,17 @@ body.dark::before { content: ""; position: fixed; inset: 0; background: rgba(0,0
 <script>
 (function() {
   if (window.top === window.self) return;
+  // 定义全局函数，供 onclick 调用
+  window.loadPage = function(url) {
+    parent.postMessage({ action: "loadPage", url: url }, "*");
+  };
+  window.goHome = function() {
+    parent.postMessage({ action: "goHome" }, "*");
+  };
+  window.loadGame = function(url) {
+    parent.postMessage({ action: "loadPage", url: url }, "*");
+  };
+  // 拦截 <a> 链接点击
   document.addEventListener("click", function(e) {
     var a = e.target.closest("a");
     if (!a) return;
