@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>SysTick 微秒/毫秒延时模块详解</title>
+<style>:root {
+  --bg: #f5f0ea;
+  --bg-card: rgba(255,255,255,0.6);
+  --bg-nav: rgba(245,240,234,0.85);
+  --bg-side: rgba(245,240,234,0.6);
+  --text: #1e2d24;
+  --text-secondary: #5a7a5a;
+  --text-light: #7a9a7a;
+  --text-lighter: #6a8a6a;
+  --border: rgba(0,0,0,0.04);
+  --border-strong: rgba(0,0,0,0.1);
+  --accent: #3a6b4a;
+  --accent-light: #6b8f71;
+  --accent-dark: #2d5a4a;
+  --hover: #2d5a4a;
+  --header-bg: linear-gradient(135deg,#1e2d24,#3a6b4a);
+  --pre-bg: #1e1e2e;
+  --pre-color: #cdd6f4;
+}
+body.dark {
+  --bg: #121212;
+  --bg-card: rgba(30,30,40,0.7);
+  --bg-nav: rgba(18,18,18,0.85);
+  --bg-side: rgba(20,20,28,0.7);
+  --text: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-light: #64748b;
+  --text-lighter: #788898;
+  --border: rgba(255,255,255,0.04);
+  --border-strong: rgba(255,255,255,0.08);
+  --accent: #6b8f71;
+  --accent-light: #8baa8a;
+  --accent-dark: #6b8f71;
+  --hover: #8baa8a;
+  --header-bg: linear-gradient(135deg,#0a0a0a,#1a2a1a);
+  --pre-bg: #0d1117;
+  --pre-color: #c9d1d9;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;transition:background .4s,color .4s}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--accent-light);border-radius:3px}
+a{color:inherit;text-decoration:none}
+nav.top-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 0;background:var(--bg-nav);backdrop-filter:blur(20px);border-bottom:.5px solid var(--border);transition:background .4s}
+nav.top-nav .inner{max-width:1000px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between}
+.nav-brand{font-size:1.05rem;font-weight:700;color:var(--accent);letter-spacing:.05em}
+.nav-brand span{color:var(--accent-light)}
+.nav-links{display:flex;gap:20px;list-style:none;align-items:center}
+.nav-links a{font-size:.85rem;color:var(--text-secondary);transition:color .3s}
+.nav-links a:hover{color:var(--hover)}
+.theme-btn{width:34px;height:34px;border-radius:50%;border:.5px solid var(--border-strong);background:transparent;color:var(--text-secondary);font-size:1rem;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.theme-btn:hover{background:rgba(107,143,113,.08);border-color:var(--accent-light)}
+.page-header{margin-top:68px;padding:48px 24px;background:var(--header-bg);color:#fff;text-align:center;transition:background .4s}
+.page-header h1{font-size:clamp(1.3rem,2.8vw,1.7rem);font-weight:700}
+.page-header .sub{margin-top:8px;font-size:.88rem;opacity:.7}
+.content-wrap { max-width: 800px; margin: 0 auto; padding: 32px 24px 60px; }
+.container { max-width: 100%; }
+.side-nav {
+  position: fixed; left: calc(50% + 430px); top: 50%; transform: translateY(-50%);
+  width: 18px; z-index: 5;
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  background: var(--bg-side); border: 0.5px solid var(--border); border-radius: 20px;
+  padding: 14px 0; max-height: 70vh; overflow-y: auto;
+  transition: background 0.3s ease;
+}
+.side-nav:hover { width: 200px; background: var(--bg-side); backdrop-filter: blur(12px); border-radius: 14px; padding: 12px; align-items: stretch; }
+.side-nav a {
+  display: block; width: 10px; height: 10px; border-radius: 50%;
+  background: var(--accent-light); opacity: 0.5;
+  flex-shrink: 0; overflow: hidden; white-space: nowrap;
+  padding: 0; font-size: 0; border: none;
+  transition: all 0.25s ease; line-height: 1.4;
+}
+.side-nav:hover a { width: auto; height: auto; border-radius: 8px; opacity: 1; padding: 6px 12px; font-size: 0.75rem; font-weight: 500; color: var(--text-secondary); background: transparent; border-left: 2px solid transparent; }
+.side-nav a:hover { color: var(--hover); background: rgba(107,143,113,0.05); }
+.side-nav a.active { width: 12px; height: 12px; background: var(--accent); opacity: 1; box-shadow: 0 0 8px rgba(107,143,113,0.4); }
+.side-nav:hover a.active { width: auto; height: auto; color: var(--accent); background: rgba(107,143,113,0.1); border-left-color: var(--accent-light); font-weight: 600; box-shadow: none; }
+section.doc-section {
+  background:var(--bg-card); backdrop-filter:blur(12px);
+  border:0.5px solid var(--border); border-radius:16px;
+  padding:28px 30px; margin-bottom:24px;
+  transition:background 0.4s,border-color 0.4s;
+}
+section.doc-section h2{font-size:1.25rem;font-weight:700;color:var(--text);border-left:3px solid var(--accent-light);padding-left:14px;margin-bottom:18px}
+section.doc-section h3{font-size:1.05rem;font-weight:600;color:var(--accent-dark);margin:20px 0 10px}
+section.doc-section h4{font-size:.95rem;font-weight:600;color:var(--text-secondary);margin:14px 0 8px}
+section.doc-section p{margin-bottom:14px;font-size:.92rem;color:var(--text-secondary)}
+section.doc-section ul,section.doc-section ol{margin-bottom:14px;padding-left:24px}
+section.doc-section li{margin-bottom:4px;font-size:.92rem;color:var(--text-secondary)}
+section.doc-section strong{color:var(--text)}
+pre{background:var(--pre-bg);color:var(--pre-color);border-radius:10px;padding:16px 20px;overflow-x:auto;font-family:'Cascadia Code','Fira Code','JetBrains Mono',Consolas,monospace;font-size:.82rem;line-height:1.6;margin:12px 0 18px}
+pre .kw{color:#cba6f7}pre .fn{color:#89b4fa}pre .str{color:#a6e3a1}pre .cm{color:#6c7086}pre .num{color:#fab387}pre .tp{color:#f5c2e7}pre .mp{color:#f9e2af}pre .op{color:#89dceb}
+table{width:100%;border-collapse:collapse;margin:14px 0 18px;font-size:.88rem}
+thead th{background:var(--accent-dark);color:#fff;padding:9px 12px;text-align:left;font-weight:600}
+tbody td{padding:7px 12px;border-bottom:1px solid var(--border)}
+tbody tr:nth-child(even){background:rgba(107,143,113,.03)}
+tbody tr:hover{background:rgba(107,143,113,.06)}
+.callout{border-left:4px solid;border-radius:0 8px 8px 0;padding:12px 16px;margin:16px 0;font-size:.88rem}
+.callout.info{background:rgba(99,143,200,.08);border-color:#4a8fc0}
+.callout.warn{background:rgba(200,160,80,.08);border-color:#c4a050}
+.callout.ok{background:rgba(107,143,113,.08);border-color:var(--accent-light)}
+.callout-red{background:rgba(200,80,80,.06);border-color:#c05050}
+.callout-green{background:rgba(107,143,113,.08);border-color:var(--accent-light)}
+.callout-amber{background:rgba(200,160,80,.08);border-color:#c4a050}
+.tag{display:inline-block;padding:0 8px;background:rgba(107,143,113,.08);color:var(--accent);border-radius:4px;font-size:.72rem;font-weight:600;margin-right:3px}
+.step-box{background:rgba(255,255,255,.4);border-radius:8px;padding:12px 16px;margin:8px 0}
+.step-num{display:inline-block;background:var(--accent-light);color:#fff;border-radius:50%;width:22px;height:22px;text-align:center;line-height:22px;font-size:.75rem;font-weight:700;margin-right:8px}
+.flow{text-align:center;padding:12px;background:rgba(255,255,255,.3);border-radius:8px;margin:8px 0;font-size:.82rem;color:var(--text-secondary)}
+.flow .arrow{color:var(--accent-light);font-weight:700}
+.table-wrap{overflow-x:auto}
+.file-badge{font-family:monospace;background:rgba(0,0,0,.04);padding:1px 6px;border-radius:3px;font-size:.8rem}
+.decl{background:rgba(255,255,255,.4);border:1px solid rgba(107,143,113,.2);border-radius:6px;padding:10px 14px;font-family:Consolas,monospace;font-size:.85rem;margin:10px 0 16px;white-space:pre-wrap}
+footer{text-align:center;padding:32px 24px;border-top:.5px solid var(--border);color:var(--text-light);font-size:.82rem;transition:border .4s}
+footer a{color:var(--accent);transition:color .3s}
+footer a:hover{color:#d4a96a}
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .6s,transform .6s}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+
+@media(max-width:900px){
+  .side-nav{position:static;width:100%;flex-direction:row;flex-wrap:wrap;gap:6px;padding:10px 16px;background:var(--bg-side);border:.5px solid var(--border);border-radius:14px;align-items:center;justify-content:center;margin-bottom:24px}
+  .side-nav a{width:auto;height:auto;border-radius:100px;padding:4px 14px;font-size:.72rem;font-weight:500;color:var(--text-secondary);background:transparent;border:.5px solid var(--border)}
+  .side-nav a.active{color:var(--accent);background:rgba(107,143,113,.1);border-color:var(--accent-light)}
+}
+@media(max-width:640px){
+  .page-header{padding:36px 20px;margin-top:60px}
+  .content-wrap{padding:24px 12px 40px}
+  section.doc-section{padding:20px 16px}
+}</style>
+</head>
+<body>
+
+<nav class=top-nav>
+  <div class=inner>
+    <span class=nav-brand><a href=../index.html><span>✦</span> tales</a></span>
+    <ul class=nav-links>
+      <li><a href=../index.html>首页</a></li>
+      <li><a href=../index.html#projects>项目</a></li>
+      <li><a href=https://github.com/tales6 target=_blank>GitHub</a></li>
+      <li><a href=https://qm.qq.com/cgi-bin/qm/qr?k=2416829925 target=_blank>QQ</a></li>
+      <button class=theme-btn id=themeBtn>🌙</button>
+    </ul>
+  </div>
+</nav>
+
+<div class="page-header">
+  <h1>SysTick 微秒/毫秒延时模块详解</h1>
+  <div class="sub">BSP/bsp_delay.c + BSP/bsp_delay.h &nbsp;|&nbsp; STM32F103 智能浇花系统</div>
+</div>
+
+<div class="content-wrap">
+  <div class="container">
+    <section class="doc-section reveal" id="card-1">
+<h2>1. 模块概述</h2>
+<p>本模块基于 <strong>SysTick</strong>（系统滴答定时器）实现精确的微秒级和毫秒级延时，采用<strong>轮询 COUNTFLAG</strong> 的方式完成延时等待。</p>
+
+<div class="callout callout-info">
+<strong>时钟配置：</strong> SysTick 时钟源选择 <strong>HCLK/8</strong>，即 <code>72 MHz &divide; 8 = 9 MHz</code>，每个计数周期 = <strong>1/9 &mu;s &asymp; 0.111 &mu;s</strong>。
+</div>
+
+<table>
+  <tr><th>参数</th><th>值</th><th>说明</th></tr>
+  <tr><td>HCLK 主频</td><td>72 MHz</td><td>SYSCLK = HCLK = 72 MHz</td></tr>
+  <tr><td>SysTick 时钟</td><td>9 MHz</td><td>72 MHz / 8</td></tr>
+  <tr><td>计数周期</td><td>~111 ns</td><td>1 / 9 MHz</td></tr>
+  <tr><td>UsCount</td><td>9</td><td>1 &mu;s 所需的计数次数</td></tr>
+  <tr><td>MsCount</td><td>9000</td><td>UsCount &times; 1000</td></tr>
+  <tr><td>最大微秒延时</td><td>~798,915 &mu;s</td><td>24 位计数器上限</td></tr>
+</table>
+
+<!-- ========== 2. 延时初始化 ========== -->
+    </section>
+
+    <section class="doc-section reveal" id="card-2">
+<h2>2. 延时初始化 &mdash; Delay_Init</h2>
+<p>配置 SysTick 定时器的时钟源并计算延时系数。</p>
+
+<pre><span class="kw">void</span> <span class="fn">Delay_Init</span>(<span class="kw">void</span>)
+{
+    <span class="cm">// 选择时钟源为 HCLK/8 (CTRL 寄存器的 bit2 清零)</span>
+    SysTick-&gt;<span class="mp">CTRL</span> &amp;= ~(<span class="num">1</span> &lt;&lt; <span class="num">2</span>);
+
+    <span class="cm">// 1 us 需要的计数次数：9 MHz / 1,000,000 = 9</span>
+    <span class="mp">UsCount</span> = <span class="num">9</span>;
+
+    <span class="cm">// 1 ms 需要的计数次数：9 * 1000 = 9000</span>
+    <span class="mp">MsCount</span> = <span class="mp">UsCount</span> * <span class="num">1000</span>;
+}</pre>
+
+<div class="callout callout-success">
+<strong>系数推导：</strong> SysTick 时钟 9 MHz，每秒计数 9,000,000 次。1 &mu;s = 9,000,000 / 1,000,000 = 9 次。毫秒系数 = 9 &times; 1000 = 9000。
+
+<!-- ========== 3. 微秒延时 ========== -->
+    </section>
+
+    <section class="doc-section reveal" id="card-3">
+<h2>3. 微秒延时 &mdash; DelayUs</h2>
+<p>实现 1 ~ 798,915 微秒的精确延时。</p>
+
+<pre><span class="kw">void</span> <span class="fn">DelayUs</span>(<span class="kw">unsigned short</span> us)
+{
+    <span class="kw">unsigned int</span> ctrlResult = <span class="num">0</span>;
+
+    us &amp;= <span class="num">0x00FFFFFF</span>;                           <span class="cm">// 仅取低 24 位（计数器宽度）</span>
+
+    SysTick-&gt;<span class="mp">LOAD</span> = us * <span class="mp">UsCount</span>;               <span class="cm">// 设置重装载值</span>
+    SysTick-&gt;<span class="mp">VAL</span>  = <span class="num">0</span>;                             <span class="cm">// 清零当前计数值</span>
+    SysTick-&gt;<span class="mp">CTRL</span> = <span class="num">1</span>;                             <span class="cm">// 使能计数器（ENABLE=1）</span>
+
+    <span class="kw">do</span> {
+        ctrlResult = SysTick-&gt;<span class="mp">CTRL</span>;                <span class="cm">// 读取控制寄存器</span>
+    } <span class="kw">while</span> ((ctrlResult &amp; <span class="num">0x01</span>) &amp;&amp; !(ctrlResult &amp; (<span class="num">1</span> &lt;&lt; <span class="num">16</span>)));
+    <span class="cm">// 条件：计数器使能位为 1 且 COUNTFLAG 尚未置位</span>
+
+    SysTick-&gt;<span class="mp">CTRL</span> = <span class="num">0</span>;                             <span class="cm">// 关闭计数器</span>
+    SysTick-&gt;<span class="mp">VAL</span>  = <span class="num">0</span>;                             <span class="cm">// 清零计数值</span>
+}</pre>
+
+<div class="callout callout-warning">
+<strong>注意：</strong> 参数 <code>us</code> 被截断为 24 位，最大支持约 798,915 &mu;s（约 798 ms）。若需更长的延时请调用 <code>DelayXms</code>。
+
+<!-- ========== 4. 毫秒延时 ========== -->
+    </section>
+
+    <section class="doc-section reveal" id="card-4">
+<h2>4. 毫秒延时 &mdash; DelayXms</h2>
+<p>实质是对微秒延时的"放大"版，使用 <code>MsCount = UsCount &times; 1000</code> 直接装载毫秒计算值，原理与 DelayUs 相同。</p>
+
+<pre><span class="kw">void</span> <span class="fn">DelayXms</span>(<span class="kw">unsigned short</span> ms)
+{
+    <span class="kw">unsigned int</span> ctrlResult = <span class="num">0</span>;
+
+    <span class="kw">if</span> (ms == <span class="num">0</span>) <span class="kw">return</span>;                        <span class="cm">// 参数保护</span>
+
+    ms &amp;= <span class="num">0x00FFFFFF</span>;                             <span class="cm">// 取低 24 位</span>
+
+    SysTick-&gt;<span class="mp">LOAD</span> = ms * <span class="mp">MsCount</span>;                <span class="cm">// 装载毫秒计数值</span>
+    SysTick-&gt;<span class="mp">VAL</span>  = <span class="num">0</span>;
+    SysTick-&gt;<span class="mp">CTRL</span> = <span class="num">1</span>;                             <span class="cm">// 使能计数器</span>
+
+    <span class="kw">do</span> {
+        ctrlResult = SysTick-&gt;<span class="mp">CTRL</span>;
+    } <span class="kw">while</span> ((ctrlResult &amp; <span class="num">0x01</span>) &amp;&amp; !(ctrlResult &amp; (<span class="num">1</span> &lt;&lt; <span class="num">16</span>)));
+
+    SysTick-&gt;<span class="mp">CTRL</span> = <span class="num">0</span>;
+    SysTick-&gt;<span class="mp">VAL</span>  = <span class="num">0</span>;
+}</pre>
+
+<!-- ========== 5. 工作原理 ========== -->
+    </section>
+
+    <section class="doc-section reveal" id="card-5">
+<h2>5. 工作原理</h2>
+
+<p>SysTick 是 Cortex-M3 内核内置的 24 位递减计数器，以下时序图说明一次延时的工作流程：</p>
+
+<div class="callout callout-info">
+<strong>1.</strong> 设置 <code>LOAD = us &times; UsCount</code>（例如延时 10 &mu;s &rArr; LOAD = 10 &times; 9 = 90）<br>
+<strong>2.</strong> 写 <code>VAL = 0</code> 清零当前计数值<br>
+<strong>3.</strong> 写 <code>CTRL = 1</code> 使能计数器，SysTick 从 LOAD 开始递减<br>
+<strong>4.</strong> 每经过 1 个时钟周期（~111 ns），VAL 减 1<br>
+<strong>5.</strong> 当 VAL 递减至 0 时，硬件自动将 COUNTFLAG（CTRL 的 bit 16）置 1<br>
+<strong>6.</strong> 软件轮询等待 COUNTFLAG 为 1<br>
+<strong>7.</strong> 写 <code>CTRL = 0</code> 关闭计数器，写 <code>VAL = 0</code> 清理，完成延时
+</div>
+
+<pre><span class="cm">// 寄存器操作拆解</span>
+SysTick-&gt;<span class="mp">CTRL</span>     <span class="cm">// 0xE000E010  控制寄存器</span>
+  <span class="cm">// bit 0: ENABLE     — 1=使能, 0=关闭</span>
+  <span class="cm">// bit 1: TICKINT    — 中断使能（本模块不使用）</span>
+  <span class="cm">// bit 2: CLKSOURCE  — 0=HCLK/8, 1=HCLK</span>
+  <span class="cm">// bit 16: COUNTFLAG — 只读, 计数到 0 时硬件置 1</span>
+
+SysTick-&gt;<span class="mp">LOAD</span>      <span class="cm">// 0xE000E014  重装载值寄存器（24 位有效）</span>
+SysTick-&gt;<span class="mp">VAL</span>       <span class="cm">// 0xE000E018  当前计数值寄存器</span></pre>
+
+<table>
+  <tr><th>寄存器</th><th>地址</th><th>本模块操作</th></tr>
+  <tr><td><code>CTRL</code></td><td>0xE000E010</td><td>初始化清 bit 2；使能时写 1；轮询 bit 16；结束后写 0</td></tr>
+  <tr><td><code>LOAD</code></td><td>0xE000E014</td><td>写入 <code>us &times; UsCount</code> 或 <code>ms &times; MsCount</code></td></tr>
+  <tr><td><code>VAL</code></td><td>0xE000E018</td><td>启动前写 0，结束后写 0</td></tr>
+</table>
+
+<div class="callout callout-success">
+<strong>为什么不用中断？</strong> 本模块采用<strong>轮询模式</strong>而非 SysTick 中断，因为延时场景下 CPU 本身就需要等待，无需中断介入。这也避免了中断抢占导致的延时误差。轮询同时检查 <code>CTRL &amp; 0x01</code> 确保计数器仍在运行状态，防止因意外关闭导致死循环。
+
+<!-- ========== 6. 完整代码 ========== -->
+    </section>
+
+    <section class="doc-section reveal" id="card-6">
+<h2>6. 完整代码</h2>
+
+<h3>bsp_delay.h</h3>
+<pre><span class="kw">#ifndef</span> BSP_DELAY_H
+<span class="kw">#define</span> BSP_DELAY_H
+
+<span class="kw">#include</span> <span class="str">"stm32f10x.h"</span>
+
+<span class="kw">void</span> <span class="fn">Delay_Init</span>(<span class="kw">void</span>);
+<span class="kw">void</span> <span class="fn">DelayUs</span>(<span class="kw">unsigned short</span> us);
+<span class="kw">void</span> <span class="fn">DelayXms</span>(<span class="kw">unsigned short</span> ms);
+
+<span class="kw">#endif</span></pre>
+
+<h3>bsp_delay.c</h3>
+<pre><span class="kw">#include</span> <span class="str">"bsp_delay.h"</span>
+
+<span class="kw">static unsigned char</span>  <span class="mp">UsCount</span> = <span class="num">0</span>;
+<span class="kw">static unsigned short</span> <span class="mp">MsCount</span> = <span class="num">0</span>;
+
+<span class="cm">/**
+  * @brief  SysTick 初始化
+  * @param  无
+  * @retval 无
+  */</span>
+<span class="kw">void</span> <span class="fn">Delay_Init</span>(<span class="kw">void</span>)
+{
+    <span class="cm">// 选择时钟 HCLK/8 (72MHz/8=9MHz)</span>
+    SysTick-&gt;<span class="mp">CTRL</span> &amp;= ~(<span class="num">1</span> &lt;&lt; <span class="num">2</span>);
+
+    <span class="mp">UsCount</span> = <span class="num">9</span>;         <span class="cm">// 1us 需要 9 个计数</span>
+    <span class="mp">MsCount</span> = <span class="mp">UsCount</span> * <span class="num">1000</span>;  <span class="cm">// 1ms 需要 9000 个计数</span>
+}
+
+<span class="cm">/**
+  * @brief  微秒级延时
+  * @param  us：延时微秒数（最大约 798,915 us）
+  * @retval 无
+  */</span>
+<span class="kw">void</span> <span class="fn">DelayUs</span>(<span class="kw">unsigned short</span> us)
+{
+    <span class="kw">unsigned int</span> ctrlResult = <span class="num">0</span>;
+
+    us &amp;= <span class="num">0x00FFFFFF</span>;
+
+    SysTick-&gt;<span class="mp">LOAD</span> = us * <span class="mp">UsCount</span>;
+    SysTick-&gt;<span class="mp">VAL</span>  = <span class="num">0</span>;
+    SysTick-&gt;<span class="mp">CTRL</span> = <span class="num">1</span>;
+
+    <span class="kw">do</span> {
+        ctrlResult = SysTick-&gt;<span class="mp">CTRL</span>;
+    } <span class="kw">while</span> ((ctrlResult &amp; <span class="num">0x01</span>) &amp;&amp; !(ctrlResult &amp; (<span class="num">1</span> &lt;&lt; <span class="num">16</span>)));
+
+    SysTick-&gt;<span class="mp">CTRL</span> = <span class="num">0</span>;
+    SysTick-&gt;<span class="mp">VAL</span>  = <span class="num">0</span>;
+}
+
+<span class="cm">/**
+  * @brief  毫秒级延时
+  * @param  ms：延时毫秒数
+  * @retval 无
+  */</span>
+<span class="kw">void</span> <span class="fn">DelayXms</span>(<span class="kw">unsigned short</span> ms)
+{
+    <span class="kw">unsigned int</span> ctrlResult = <span class="num">0</span>;
+
+    <span class="kw">if</span> (ms == <span class="num">0</span>) <span class="kw">return</span>;
+
+    ms &amp;= <span class="num">0x00FFFFFF</span>;
+
+    SysTick-&gt;<span class="mp">LOAD</span> = ms * <span class="mp">MsCount</span>;
+    SysTick-&gt;<span class="mp">VAL</span>  = <span class="num">0</span>;
+    SysTick-&gt;<span class="mp">CTRL</span> = <span class="num">1</span>;
+
+    <span class="kw">do</span> {
+        ctrlResult = SysTick-&gt;<span class="mp">CTRL</span>;
+    } <span class="kw">while</span> ((ctrlResult &amp; <span class="num">0x01</span>) &amp;&amp; !(ctrlResult &amp; (<span class="num">1</span> &lt;&lt; <span class="num">16</span>)));
+
+    SysTick-&gt;<span class="mp">CTRL</span> = <span class="num">0</span>;
+    SysTick-&gt;<span class="mp">VAL</span>  = <span class="num">0</span>;
+}</pre>
+
+    </section>
+  </div>
+  
+</div>
+
+<nav class="side-nav" id="sideNav">
+      <a href="#card-1" data-section="card-1">模块概述</a>
+      <a href="#card-2" data-section="card-2">延时初始化 - Delay_Init</a>
+      <a href="#card-3" data-section="card-3">微秒延时 - DelayUs</a>
+      <a href="#card-4" data-section="card-4">毫秒延时 - DelayXms</a>
+      <a href="#card-5" data-section="card-5">工作原理</a>
+      <a href="#card-6" data-section="card-6">完整代码</a>
+  </nav>
+
+<footer>
+  Built with <a href="https://github.com/tales6">tales</a>
+</footer>
+
+<script>
+(function() {
+  var btn = document.getElementById('themeBtn');
+  var saved = localStorage.getItem('tales-theme');
+  if (saved === 'dark') document.body.classList.add('dark');
+  btn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+  btn.addEventListener('click', function() {
+    document.body.classList.toggle('dark');
+    btn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+    localStorage.setItem('tales-theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+  });
+
+  var ro = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(function(el) { ro.observe(el); });
+
+  var navLinks = document.querySelectorAll('#sideNav a');
+  var secObs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        navLinks.forEach(function(a) { a.classList.remove('active'); });
+        var active = document.querySelector('#sideNav a[data-section="' + e.target.id + '"]');
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { threshold: 0.2, rootMargin: '-60px 0px -40% 0px' });
+  document.querySelectorAll('.doc-section').forEach(function(el) { secObs.observe(el); });
+})();
+</script>
+
+</body>
+</html>
