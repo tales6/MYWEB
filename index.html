@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -542,65 +542,6 @@ body.dark .vol-slider input[type="range"]::-webkit-slider-thumb { background: va
   /* ===== Section Common ===== */
   section { padding: 100px 24px; }
   #sub-view section { padding: 0; }
-  #sub-view .side-nav {
-    position: fixed; left: calc(50% + 430px); top: 50%; transform: translateY(-50%);
-    width: 32px !important; z-index: 50;
-    display: flex; flex-direction: column; align-items: center; gap: 8px;
-    background: var(--card-bg, rgba(255,255,255,0.6));
-    border: 0.5px solid var(--border, rgba(0,0,0,0.04));
-    border-radius: 20px; padding: 12px 0; max-height: 70vh; overflow-y: auto;
-    transition: all 0.25s ease;
-  }
-  #sub-view .side-nav:hover {
-    width: 200px !important; border-radius: 14px; padding: 12px !important;
-    align-items: stretch !important; backdrop-filter: blur(12px);
-  }
-  #sub-view .side-nav a {
-    position: relative !important;
-    display: flex !important; align-items: center !important; justify-content: center !important;
-    width: 22px !important; height: 22px !important; border-radius: 50% !important;
-    flex-shrink: 0; overflow: hidden; white-space: nowrap;
-    font-size: 0 !important; color: transparent !important;
-    transition: all 0.25s ease !important;
-    text-decoration: none; background: transparent !important;
-    box-shadow: none !important;
-    padding: 0 !important;
-    opacity: 1 !important;
-    border: none !important;
-  }
-  #sub-view .side-nav a::before {
-    content: ""; position: absolute;
-    width: 10px; height: 10px; border-radius: 50%;
-    background: var(--accent-light, #6b8f71); opacity: 0.5;
-    transition: all 0.25s ease;
-  }
-  #sub-view .side-nav:hover a {
-    width: 100% !important; height: auto !important; border-radius: 8px !important;
-    padding: 6px 12px !important; font-size: 0.75rem !important;
-    font-weight: 500 !important; color: var(--text-sec, #5a7a5a) !important;
-    background: transparent !important; border-left: 2px solid transparent !important;
-    justify-content: flex-start !important;
-  }
-  #sub-view .side-nav:hover a::before { display: none; }
-  #sub-view .side-nav a:hover {
-    color: var(--accent-dark, #2d5a4a) !important;
-    background: rgba(107,143,113,0.05) !important;
-  }
-  #sub-view .side-nav a.active::before {
-    width: 12px; height: 12px;
-    background: var(--accent, #3a6b4a); opacity: 1;
-    box-shadow: 0 0 8px rgba(107,143,113,0.4);
-  }
-  #sub-view .side-nav:hover a.active {
-    width: 100% !important; height: auto !important;
-    color: var(--accent, #3a6b4a) !important;
-    background: rgba(107,143,113,0.1) !important;
-    border-left-color: var(--accent-light, #6b8f71) !important;
-    font-weight: 600 !important; box-shadow: none !important;
-    justify-content: flex-start !important;
-  }
-  #sub-view .side-nav:hover a.active::before { display: none; }
-  body.dark #sub-view .side-nav { background: rgba(25,30,40,0.6); }
   .section-inner { max-width: 1000px; margin: 0 auto; }
   .section-label {
     display: inline-block;
@@ -813,6 +754,8 @@ body.dark .vol-slider input[type="range"]::-webkit-slider-thumb { background: va
 }
 .sticky-nav a { padding: 4px 14px; border-radius: 16px; font-size: 0.8rem; font-weight: 500; color: var(--text-secondary); transition: all 0.3s; }
 .sticky-nav a:hover { background: rgba(107,143,113,0.1); color: var(--accent-dark); }
+.sticky-nav a.active { background: rgba(107,143,113,0.15); color: var(--accent); font-weight: 600; }
+body.dark .sticky-nav a.active { background: rgba(40,80,60,0.3); color: #8baa8a; }
 body.dark .sticky-nav { background: rgba(12,12,16,0.9); border-color: rgba(255,255,255,0.04); }
 body.dark .sticky-nav a { color: #b0c4d8; }
 body.dark .sticky-nav a:hover { color: #fff; background: rgba(40,55,75,0.3); }
@@ -1518,10 +1461,11 @@ body.dark .bmb-time { color: #8899aa; }
   })();
 
   // ===== SPA Navigation =====
+  var SITE_ROOT = location.pathname.replace(/\/[^/]*$/, "");
   function absUrl(u) {
+    if (/^https?:\/\//i.test(u) || u.startsWith("//")) return u;
     if (u.startsWith("/")) return u;
-    var base = location.pathname.replace(/\/[^/]*$/, "/").replace(/^\/+/, "/");
-    return base.replace(/\/$/, "") + "/" + u;
+    return SITE_ROOT + "/" + u;
   }
 
   async function loadPage(url) {
@@ -1549,8 +1493,6 @@ body.dark .bmb-time { color: #8899aa; }
         var container = doc.querySelector(".container");
         if (container) content += container.outerHTML;
       }
-      var sideNav = doc.querySelector(".side-nav");
-      if (sideNav) content += sideNav.outerHTML;
       subView.innerHTML = '<div style="max-width:1000px;margin:0 auto;padding:24px">' +
         '<button class="back-btn" onclick="goHome()">\u2190 \u8fd4\u56de\u9996\u9875</button>' +
         "</div>" + content;
@@ -1565,7 +1507,7 @@ body.dark .bmb-time { color: #8899aa; }
   function goHome() {
     document.getElementById("main-view").style.display = "";
     document.getElementById("sub-view").style.display = "none";
-    history.pushState({ action: "home" }, "", absUrl("index.html"));
+    history.pushState({ action: "home" }, "", SITE_ROOT + "/index.html");
     window.scrollTo(0, 0);
   }
 
@@ -1627,7 +1569,7 @@ body.dark .bmb-time { color: #8899aa; }
   });
 
   function initSideNav() {
-    var nav = document.getElementById("sub-view").querySelector(".side-nav");
+    var nav = document.getElementById("sub-view").querySelector(".sticky-nav");
     if (!nav) return;
     var links = nav.querySelectorAll("a");
     var sections = [];
