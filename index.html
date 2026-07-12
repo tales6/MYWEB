@@ -1556,7 +1556,14 @@ body.dark .bmb-time { color: #8899aa; }
     var href = a.getAttribute("href");
     if (!href || href.startsWith("#") || href.startsWith("http") || href.startsWith("//") || href.startsWith("javascript")) return;
     if (!a.closest("#sub-view")) return;
+    // 非HTML文件(docx/mp4/png/epro2等)放行,让浏览器默认处理(新标签打开)
+    if (!href.endsWith(".html") && !href.endsWith(".html#projects") && !href.endsWith("/")) return;
     e.preventDefault();
+    // 返回首页链接(含 ../ 或指向 index.html)直接调 goHome()
+    if (href.includes("index.html")) {
+      goHome();
+      return;
+    }
     loadPage(href);
   });
 
