@@ -79,21 +79,21 @@ nav.top-nav .inner { max-width:1000px; margin:0 auto; padding:0 24px; display:fl
 /* Main container */
 .container { max-width: 100%; }
 
-/* Sticky nav (top) */
-.sticky-nav {
+/* Side nav (right) - collapsed by default, expands on hover */
+.side-nav {
   position: sticky; top: 58px; z-index: 50;
   background: var(--bg-nav); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
   border-bottom: 0.5px solid var(--border);
   padding: 10px 24px; display: flex; gap: 8px; flex-wrap: wrap;
   justify-content: center; margin-top: -1px;
 }
-.sticky-nav a { padding: 4px 14px; border-radius: 16px; font-size: 0.8rem; font-weight: 500; color: var(--text-secondary); transition: all 0.3s; }
-.sticky-nav a:hover { background: rgba(107,143,113,0.1); color: var(--accent-dark); }
-.sticky-nav a.active { background: rgba(107,143,113,0.15); color: var(--accent); font-weight: 600; }
-body.dark .sticky-nav { background: rgba(15,15,18,0.85); border-color: rgba(255,255,255,0.04); }
-body.dark .sticky-nav a { color: #b0c4d8; }
-body.dark .sticky-nav a:hover { color: #fff; background: rgba(40,55,75,0.3); }
-body.dark .sticky-nav a.active { background: rgba(40,80,60,0.3); color: #8baa8a; }
+.side-nav a { padding: 4px 14px; border-radius: 16px; font-size: 0.8rem; font-weight: 500; color: var(--text-secondary); transition: all 0.3s; }
+.side-nav a:hover { background: rgba(107,143,113,0.1); color: var(--accent-dark); }
+.side-nav a.active { background: rgba(107,143,113,0.15); color: var(--accent); font-weight: 600; }
+body.dark .side-nav { background: rgba(15,15,18,0.85); border-color: rgba(255,255,255,0.04); }
+body.dark .side-nav a { color: #b0c4d8; }
+body.dark .side-nav a:hover { color: #fff; background: rgba(40,55,75,0.3); }
+body.dark .side-nav a.active { background: rgba(40,80,60,0.3); color: #8baa8a; }
 
 
 section.doc-section {
@@ -139,7 +139,9 @@ footer a:hover{color:#d4a96a}
 
 
 @media(max-width:900px){
-  .sticky-nav{position:static;width:100%;flex-wrap:wrap;gap:6px;padding:10px 16px;justify-content:center;margin-bottom:0}
+  .side-nav{position:static;width:100%;flex-direction:row;flex-wrap:wrap;gap:6px;padding:10px 16px;background:var(--bg-side);border:.5px solid var(--border);border-radius:14px;align-items:center;justify-content:center;margin-bottom:24px}
+  .side-nav a{width:auto;height:auto;border-radius:100px;padding:4px 14px;font-size:.72rem;font-weight:500;color:var(--text-secondary);background:transparent;border:.5px solid var(--border)}
+  .side-nav a.active{color:var(--accent);background:rgba(107,143,113,.1);border-color:var(--accent-light)}
 }
 @media (max-width:640px) {
   .page-header { padding:36px 20px; margin-top:60px; }
@@ -864,7 +866,7 @@ osEventFlagsSet(systemEventGroupHandle, NTP_ALLOWED_BIT);</pre>
   
 </div>
 
-<nav class="sticky-nav" id="sideNav">
+<nav class="side-nav" id="sideNav">
       <a href="#overview" data-section="overview">一、项目概述</a>
       <a href="#arch" data-section="arch">二、系统架构</a>
       <a href="#tasks" data-section="tasks">三、FreeRTOS 任务分析</a>
