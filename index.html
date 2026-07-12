@@ -1264,7 +1264,7 @@ body.dark .bmb-time { color: #8899aa; }
 
     function loadTrack(idx) {
       const t = tracks[idx];
-      audio.src = t.src;
+      audio.src = SITE_ROOT + "/" + t.src;
       trackName.textContent = t.name;
       trackArtist.textContent = t.artist;
       audio.load();
