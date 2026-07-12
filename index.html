@@ -1150,17 +1150,23 @@ body.dark .bmb-time { color: #8899aa; }
 </div>
 
 <script>
-  // ===== Theme Toggle =====
+  // ===== Theme Toggle (event delegation - works for injected sub-pages too) =====
   (function() {
-    const btn = document.getElementById('themeBtn');
     const saved = localStorage.getItem('tales-theme');
     if (saved === 'dark') document.body.classList.add('dark');
-    btn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
-    btn.addEventListener('click', () => {
+    window.updateThemeBtns = function() {
+      var isDark = document.body.classList.contains('dark');
+      document.querySelectorAll('.theme-btn').forEach(function(b) {
+        b.textContent = isDark ? '☀️' : '🌙';
+      });
+    };
+    window.updateThemeBtns();
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.theme-btn')) return;
       document.body.classList.toggle('dark');
-      const isDark = document.body.classList.contains('dark');
-      btn.textContent = isDark ? '☀️' : '🌙';
+      var isDark = document.body.classList.contains('dark');
       localStorage.setItem('tales-theme', isDark ? 'dark' : 'light');
+      window.updateThemeBtns();
     });
   })();
 
@@ -1484,7 +1490,7 @@ body.dark .bmb-time { color: #8899aa; }
       var content = "";
       var header = doc.querySelector(".page-header");
       if (header) content += header.outerHTML;
-      var sNav = doc.querySelector(".sticky-nav");
+      var sNav = doc.querySelector(".side-nav") || doc.querySelector(".sticky-nav");
       if (sNav) content += sNav.outerHTML;
       var cWrap = doc.querySelector(".content-wrap");
       if (cWrap) {
@@ -1499,6 +1505,7 @@ body.dark .bmb-time { color: #8899aa; }
       history.pushState({ url: url, action: "page" }, "", absUrl(url));
       subView.querySelectorAll(".reveal").forEach(function(el) { el.classList.add("visible"); });
       initSideNav();
+      if (window.updateThemeBtns) window.updateThemeBtns();
     } catch (e) {
       subView.innerHTML = '<div style="text-align:center;padding:40px 24px;color:var(--text-sec)">\u52a0\u8f7d\u5931\u8d25: ' + e.message + '</div>';
     }
