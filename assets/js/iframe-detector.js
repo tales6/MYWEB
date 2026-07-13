@@ -231,8 +231,10 @@ body.dark .bmb-time { color: #8899aa; }\
       var innerEl = bar.querySelector('.bmb-inner');
       function collapseBar() {
         innerEl.style.visibility = 'hidden';
-        bar.classList.add('collapsed');
-        bar.classList.remove('expanded');
+        setTimeout(function() {
+          bar.classList.add('collapsed');
+          bar.classList.remove('expanded');
+        }, 20);
       }
       function expandBar() {
         if (collapseTimer) { clearTimeout(collapseTimer); collapseTimer = null; }
