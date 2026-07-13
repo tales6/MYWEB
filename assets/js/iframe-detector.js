@@ -116,7 +116,7 @@
 }\
 .bmb-wrap.show { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }\
 .bmb-wrap.collapsed { padding: 0; border-radius: 4px; width: 280px; height: 8px; background: rgba(180,150,90,0.25); box-shadow: none; }\
-.bmb-wrap.collapsed .bmb-inner { opacity: 0; visibility: hidden; }\
+.bmb-wrap.collapsed .bmb-inner, .bmb-wrap.collapsing .bmb-inner { opacity: 0; visibility: hidden; display: none; }\
 .bmb-wrap.collapsed .bmb-progress { position: absolute; top: 0; left: 0; height: 100%; background: linear-gradient(90deg, var(--accent-light), #d4a96a); border-radius: 3px; width: 0%; transition: width 0.3s linear; }\
 .bmb-wrap.expanded { padding: 12px 32px; box-shadow: 0 8px 36px rgba(0,0,0,0.08); }\
 .bmb-wrap.expanded .bmb-inner { opacity: 1; }\
@@ -231,12 +231,16 @@ body.dark .bmb-time { color: #8899aa; }\
       var innerEl = bar.querySelector('.bmb-inner');
       function collapseBar() {
         innerEl.style.display = 'none';
-        bar.classList.add('collapsed');
+        bar.classList.add('collapsing');
         bar.classList.remove('expanded');
+        setTimeout(function() {
+          bar.classList.add('collapsed');
+          bar.classList.remove('collapsing');
+        }, 100);
       }
       function expandBar() {
         if (collapseTimer) { clearTimeout(collapseTimer); collapseTimer = null; }
-        bar.classList.remove('collapsed');
+        bar.classList.remove('collapsed', 'collapsing');
         bar.classList.add('expanded');
         innerEl.style.display = '';
       }
