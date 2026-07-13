@@ -18,11 +18,28 @@
     document.body.classList.add('dark');
   }
 
+  // 初始广播主题给已加载的 iframe
+  if (window.self === window.top) {
+    setTimeout(function() {
+      var isDark = document.body.classList.contains('dark');
+      document.querySelectorAll('iframe').forEach(function(f) {
+        try { f.contentWindow.postMessage({ action: 'themeChange', theme: isDark ? 'dark' : 'light' }, '*'); } catch(e) {}
+      });
+    }, 500);
+  }
+
   // 更新所有主题按钮的图标
   function updateThemeBtns() {
     var isDark = document.body.classList.contains('dark');
     document.querySelectorAll('.theme-btn').forEach(function(b) {
       b.textContent = isDark ? '☀️' : '🌙';
+    });
+  }
+
+  // 向所有 iframe 广播主题状态
+  function broadcastTheme(isDark) {
+    document.querySelectorAll('iframe').forEach(function(f) {
+      try { f.contentWindow.postMessage({ action: 'themeChange', theme: isDark ? 'dark' : 'light' }, '*'); } catch(e) {}
     });
   }
 
@@ -33,6 +50,7 @@
     var isDark = document.body.classList.contains('dark');
     localStorage.setItem(STORAGE_KEY, isDark ? 'dark' : 'light');
     updateThemeBtns();
+    broadcastTheme(isDark);
   });
 
   // DOM 就绪后更新按钮图标
@@ -50,6 +68,7 @@
       var isDark = document.body.classList.contains('dark');
       localStorage.setItem(STORAGE_KEY, isDark ? 'dark' : 'light');
       updateThemeBtns();
+      broadcastTheme(isDark);
     },
     updateBtns: updateThemeBtns
   };
