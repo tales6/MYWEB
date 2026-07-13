@@ -325,7 +325,7 @@ nav .inner {
   display: flex; flex-direction: column; align-items: center; gap: 10px;
   background: var(--bg-side); border: 0.5px solid var(--border); border-radius: 20px;
   padding: 14px 0; max-height: 70vh; overflow-y: auto;
-  transition: background 0.3s ease;
+  transition: width 0.3s ease, border-radius 0.3s ease, padding 0.3s ease, background 0.3s ease;
 }
 .side-nav:hover { width: 200px; background: var(--bg-side); backdrop-filter: blur(12px); border-radius: 14px; padding: 12px; align-items: stretch; }
 .side-nav a {
@@ -333,9 +333,10 @@ nav .inner {
   background: var(--accent-light); opacity: 0.5;
   flex-shrink: 0; overflow: hidden; white-space: nowrap;
   padding: 0; font-size: 0; border: none;
-  transition: all 0.25s ease; line-height: 1.4;
+  line-height: 1.4;
+  transition: width 0.2s ease, height 0.2s ease, opacity 0.2s ease, padding 0.2s ease, font-size 0.2s ease;
 }
-.side-nav:hover a { width: auto; height: auto; border-radius: 8px; opacity: 1; padding: 6px 12px; font-size: 0.75rem; font-weight: 500; color: var(--text-secondary); background: transparent; border-left: 2px solid transparent; }
+.side-nav:hover a { width: auto; height: auto; border-radius: 8px; opacity: 1; padding: 6px 12px; font-size: 0.75rem; font-weight: 500; color: var(--text-secondary); background: transparent; border-left: 2px solid transparent; transition: width 0.25s ease 0.05s, height 0.25s ease 0.05s, opacity 0.25s ease 0.05s, padding 0.25s ease 0.05s, font-size 0.25s ease 0.05s; }
 .side-nav a:hover { color: var(--hover); background: rgba(107,143,113,0.05); }
 .side-nav a.active { width: 12px; height: 12px; background: var(--accent); opacity: 1; box-shadow: 0 0 8px rgba(107,143,113,0.4); }
 .side-nav:hover a.active { width: auto; height: auto; color: var(--accent); background: rgba(107,143,113,0.1); border-left-color: var(--accent-light); font-weight: 600; box-shadow: none; }
