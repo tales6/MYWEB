@@ -1,0 +1,485 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FreeRTOS 物联网天气站 · 文档总览 · tales</title>
+<style>
+  :root {
+    --bg: #f5f0ea;
+    --text: #1e2d24;
+    --text-sec: #5a7a5a;
+    --text-light: #7a9a7a;
+    --text-lighter: #6a8a6a;
+    --text-footer: #8a9a8a;
+    --accent: #3a6b4a;
+    --accent-light: #6b8f71;
+    --accent-lighter: #8baa8a;
+    --accent-dark: #2d5a4a;
+    --nav-bg: rgba(245,240,234,0.85);
+    --card-bg: rgba(255,255,255,0.6);
+    --border: rgba(0,0,0,0.04);
+    --tag-bg: rgba(107,143,113,0.08);
+    --header-bg: linear-gradient(135deg, #1e2d24 0%, #3a6b4a 100%);
+  }
+  body.dark {
+    --bg: #121212;
+    --text: #e2e8f0;
+    --text-sec: #94a3b8;
+    --text-light: #64748b;
+    --text-lighter: #788898;
+    --text-footer: #64748b;
+    --accent: #6b8f71;
+    --accent-light: #8baa8a;
+    --accent-lighter: #9bb89a;
+    --accent-dark: #6b8f71;
+    --nav-bg: rgba(18,18,18,0.85);
+    --card-bg: rgba(30,30,40,0.6);
+    --border: rgba(255,255,255,0.04);
+    --tag-bg: rgba(107,143,113,0.12);
+    --header-bg: linear-gradient(135deg, #0a0a0a, #1a2a1a);
+  }
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { transition: background 0.4s, color 0.4s;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans SC', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+  }
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #8baa8a; border-radius: 3px; }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* ===== Nav ===== */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 16px 0;
+    background: var(--nav-bg);
+    backdrop-filter: blur(20px) saturate(1.5);
+    -webkit-backdrop-filter: blur(20px) saturate(1.5);
+    border-bottom: 0.5px solid var(--border);
+  }
+  nav .inner {
+    max-width: 1000px; margin: 0 auto;
+    padding: 0 24px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-brand {
+    font-size: 1.05rem; font-weight: 700; color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+  .nav-links { display: flex; gap: 20px; list-style: none; }
+  .nav-links a {
+    font-size: 0.85rem; color: var(--text-sec); transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--accent-dark); }
+
+  /* ===== Header ===== */
+  .page-header {
+    margin-top: 68px;
+    padding: 48px 24px;
+    background: linear-gradient(135deg, #1a3a2a 0%, #2d7a4a 100%);
+    color: #fff;
+    text-align: center;
+  }
+  .page-header h1 {
+    font-size: clamp(1.4rem, 3vw, 1.8rem);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+  .page-header p {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    opacity: 0.7;
+  }
+  .page-header .github-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-top: 16px;
+    padding: 8px 20px;
+    border-radius: 30px;
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    font-size: 0.82rem; font-weight: 500;
+    transition: background 0.3s;
+  }
+  .page-header .github-link:hover { background: rgba(255,255,255,0.2); }
+
+  /* ===== Container ===== */
+  .container { max-width: 1000px; margin: 0 auto; padding: 40px 24px 60px; }
+
+  /* ===== Overview ===== */
+  .overview-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 0.5px solid var(--border);
+    border-radius: 20px;
+    padding: 32px 28px;
+    margin-bottom: 40px;
+  }
+  .overview-card h2 {
+    font-size: 1.3rem; font-weight: 700;
+    margin-bottom: 12px; color: var(--text);
+  }
+  .overview-card p {
+    font-size: 0.9rem; color: #4a6a4a;
+    line-height: 1.8;
+  }
+  .overview-card p + p { margin-top: 10px; }
+
+  /* ===== Section ===== */
+  .section-label {
+    display: inline-block;
+    font-size: 0.72rem; font-weight: 600;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--accent-lighter); margin-bottom: 16px;
+  }
+
+  /* ===== Card Grid ===== */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+  .card { cursor: pointer;
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 0.5px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    transition: all 0.35s;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.04);
+    border-color: var(--accent-light);
+  }
+  .card .icon { font-size: 1.6rem; margin-bottom: 10px; display: block; }
+  .card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+  .card h3 a { color: var(--accent-dark); transition: color 0.3s; }
+  .card h3 a:hover { color: #d4a96a; }
+  .card p { font-size: 0.82rem; color: var(--text-lighter); }
+  .card .tag {
+    display: inline-block;
+    font-size: 0.68rem;
+    padding: 1px 8px;
+    border-radius: 10px;
+    background: var(--tag-bg);
+    color: var(--accent);
+    margin-top: 8px;
+  }
+
+  /* ===== Resource List ===== */
+  .res-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 48px; }
+  .res-item {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 18px;
+    background: var(--card-bg);
+    backdrop-filter: blur(8px);
+    border: 0.5px solid var(--border);
+    border-radius: 12px;
+    transition: all 0.3s;
+  }
+  .res-item:hover {
+    background: rgba(255,255,255,0.8);
+    transform: translateX(4px);
+  }
+  .res-item .icon { font-size: 1.2rem; flex-shrink: 0; }
+  .res-item .info { flex: 1; }
+  .res-item .info a {
+    font-weight: 600; font-size: 0.9rem; color: var(--accent-dark);
+    transition: color 0.3s;
+  }
+  .res-item .info a:hover { color: #d4a96a; }
+  .res-item .info span {
+    display: block; font-size: 0.78rem; color: var(--text-light);
+  }
+
+  /* ===== Screenshot Grid ===== */
+  .screenshot-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+  .screenshot-item {
+    background: var(--card-bg);
+    border: 0.5px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.35s;
+  }
+  .screenshot-item:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,0.06); }
+  .screenshot-item img { width: 100%; display: block; }
+  .screenshot-item .caption { padding: 10px 16px; font-size: 0.8rem; color: var(--text-light); text-align: center; }
+
+  /* ===== Footer ===== */
+  footer {
+    text-align: center; padding: 32px 24px;
+    border-top: 0.5px solid var(--border);
+    color: var(--text-footer); font-size: 0.82rem;
+  }
+  footer a { color: var(--accent); transition: color 0.3s; }
+  footer a:hover { color: #d4a96a; }
+
+  /* ===== Sticky Nav (section jump) ===== */
+  .sticky-nav {
+    position: sticky; top: 58px; z-index: 50;
+    background: rgba(245, 240, 234, 0.9);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 0.5px solid var(--border);
+    padding: 10px 24px;
+    display: flex; gap: 8px; flex-wrap: wrap;
+    justify-content: center;
+    margin-top: -1px;
+  }
+  .sticky-nav a {
+    padding: 4px 14px; border-radius: 16px;
+    font-size: 0.8rem; font-weight: 500; color: var(--text-sec);
+    transition: all 0.3s;
+  }
+  .sticky-nav a:hover { background: rgba(107,143,113,0.1); color: var(--accent-dark); }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 640px) {
+    .page-header { padding: 36px 20px; margin-top: 60px; }
+    .container { padding: 24px 16px 40px; }
+    .card-grid { grid-template-columns: 1fr; }
+    .overview-card { padding: 24px 20px; }
+    .screenshot-grid { grid-template-columns: 1fr; }
+  }
+
+  .theme-btn {
+    width:34px; height:34px; border-radius:50%; border:0.5px solid var(--border);
+    background:transparent; color:var(--text-sec); font-size:1rem;
+    cursor:pointer; transition:all 0.3s; display:flex;
+    align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .theme-btn:hover { background:var(--tag-bg); border-color:var(--accent-light); }
+  .reveal { opacity:0; transform:translateY(24px); transition:opacity 0.6s ease,transform 0.6s ease; }
+  .reveal.visible { opacity:1; transform:translateY(0); }
+  body.dark nav { background: rgba(15,15,18,0.85); border-color: rgba(255,255,255,0.04); }
+  body.dark .nav-links a, body.dark .nav-links button { color: #c8d4e0; }
+  body.dark .nav-links a:hover { color: #fff; }
+  body.dark .sticky-nav { background: rgba(15,15,18,0.85); }
+  body.dark .sticky-nav a { color: #b0c4d8; }
+  body.dark .sticky-nav a:hover { color: #fff; }
+  body.dark .card { cursor: pointer; background: rgba(25,30,40,0.6); }
+  body.dark .overview-card { background: rgba(25,30,40,0.6); }
+  body.dark .res-item { background: rgba(25,30,40,0.5); }
+  body.dark .screenshot-item { background: rgba(25,30,40,0.5); }
+  body.dark .theme-btn { color: #d0dce8; border-color: rgba(255,255,255,0.08); }
+
+body.dark::before { content: ""; position: fixed; inset: 0; background: rgba(0,0,0,0.45); pointer-events: none; z-index: 0; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="inner">
+    <span class="nav-brand">✦ tales</span>
+    <ul class="nav-links">
+      <li><a href="../../index.html">首页</a></li>
+      <li><a href="../../index.html#projects">项目</a></li>
+      <li><a href="https://github.com/tales6" target="_blank">GitHub</a></li>
+      <li><a href="https://qm.qq.com/cgi-bin/qm/qr?k=2416829925" target="_blank">QQ</a></li>
+      <button class="theme-btn" id="themeBtn">🌙</button>
+    </ul>
+  </div>
+</nav>
+
+<div class="page-header">
+  <h1>🌤️ FreeRTOS 物联网天气站</h1>
+  <p>STM32F103C8T6 + FreeRTOS + ESP8266 + OLED</p>
+  <a class="github-link" href="https://github.com/tales6/FREERTOS_WEATHER" target="_blank">
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+    GitHub 仓库
+  </a>
+</div>
+
+<!-- Sticky section nav -->
+<nav class="sticky-nav">
+  <a href="#intro">项目概述</a>
+  <a href="#code">代码详解</a>
+  <a href="#report">设计报告</a>
+  <a href="#hardware">接线图与截图</a>
+  <a href="#video">演示视频</a>
+</nav>
+
+<div class="container">
+
+  <!-- ===== Intro ===== -->
+  <section id="intro">
+    <div class="overview-card">
+      <h2>项目概述</h2>
+      <p>本设计基于 <strong>STM32F103C8T6</strong> 主控芯片，运行 <strong>FreeRTOS</strong> 实时操作系统，通过 <strong>ESP8266</strong> WiFi 模块连接网络，获取实时天气数据与 NTP 时间同步，在 <strong>OLED</strong> 屏幕上显示天气信息和时钟。</p>
+      <p>系统采用多任务架构，将网络通信、数据解析、显示刷新等功能分离为独立任务，通过 FreeRTOS 的任务调度实现高效并发运行，充分展现了嵌入式实时操作系统的设计思想。</p>
+    </div>
+  </section>
+
+  <!-- ===== Code Details ===== -->
+  <section id="code">
+    <div class="section-label">📘 代码详解</div>
+    <div class="card-grid">
+      <div class="card reveal" onclick="loadPage('projects/freertos-weather/代码详解/代码详解_概要.html')">
+        <span class="icon">📋</span>
+        <h3>代码详解概要</h3>
+        <p>系统整体架构、任务划分与 FreeRTOS 配置概览。</p>
+        <span class="tag">架构</span>
+      </div>
+      <div class="card reveal" onclick="loadPage('projects/freertos-weather/代码详解/详解_ESP8266驱动.html')">
+        <span class="icon">🔌</span>
+        <h3>ESP8266 驱动详解</h3>
+        <p>AT 指令封装、WiFi 连接、HTTP 请求天气数据全流程。</p>
+        <span class="tag">ESP8266</span>
+      </div>
+      <div class="card reveal" onclick="loadPage('projects/freertos-weather/代码详解/详解_NTP时钟同步.html')">
+        <span class="icon">🕐</span>
+        <h3>NTP 时钟同步详解</h3>
+        <p>NTP 协议原理、时间戳解析与本地时钟校准实现。</p>
+        <span class="tag">NTP</span>
+      </div>
+      <div class="card reveal" onclick="loadPage('projects/freertos-weather/代码详解/详解_数据处理解析.html')">
+        <span class="icon">📊</span>
+        <h3>数据处理解析详解</h3>
+        <p>JSON 天气数据解析、温度湿度提取与格式化显示。</p>
+        <span class="tag">JSON</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Design Report ===== -->
+  <section id="report">
+    <div class="section-label">📋 设计报告</div>
+    <div class="res-list">
+      <div class="res-item reveal">
+        <span class="icon">📄</span>
+        <div class="info">
+          <a href="设计报告/基于FreeRTOS的STM32物联网天气站.docx" target="_blank">基于FreeRTOS的STM32物联网天气站.docx</a>
+          <span>完整设计报告，包含需求分析、系统设计、测试验证等。</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Hardware: Wiring & Screenshots ===== -->
+  <section id="hardware">
+    <div class="section-label">🔌 接线图</div>
+    <div class="res-list">
+      <div class="res-item reveal">
+        <span class="icon">📐</span>
+        <div class="info">
+          <a href="接线图/接线图.png" target="_blank">接线图.png</a>
+          <span>STM32 与 ESP8266、OLED 等模块的完整接线示意图。</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-label">🖥️ 运行截图</div>
+    <div class="screenshot-grid">
+      <div class="screenshot-item reveal">
+        <img src="freertos-weather/运行截图/运行截图_1.jpg" alt="运行截图1" loading="lazy" />
+        <div class="caption">运行截图 1</div>
+      </div>
+      <div class="screenshot-item reveal">
+        <img src="freertos-weather/运行截图/运行截图_2.jpg" alt="运行截图2" loading="lazy" />
+        <div class="caption">运行截图 2</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Video ===== -->
+  <section id="video">
+    <div class="section-label">🎬 实物演示</div>
+    <div class="res-list">
+      <div class="res-item reveal">
+        <span class="icon">▶️</span>
+        <div class="info">
+          <a href="演示视频/演示视频.mp4" target="_blank">演示视频.mp4</a>
+          <span>完整功能演示：天气获取、NTP 同步、OLED 显示。</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <p>&copy; 2026 <a href="https://github.com/tales6" target="_blank">tales</a> · <a href="../../index.html">返回主页</a></p>
+</footer>
+
+<script>
+(function() {
+  const btn = document.getElementById('themeBtn');
+  if (!btn) return;
+  const saved = localStorage.getItem('tales-theme');
+  if (saved === 'dark') document.body.classList.add('dark');
+  btn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+  btn.addEventListener('click', () => {
+    document.body.classList.toggle('dark');
+    const isDark = document.body.classList.contains('dark');
+    btn.textContent = isDark ? '☀️' : '🌙';
+    localStorage.setItem('tales-theme', isDark ? 'dark' : 'light');
+  });
+  // Reveal observer
+  document.querySelectorAll('.reveal').forEach(el => {
+    const ro = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); ro.unobserve(e.target); } });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    ro.observe(el);
+  });
+})();
+</script>
+
+<!-- iframe-detector -->
+<script>
+(function() {
+  if (window.top === window.self) return;
+  // 定义全局函数，供 onclick 调用
+  window.loadPage = function(url) {
+    parent.postMessage({ action: "loadPage", url: url }, "*");
+  };
+  window.goHome = function() {
+    parent.postMessage({ action: "goHome" }, "*");
+  };
+  window.loadGame = function(url) {
+    parent.postMessage({ action: "loadPage", url: url }, "*");
+  };
+  // 拦截 <a> 链接点击
+  document.addEventListener("click", function(e) {
+    var a = e.target.closest("a");
+    if (!a) return;
+    var href = a.getAttribute("href");
+    if (!href) return;
+    if (href.startsWith("http") || href.startsWith("//")) return;
+    if (href.startsWith("#")) {
+      e.preventDefault();
+      var id = href.slice(1);
+      var el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+    if (href.includes("index.html")) {
+      e.preventDefault();
+      var hash = href.split("#")[1] || "";
+      parent.postMessage({ action: "goHome", hash: hash }, "*");
+      return;
+    }
+    var hrefNoHash = href.split("#")[0];
+    if (hrefNoHash.endsWith(".html") || hrefNoHash.endsWith("/")) {
+      e.preventDefault();
+      parent.postMessage({ action: "loadPage", url: href }, "*");
+    }
+  });
+})();
+</script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"36609f38e61343d9a61a6fd04d6e8b9c","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+</html>
+
