@@ -70,6 +70,13 @@
       updateThemeBtns();
       broadcastTheme(isDark);
     },
-    updateBtns: updateThemeBtns
+    setTheme: function(isDark) {
+      document.body.classList.toggle('dark', isDark);
+      localStorage.setItem(STORAGE_KEY, isDark ? 'dark' : 'light');
+      updateThemeBtns();
+      broadcastTheme(isDark);
+    },
+    updateBtns: updateThemeBtns,
+    broadcast: broadcastTheme
   };
 })(window, document);

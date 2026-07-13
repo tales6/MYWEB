@@ -104,6 +104,8 @@
       loadPage(e.data.url);
     } else if (e.data.action === "loadGame") {
       loadGame(e.data.url);
+    } else if (e.data.action === "themeChange") {
+      if (window.TalesTheme) window.TalesTheme.setTheme(e.data.theme === "dark");
     }
   });
 

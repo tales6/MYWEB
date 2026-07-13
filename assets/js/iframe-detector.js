@@ -44,6 +44,15 @@
       }
     });
 
+    // 子页面内点击主题按钮时通知父页面
+    document.addEventListener("click", function(e) {
+      if (!e.target.closest(".theme-btn")) return;
+      setTimeout(function() {
+        var isDark = document.body.classList.contains("dark");
+        parent.postMessage({ action: "themeChange", theme: isDark ? "dark" : "light" }, "*");
+      }, 0);
+    });
+
     // 拦截 <a> 点击
     document.addEventListener("click", function(e) {
       var a = e.target.closest("a");
