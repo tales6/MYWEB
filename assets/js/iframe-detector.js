@@ -230,17 +230,15 @@ body.dark .bmb-time { color: #8899aa; }\
       var collapseTimer = null;
       var innerEl = bar.querySelector('.bmb-inner');
       function collapseBar() {
-        innerEl.style.visibility = 'hidden';
-        setTimeout(function() {
-          bar.classList.add('collapsed');
-          bar.classList.remove('expanded');
-        }, 20);
+        innerEl.style.display = 'none';
+        bar.classList.add('collapsed');
+        bar.classList.remove('expanded');
       }
       function expandBar() {
         if (collapseTimer) { clearTimeout(collapseTimer); collapseTimer = null; }
         bar.classList.remove('collapsed');
         bar.classList.add('expanded');
-        setTimeout(function() { innerEl.style.visibility = ''; }, 50);
+        innerEl.style.display = '';
       }
       bar.addEventListener('mouseenter', function() {
         if (collapseTimer) { clearTimeout(collapseTimer); collapseTimer = null; }
