@@ -22,11 +22,12 @@
   .video-bg::after {
     content: '';
     position: absolute; inset: 0;
-    background: rgba(245,240,234,0.55);
+    background: transparent;
     pointer-events: none;
+    transition: background 0.3s;
   }
   body.dark .video-bg::after {
-    background: rgba(12,12,14,0.65);
+    background: rgba(12,12,14,0.6);
   }
 
   /* ===== Content Wrap ===== */
