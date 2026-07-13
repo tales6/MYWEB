@@ -98,7 +98,7 @@
   pointer-events: none;\
 }\
 .bmb-wrap.show { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }\
-.bmb-wrap.collapsed { padding: 0; border-radius: 3px; width: 280px; height: 4px; background: rgba(0,0,0,0.08); box-shadow: none; }\
+.bmb-wrap.collapsed { padding: 0; border-radius: 4px; width: 280px; height: 8px; background: rgba(180,150,90,0.25); box-shadow: none; }\
 .bmb-wrap.collapsed .bmb-inner { opacity: 0; }\
 .bmb-wrap.collapsed .bmb-progress { position: absolute; top: 0; left: 0; height: 100%; background: linear-gradient(90deg, var(--accent-light), #d4a96a); border-radius: 3px; width: 0%; transition: width 0.3s linear; }\
 .bmb-wrap.expanded { padding: 12px 32px; box-shadow: 0 8px 36px rgba(0,0,0,0.08); }\
@@ -116,7 +116,7 @@
 .bmb-btn.bmb-play:hover { background: var(--accent); }\
 .bmb-time { font-size: 0.7rem; color: var(--text-light); font-variant-numeric: tabular-nums; min-width: 65px; text-align: right; margin-left: 4px; }\
 body.dark .bmb-wrap { background: rgba(20,25,35,0.75); border-color: rgba(255,255,255,0.06); }\
-body.dark .bmb-wrap.collapsed { background: rgba(255,255,255,0.06); }\
+body.dark .bmb-wrap.collapsed { background: rgba(180,150,90,0.2); }\
 body.dark .bmb-btn { color: #b0c4d8; }\
 body.dark .bmb-btn:hover { background: rgba(40,55,75,0.4); color: #fff; }\
 body.dark .bmb-btn.bmb-play { background: var(--accent); color: #fff; }\
@@ -219,12 +219,12 @@ body.dark .bmb-time { color: #8899aa; }\
       });
       bar.addEventListener('mouseleave', function() {
         if (collapseTimer) clearTimeout(collapseTimer);
-        collapseTimer = setTimeout(collapseBar, 3000);
+        collapseTimer = setTimeout(collapseBar, 1500);
       });
 
       loadTrack(0);
       setTimeout(function() { bar.classList.add('show'); }, 800);
-      collapseTimer = setTimeout(collapseBar, 4000);
+      collapseTimer = setTimeout(collapseBar, 2000);
     }).catch(function(err) {
       console.error('Failed to load music:', err);
     });

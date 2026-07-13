@@ -558,10 +558,10 @@
 /* Collapsed state: thin progress bar */
 .bmb-wrap.collapsed {
   padding: 0;
-  border-radius: 3px;
+  border-radius: 4px;
   width: 280px;
-  height: 4px;
-  background: rgba(0,0,0,0.08);
+  height: 8px;
+  background: rgba(180,150,90,0.25);
   box-shadow: none;
 }
 .bmb-wrap.collapsed .bmb-inner { opacity: 0; }
@@ -618,7 +618,7 @@
   min-width: 65px; text-align: right;
   margin-left: 4px;
 }
-body.dark .bmb-wrap.collapsed { background: rgba(255,255,255,0.06); }
+body.dark .bmb-wrap.collapsed { background: rgba(180,150,90,0.2); }
 
 /* ===== Responsive (Home) ===== */
 @media (max-width: 768px) {
@@ -1080,10 +1080,10 @@ body.dark .bmb-wrap.collapsed { background: rgba(255,255,255,0.06); }
       });
       bar.addEventListener("mouseleave", function() {
         if (collapseTimer) clearTimeout(collapseTimer);
-        collapseTimer = setTimeout(collapseBar, 3000);
+        collapseTimer = setTimeout(collapseBar, 1500);
       });
       // Start collapsed
-      collapseTimer = setTimeout(collapseBar, 4000);
+      collapseTimer = setTimeout(collapseBar, 2000);
     })();
     document.getElementById("bmbPlayBtn").addEventListener("click", togglePlay);
     document.getElementById("bmbPrevBtn").addEventListener("click", function() { closeTrackList(); prevTrack(); });
