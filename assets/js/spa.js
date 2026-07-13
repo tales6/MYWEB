@@ -32,7 +32,7 @@
     subView.style.display = "block";
     window.scrollTo(0, 0);
     subView.innerHTML = '<div style="position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg);z-index:50;display:flex;align-items:center;justify-content:center;color:var(--text-sec)">加载中...</div>' +
-      '<iframe id="page-iframe" src="' + absUrl(url) + '" style="width:100%;border:none;min-height:calc(100vh - 80px);display:block" onload="this.style.display=\'block\';this.previousElementSibling.style.display=\'none\'"></iframe>';
+      '<iframe id="page-iframe" src="' + absUrl(url) + '" style="width:100%;border:none;min-height:100vh;display:block" onload="this.style.display=\'block\';this.previousElementSibling.style.display=\'none\'"></iframe>';
     history.pushState({ url: url, action: "page" }, "", absUrl(url));
   }
 
@@ -102,6 +102,8 @@
       goHome(e.data.hash);
     } else if (e.data.action === "loadPage") {
       loadPage(e.data.url);
+    } else if (e.data.action === "loadGame") {
+      loadGame(e.data.url);
     }
   });
 

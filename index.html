@@ -547,7 +547,7 @@
   border-radius: 50px;
   box-shadow: 0 4px 24px rgba(0,0,0,0.04);
   padding: 10px 28px;
-  transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s;
+  transition: all 0.35s cubic-bezier(0.34,1.56,0.64,1);
   opacity: 0; transform: translateX(-50%) translateY(24px);
   pointer-events: none;
 }
@@ -555,12 +555,36 @@
   opacity: 1; transform: translateX(-50%) translateY(0);
   pointer-events: auto;
 }
-.bmb-wrap:hover {
+/* Collapsed state: thin progress bar */
+.bmb-wrap.collapsed {
+  padding: 0;
+  border-radius: 3px;
+  width: 280px;
+  height: 4px;
+  background: rgba(0,0,0,0.08);
+  box-shadow: none;
+}
+.bmb-wrap.collapsed .bmb-inner { opacity: 0; }
+.bmb-wrap.collapsed .bmb-progress {
+  position: absolute; top: 0; left: 0; height: 100%;
+  background: linear-gradient(90deg, var(--accent-light), #d4a96a);
+  border-radius: 3px;
+  width: 0%;
+  transition: width 0.3s linear;
+}
+/* Expanded state: full controls */
+.bmb-wrap.expanded {
   padding: 12px 32px;
   box-shadow: 0 8px 36px rgba(0,0,0,0.08);
 }
+.bmb-wrap.expanded .bmb-inner { opacity: 1; }
+.bmb-wrap.expanded .bmb-progress { display: none; }
 .bmb-inner {
   display: flex; align-items: center; gap: 20px;
+  transition: opacity 0.25s;
+}
+.bmb-progress {
+  display: none;
 }
 .bmb-left {
   display: flex; align-items: center; gap: 10px;
@@ -594,6 +618,7 @@
   min-width: 65px; text-align: right;
   margin-left: 4px;
 }
+body.dark .bmb-wrap.collapsed { background: rgba(255,255,255,0.06); }
 
 /* ===== Responsive (Home) ===== */
 @media (max-width: 768px) {
@@ -673,11 +698,11 @@
   <div class="hero-content" id="heroContent">
     <!-- Left: avatar + name + badge -->
     <div class="hero-left">
-      <div class="hero-avatar-wrap reveal">
+      <a href="javascript:void(0)" onclick="loadPage('about.html')" class="hero-avatar-wrap reveal" title="点击查看简介">
         <img src="assets/avatar.jpg" alt="tales avatar" />
-      </div>
+      </a>
       <h1 class="reveal reveal-delay-1">tales</h1>
-      <p class="tagline reveal reveal-delay-2">嵌入式开发 · 万物皆可嵌</p>
+      <p class="tagline reveal reveal-delay-2">机械 · 电子</p>
       <div class="hero-badges reveal reveal-delay-3">
         <a href="https://github.com/tales6" target="_blank" class="badge-gh">
           <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
@@ -756,17 +781,18 @@
     <div class="game-grid" id="game-grid"></div>
   </div>
 </section>
-</div>
-
-<div id="sub-view" style="display:none"></div>
 
 <!-- ===== Footer ===== -->
 <footer>
   <p>&copy; 2026 <a href="https://github.com/tales6" target="_blank">tales</a> · 用代码创造物理世界</p>
 </footer>
+</div>
+
+<div id="sub-view" style="display:none"></div>
 
 <!-- ===== Bottom Music Bar ===== -->
 <div class="bmb-wrap" id="bottomMusicBar">
+  <div class="bmb-progress" id="bmbProgress"></div>
   <div class="bmb-inner">
     <div class="bmb-left">
       <span class="bmb-icon">🎵</span>
@@ -1027,11 +1053,38 @@
       var btn = document.getElementById("bmbPlayBtn");
       var nameEl = document.getElementById("bmbTrackName");
       var timeEl = document.getElementById("bmbTime");
+      var progEl = document.getElementById("bmbProgress");
       if (btn) btn.textContent = isPlaying ? "\u23f8" : "\u25b6";
       if (nameEl && tracks[currentTrack]) nameEl.textContent = tracks[currentTrack].name;
       if (timeEl) timeEl.textContent = formatTime(audio.currentTime) + " / " + formatTime(audio.duration);
+      if (progEl && audio.duration) {
+        progEl.style.width = (audio.currentTime / audio.duration * 100) + '%';
+      }
       if (bar) bar.classList.add("show");
     }
+    // Collapse/expand logic
+    (function() {
+      var bar = document.getElementById("bottomMusicBar");
+      var collapseTimer = null;
+      function collapseBar() {
+        bar.classList.add("collapsed");
+        bar.classList.remove("expanded");
+      }
+      function expandBar() {
+        bar.classList.add("expanded");
+        bar.classList.remove("collapsed");
+      }
+      bar.addEventListener("mouseenter", function() {
+        if (collapseTimer) { clearTimeout(collapseTimer); collapseTimer = null; }
+        expandBar();
+      });
+      bar.addEventListener("mouseleave", function() {
+        if (collapseTimer) clearTimeout(collapseTimer);
+        collapseTimer = setTimeout(collapseBar, 3000);
+      });
+      // Start collapsed
+      collapseTimer = setTimeout(collapseBar, 4000);
+    })();
     document.getElementById("bmbPlayBtn").addEventListener("click", togglePlay);
     document.getElementById("bmbPrevBtn").addEventListener("click", function() { closeTrackList(); prevTrack(); });
     document.getElementById("bmbNextBtn").addEventListener("click", function() { closeTrackList(); nextTrack(); });
