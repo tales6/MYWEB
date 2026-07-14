@@ -5,22 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/jpeg" href="/assets/avatar.jpg">
 <link rel="apple-touch-icon" href="/assets/avatar.jpg">
-<title>俄罗斯方块</title>
+<title>俄罗斯方块 · tales</title>
+<link rel="stylesheet" href="../../assets/css/common.css">
 <style>
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-  background: #f5f0ea; color: #1e2d24;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans SC', sans-serif;
-  min-height: 100vh; display: flex; justify-content: center; align-items: center; user-select: none;
-  overflow: hidden;
-}
-::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #8baa8a; border-radius: 3px; }
-.container { width: 100%; max-width: 600px; padding: 20px; }
-.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-.header h1 {
-  font-size: 1.8rem; font-weight: 800;
+body { background: #f5f0ea; }
+.game-wrap { max-width: 600px; margin: 0 auto; text-align: center; }
+.game-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.game-header h2 {
+  font-size: 1.4rem; font-weight: 800;
   background: linear-gradient(135deg, #3a6b4a, #d4a96a);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
@@ -28,15 +20,15 @@ body {
 .stats .stat { text-align: center; }
 .stats .stat .label { font-size: 0.72rem; color: #8baa8a; letter-spacing: 0.05em; }
 .stats .stat .value { font-size: 1.1rem; font-weight: 700; color: #3a6b4a; }
-.actions { display: flex; gap: 8px; justify-content: center; margin-bottom: 16px; }
-.actions button {
+.game-actions { display: flex; gap: 8px; justify-content: center; margin-bottom: 16px; }
+.game-actions button {
   padding: 8px 18px; border-radius: 10px; border: 0.5px solid rgba(30,45,36,0.08);
   background: rgba(255,255,255,0.5); color: #3a6b4a; font-size: 0.85rem; font-weight: 600;
   cursor: pointer; transition: all 0.3s; backdrop-filter: blur(8px); font-family: inherit;
 }
-.actions button:hover { background: #3a6b4a; color: #fff; border-color: #3a6b4a; transform: translateY(-1px); }
+.game-actions button:hover { background: #3a6b4a; color: #fff; border-color: #3a6b4a; transform: translateY(-1px); }
 .game-area { display: flex; gap: 20px; justify-content: center; align-items: flex-start; }
-canvas#board {
+canvas#tetrisBoard {
   border-radius: 16px;
   background: rgba(232,228,222,0.6);
   border: 0.5px solid rgba(0,0,0,0.04);
@@ -65,36 +57,73 @@ canvas#board {
 </style>
 </head>
 <body>
-<div class="container">
-  <div class="header">
-    <h1>俄罗斯方块</h1>
-    <div class="stats">
-      <div class="stat"><div class="label">分数</div><div class="value" id="score">0</div></div>
-      <div class="stat"><div class="label">等级</div><div class="value" id="level">1</div></div>
-    </div>
+
+<nav class="top-nav">
+  <div class="inner">
+    <span class="nav-brand"><a href="../../index.html"><span>✦</span> tales</a></span>
+    <ul class="nav-links">
+      <li><a href="../../index.html">首页</a></li>
+      <li class="nav-dropdown">
+        <a href="javascript:void(0)">项目 ▾</a>
+        <div class="dropdown-menu nav-projects-dropdown"></div>
+      </li>
+      <li class="nav-dropdown">
+        <a href="javascript:void(0)">小游戏 ▾</a>
+        <div class="dropdown-menu nav-games-dropdown"></div>
+      </li>
+      <li><a href="https://github.com/tales6" target="_blank">GitHub</a></li>
+      <li><a href="https://qm.qq.com/cgi-bin/qm/qr?k=2416829925" target="_blank">QQ</a></li>
+      <button class="theme-btn">🌙</button>
+    </ul>
   </div>
-  <div class="actions">
-    <button onclick="resetGame()">新游戏</button>
-    <button onclick="goBack()">返回</button>
-  </div>
-  <div class="game-area">
-    <canvas id="board" width="250" height="500"></canvas>
-    <div class="side">
-      <div class="side-box">
-        <div class="label">下一个</div>
-        <canvas id="nextCanvas" width="100" height="100"></canvas>
-      </div>
-      <div class="side-box stats-box">
-        <div class="row"><span class="sl">行数</span><span class="sv" id="lines">0</span></div>
-        <div class="row"><span class="sl">最高分</span><span class="sv" id="highScore">0</span></div>
-      </div>
-    </div>
-  </div>
-  <div class="msg" id="msg"></div>
-  <div class="controls-hint">← → 移动 &nbsp; ↑ 旋转 &nbsp; ↓ 加速 &nbsp; 空格 硬降 &nbsp; P 暂停</div>
+</nav>
+
+<div class="page-header">
+  <h1>🧱 俄罗斯方块</h1>
+  <p>经典益智消除，堆叠方块消除行</p>
 </div>
+
+<div class="container">
+  <div class="game-wrap">
+    <div class="game-header">
+      <h2>俄罗斯方块</h2>
+      <div class="stats">
+        <div class="stat"><div class="label">分数</div><div class="value" id="score">0</div></div>
+        <div class="stat"><div class="label">等级</div><div class="value" id="level">1</div></div>
+      </div>
+    </div>
+    <div class="game-actions">
+      <button onclick="resetGame()">新游戏</button>
+    </div>
+    <div class="game-area">
+      <canvas id="tetrisBoard" width="250" height="500"></canvas>
+      <div class="side">
+        <div class="side-box">
+          <div class="label">下一个</div>
+          <canvas id="nextCanvas" width="100" height="100"></canvas>
+        </div>
+        <div class="side-box stats-box">
+          <div class="row"><span class="sl">行数</span><span class="sv" id="lines">0</span></div>
+          <div class="row"><span class="sl">最高分</span><span class="sv" id="highScore">0</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="msg" id="msg"></div>
+    <div class="controls-hint">← → 移动 &nbsp; ↑ 旋转 &nbsp; ↓ 加速 &nbsp; 空格 硬降 &nbsp; P 暂停</div>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2026 <a href="https://github.com/tales6" target="_blank">tales</a> · <a href="../../index.html">返回主页</a></p>
+</footer>
+
+<script src="../../assets/js/config.js?v=4.1"></script>
+<script src="../../assets/js/theme.js?v=4.1"></script>
+<script src="../../assets/js/nav.js?v=4.1"></script>
+<script src="../../assets/js/reveal.js?v=4.1"></script>
+<script src="../../assets/js/iframe-detector.js?v=4.1"></script>
 <script>
-const canvas=document.getElementById('board');
+const canvas=document.getElementById('tetrisBoard');
 const ctx=canvas.getContext('2d');
 const nextCanvas=document.getElementById('nextCanvas');
 const nctx=nextCanvas.getContext('2d');
@@ -213,26 +242,21 @@ function getGhostY(){
 
 function draw(){
   ctx.clearRect(0,0,W,H);
-  // grid
   ctx.strokeStyle='rgba(30,45,36,0.04)';ctx.lineWidth=0.5;
   for(let i=0;i<=COLS;i++){ctx.beginPath();ctx.moveTo(i*BLOCK,0);ctx.lineTo(i*BLOCK,H);ctx.stroke();}
   for(let i=0;i<=ROWS;i++){ctx.beginPath();ctx.moveTo(0,i*BLOCK);ctx.lineTo(W,i*BLOCK);ctx.stroke();}
-  // board
   for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){
     if(board[r][c]){ctx.fillStyle=board[r][c];ctx.beginPath();ctx.roundRect(c*BLOCK+1,r*BLOCK+1,BLOCK-2,BLOCK-2,4);ctx.fill();}
   }
-  // ghost
   if(state==='playing'){
     const gy=getGhostY();
     ctx.globalAlpha=0.15;
     current.shape.forEach((row,r)=>row.forEach((v,c)=>{if(v){ctx.fillStyle=current.color;ctx.beginPath();ctx.roundRect((current.x+c)*BLOCK+1,(gy+r)*BLOCK+1,BLOCK-2,BLOCK-2,4);ctx.fill();}}));
     ctx.globalAlpha=1;
   }
-  // current piece
   if(current&&state!=='over'){
     current.shape.forEach((row,r)=>row.forEach((v,c)=>{if(v){ctx.fillStyle=current.color;ctx.beginPath();ctx.roundRect((current.x+c)*BLOCK+1,(current.y+r)*BLOCK+1,BLOCK-2,BLOCK-2,4);ctx.fill();}}));
   }
-  // overlay
   if(state==='menu'){
     ctx.fillStyle='rgba(30,45,36,0.06)';ctx.fillRect(0,0,W,H);
     ctx.fillStyle='#3a6b4a';ctx.font='bold 30px system-ui';ctx.textAlign='center';
@@ -249,7 +273,6 @@ function draw(){
     ctx.fillStyle='rgba(255,255,255,0.6)';ctx.font='13px system-ui';
     ctx.fillText('按空格重新开始',W/2,H/2+80);
   }
-  // next piece
   nctx.clearRect(0,0,nextCanvas.width,nextCanvas.height);
   const ns=next.shape;
   const nw=ns[0].length*20,nh=ns.length*20;
@@ -264,7 +287,6 @@ function updateUI(){
   document.getElementById('highScore').textContent=highScore;
 }
 
-// controls
 document.addEventListener('keydown',e=>{
   const k=e.key;
   if(k.startsWith('Arrow'))e.preventDefault();
@@ -282,7 +304,6 @@ document.addEventListener('keydown',e=>{
   else if(k==='ArrowUp')rotate();
 });
 
-// touch
 canvas.addEventListener('click',()=>{
   if(state==='menu'){state='playing';document.getElementById('msg').textContent='';dropTimer=setInterval(tick,800);draw();}
   else if(state==='over')resetGame();
@@ -298,11 +319,7 @@ canvas.addEventListener('touchend',e=>{
   else rotate();
 });
 
-function goBack() { if (window.parent && window.parent.goHome) { window.parent.goHome(); } else { sessionStorage.setItem("splashShown","1"); window.location.href = "../index.html"; } }
 resetGame();
 </script>
-<script src="../assets/js/page-manager.js"></script>
-<script src="../assets/js/theme.js"></script>
-<script src="../assets/js/iframe-detector.js"></script>
 </body>
 </html>

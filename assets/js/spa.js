@@ -85,17 +85,7 @@
   }
 
   function loadGame(url) {
-    AppLifecycle.navigateTo('subpage');
-    var mainView = document.getElementById("main-view");
-    var subView = document.getElementById("sub-view");
-    if (!mainView || !subView) return;
-    subView.innerHTML = '<div style="max-width:1000px;margin:0 auto;padding:24px">' +
-      '<button class="back-btn" onclick="goHome()">← 返回首页</button></div>' +
-      '<div style="max-width:600px;margin:0 auto;padding:0 24px 60px"><iframe src="' + absUrl(url) + '" style="width:100%;border:none;min-height:80vh;border-radius:16px;background:var(--bg)" allow="autoplay"></iframe></div>';
-    mainView.style.display = "none";
-    subView.style.display = "block";
-    history.pushState({ url: url, action: "game" }, "", absUrl(url));
-    window.scrollTo(0, 0);
+    loadPage(url);
   }
 
   function goToSection(sectionId) {
@@ -180,8 +170,10 @@
         var targetId = a.getAttribute("data-section") || a.getAttribute("href").slice(1);
         var target = subView.querySelector("#" + CSS.escape(targetId));
         if (target) {
-          var top = target.getBoundingClientRect().top + window.pageYOffset - 80;
-          window.scrollTo({ top: top, behavior: "smooth" });
+          var navEl = document.querySelector('nav.top-nav');
+          var offset = navEl ? navEl.offsetHeight + 28 : 100;
+          target.style.scrollMarginTop = offset + 'px';
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
       });
     });
@@ -194,7 +186,7 @@
           if (match) match.el.classList.add("active");
         }
       });
-    }, { rootMargin: "-60px 0px -40%", threshold: 0.2 });
+    }, { rootMargin: "-80px 0px -40%", threshold: 0.2 });
     sections.forEach(function(s) { obs.observe(s.section); });
   };
 

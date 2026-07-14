@@ -35,11 +35,11 @@
   // 渲染导航栏的游戏下拉菜单
   function renderGamesDropdown(games) {
     return games.map(function(g) {
-      return '<a href="javascript:void(0)" onclick="loadGame(\'' + g.file + '\')">' +
+      return '<a href="javascript:void(0)" onclick="loadPage(\'' + g.file + '\')">' +
         '<span class="dd-icon">' + g.icon + '</span>' +
         '<span class="dd-text">' +
           '<span class="dd-title">' + escapeHtml(g.title) + '</span>' +
-          '<span class="dd-desc">' + escapeHtml(g.desc) + '</span>' +
+          '<span class="dd-desc">' + escapeHtml(g.dropdownDesc || g.desc) + '</span>' +
         '</span>' +
       '</a>';
     }).join('');
@@ -85,7 +85,7 @@
   function renderGameGrid(games) {
     return games.map(function(g, i) {
       var delay = i % 3 + 1;
-      return '<a href="' + g.file + '" class="game-card reveal reveal-delay-' + delay + '" onclick="event.preventDefault();loadGame(\'' + g.file + '\')">' +
+      return '<a href="' + g.file + '" class="game-card reveal reveal-delay-' + delay + '" onclick="event.preventDefault();loadPage(\'' + g.file + '\')">' +
         '<span class="icon">' + g.icon + '</span>' +
         '<h3>' + escapeHtml(g.title) + '</h3>' +
         '<p>' + escapeHtml(g.desc) + '</p>' +

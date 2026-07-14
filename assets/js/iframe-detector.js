@@ -124,45 +124,40 @@
   // 注入底部音乐栏 CSS + HTML
   var style = document.createElement('style');
   style.textContent = '\
-.bmb-wrap {\
-  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);\
-  z-index: 200;\
-  background: rgba(255,255,255,0.75);\
-  backdrop-filter: blur(28px) saturate(1.6);\
-  -webkit-backdrop-filter: blur(28px) saturate(1.6);\
-  border: 0.5px solid rgba(0,0,0,0.06);\
-  border-radius: 50px;\
-  box-shadow: 0 4px 24px rgba(0,0,0,0.04);\
-  padding: 10px 28px;\
-  transition: all 0.35s cubic-bezier(0.34,1.56,0.64,1);\
-  opacity: 0; transform: translateX(-50%) translateY(24px);\
-  pointer-events: none;\
+.music-bar {\
+  position: fixed; bottom: 24px; left: 50%; z-index: 200;\
+  transform: translateX(-50%);\
+  display: flex; align-items: center; justify-content: center;\
+  border-radius: 9999px;\
+  width: 120px; height: 6px; padding: 0; gap: 0; overflow: hidden;\
+  background: rgba(107,143,113,0.15);\
+  border: 1px solid rgba(107,143,113,0.08);\
+  box-shadow: 0 8px 32px rgba(0,0,0,0.06), 0 0 0 1px rgba(255,255,255,0.04) inset;\
+  transition: width 0.5s cubic-bezier(0.34,1.56,0.64,1), height 0.5s cubic-bezier(0.34,1.56,0.64,1), padding 0.5s cubic-bezier(0.34,1.56,0.64,1), gap 0.5s cubic-bezier(0.34,1.56,0.64,1), background 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;\
+  opacity: 0; pointer-events: none;\
 }\
-.bmb-wrap.show { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }\
-.bmb-progress { display: none; }\
-.bmb-wrap.collapsed { padding: 0; border-radius: 4px; width: 280px; height: 8px; background: linear-gradient(90deg, rgba(107,143,113,0.3), rgba(212,169,106,0.3), rgba(107,143,113,0.3)); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }\
-.bmb-wrap.collapsed .bmb-inner { opacity: 0; visibility: hidden; }\
-.bmb-wrap.collapsed .bmb-progress { position: absolute; top: 0; left: 0; height: 100%; background: linear-gradient(90deg, var(--accent), #d4a96a, var(--accent-light)); border-radius: 4px; width: 0%; transition: width 0.3s linear; }\
-.bmb-wrap.expanded { padding: 12px 32px; box-shadow: 0 8px 36px rgba(0,0,0,0.08); }\
-.bmb-wrap.expanded .bmb-inner { opacity: 1; }\
-.bmb-wrap.expanded .bmb-progress { display: none; }\
-.bmb-inner { display: flex; align-items: center; gap: 20px; transition: opacity 0.25s; }\
-.bmb-left { display: flex; align-items: center; gap: 10px; }\
-.bmb-icon { font-size: 1.1rem; }\
-.bmb-name { font-size: 0.85rem; font-weight: 500; max-width: 130px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }\
-.bmb-right { display: flex; align-items: center; gap: 6px; }\
-.bmb-btn { background: none; border: none; cursor: pointer; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; color: var(--text-sec); transition: all 0.2s; }\
-.bmb-btn:hover { background: rgba(0,0,0,0.06); color: var(--accent-dark); }\
-.bmb-btn.bmb-play { width: 36px; height: 36px; background: var(--accent-dark); color: #fff; font-size: 1rem; }\
-.bmb-btn.bmb-play:hover { background: var(--accent); }\
-.bmb-time { font-size: 0.7rem; color: var(--text-light); font-variant-numeric: tabular-nums; min-width: 65px; text-align: right; margin-left: 4px; }\
-body.dark .bmb-wrap { background: rgba(20,25,35,0.75); border-color: rgba(255,255,255,0.06); }\
-body.dark .bmb-wrap.collapsed { background: rgba(180,150,90,0.25); }\
-body.dark .bmb-btn { color: #b0c4d8; }\
-body.dark .bmb-btn:hover { background: rgba(40,55,75,0.4); color: #fff; }\
-body.dark .bmb-btn.bmb-play { background: var(--accent); color: #fff; }\
-body.dark .bmb-name { color: #e0e8f4; }\
-body.dark .bmb-time { color: #8899aa; }\
+.music-bar.show { opacity: 1; pointer-events: auto; }\
+.music-bar-progress { position: absolute; top: 0; left: 0; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--accent), #d4a96a); width: 0%; transition: width 0.3s linear; }\
+.music-bar-body { display: flex; align-items: center; gap: 10px; opacity: 0; pointer-events: none; transition: opacity 0.35s ease; }\
+.music-bar.expanded { width: 300px; height: 48px; padding: 0 18px; gap: 8px; overflow: visible; background: rgba(255,255,255,0.8); backdrop-filter: blur(16px) saturate(200%); -webkit-backdrop-filter: blur(16px) saturate(200%); border-color: rgba(255,255,255,0.25); box-shadow: 0 12px 48px rgba(58,107,74,0.15), 0 0 0 1px rgba(255,255,255,0.08) inset; }\
+.music-bar.expanded .music-bar-progress { display: none; }\
+.music-bar.expanded .music-bar-body { opacity: 1; pointer-events: auto; }\
+.music-bar-icon { font-size: 1.2rem; flex-shrink: 0; }\
+.music-bar-name { font-size: 0.85rem; font-weight: 500; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }\
+.music-bar-actions { display: flex; align-items: center; gap: 2px; flex-shrink: 0; }\
+.mb-btn { background: none; border: none; cursor: pointer; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; color: var(--text-sec); transition: all 0.2s; }\
+.mb-btn:hover { background: rgba(0,0,0,0.06); color: var(--accent-dark); }\
+.mb-btn.mb-play { width: 34px; height: 34px; background: var(--accent-dark); color: #fff; font-size: 0.95rem; }\
+.mb-btn.mb-play:hover { background: var(--accent); }\
+.music-bar-clock { font-size: 0.68rem; color: var(--text-light); font-variant-numeric: tabular-nums; flex-shrink: 0; }\
+body.dark .music-bar { border-color: rgba(180,150,90,0.15); background: rgba(180,150,90,0.1); }\
+body.dark .music-bar.expanded { background: rgba(20,25,35,0.75); border-color: rgba(255,255,255,0.08); box-shadow: 0 12px 48px rgba(0,0,0,0.3); }\
+body.dark .mb-btn { color: #b0c4d8; }\
+body.dark .mb-btn:hover { background: rgba(40,55,75,0.4); color: #fff; }\
+body.dark .mb-btn.mb-play { background: var(--accent); }\
+body.dark .mb-btn.mb-play:hover { background: var(--accent-light); }\
+body.dark .music-bar-name { color: #e0e8f4; }\
+body.dark .music-bar-clock { color: #8899aa; }\
 \
 /* == CSS variables (self-contained for pages w/o common.css) == */\
 :root { --text-sec: #5a7a5a; --text-light: #7a9a7a; --text: #1e2d24; --accent-dark: #2d5a4a; --accent: #3a6b4a; --accent-light: #6b8f71; --card-bg: rgba(255,255,255,0.6); --border: rgba(0,0,0,0.04); --tag-bg: rgba(107,143,113,0.08); }\
@@ -206,21 +201,19 @@ body.dark .dropdown-menu .dd-desc { color: #94a3b8; }\
 
   // 注入音乐栏 HTML
   var bar = document.createElement('div');
-  bar.className = 'bmb-wrap';
+  bar.className = 'music-bar';
   bar.id = 'bottomMusicBar';
   bar.innerHTML = '\
-<div class="bmb-progress" id="bmbProgress"></div>\
-<div class="bmb-inner">\
-  <div class="bmb-left">\
-    <span class="bmb-icon">🎵</span>\
-    <span class="bmb-name" id="bmbTrackName">未播放</span>\
+<div class="music-bar-progress" id="bmbProgress"></div>\
+<div class="music-bar-body">\
+  <span class="music-bar-icon">🎵</span>\
+  <span class="music-bar-name" id="bmbTrackName">未播放</span>\
+  <div class="music-bar-actions">\
+    <button class="mb-btn" id="bmbPrevBtn" title="上一首">⏮</button>\
+    <button class="mb-btn mb-play" id="bmbPlayBtn" title="播放/暂停">▶</button>\
+    <button class="mb-btn" id="bmbNextBtn" title="下一首">⏭</button>\
   </div>\
-  <div class="bmb-right">\
-    <button class="bmb-btn" id="bmbPrevBtn" title="上一首">⏮</button>\
-    <button class="bmb-btn bmb-play" id="bmbPlayBtn" title="播放/暂停">▶</button>\
-    <button class="bmb-btn" id="bmbNextBtn" title="下一首">⏭</button>\
-    <span class="bmb-time" id="bmbTime">0:00 / 0:00</span>\
-  </div>\
+  <span class="music-bar-clock" id="bmbTime">0:00 / 0:00</span>\
 </div>';
   document.body.appendChild(bar);
 
@@ -228,34 +221,24 @@ body.dark .dropdown-menu .dd-desc { color: #94a3b8; }\
   (function() {
     if (!bar || bar.dataset.mc === '1') return;
     bar.dataset.mc = '1';
-    var _timer = null;
-    function collapseBar() {
-      bar.classList.add('collapsed');
-      bar.classList.remove('expanded');
+    var timer = null;
+    function collapse() { clearTimeout(timer); timer = null; bar.classList.remove('expanded'); }
+    function expand() { clearTimeout(timer); timer = null; bar.classList.add('expanded'); }
+    function onEnter() { clearTimeout(timer); timer = null; expand(); }
+    function onLeave() { clearTimeout(timer); timer = setTimeout(collapse, 1000); }
+    function init() {
+      bar.addEventListener('mouseenter', onEnter);
+      bar.addEventListener('mouseleave', onLeave);
+      expand();
+      timer = setTimeout(collapse, 1000);
     }
-    function expandBar() {
-      if (_timer) { clearTimeout(_timer); _timer = null; }
-      bar.classList.add('expanded');
-      bar.classList.remove('collapsed');
-    }
-    var onEnter = function() {
-      if (_timer) { clearTimeout(_timer); _timer = null; }
-      expandBar();
-    };
-    var onLeave = function() {
-      if (_timer) clearTimeout(_timer);
-      _timer = setTimeout(collapseBar, 1000);
-    };
-    bar.addEventListener('mouseenter', onEnter);
-    bar.addEventListener('mouseleave', onLeave);
-    _timer = setTimeout(collapseBar, 1000);
-
-    // 导出 cleanup 供 spa.js 生命周期调用
-    window._bottomBarCleanup = function() {
-      if (_timer) { clearTimeout(_timer); _timer = null; }
+    function destroy() {
+      clearTimeout(timer); timer = null;
       bar.removeEventListener('mouseenter', onEnter);
       bar.removeEventListener('mouseleave', onLeave);
-    };
+    }
+    init();
+    window._bottomBarCleanup = function() { destroy(); };
   })();
 
   // UI 独立于音乐数据：先拉起显示
@@ -343,7 +326,7 @@ body.dark .dropdown-menu .dd-desc { color: #94a3b8; }\
         var target = document.getElementById(id);
         if (!target) return;
         var navEl = document.querySelector('nav:not(.side-nav):not(.sticky-nav)');
-        var offset = navEl ? navEl.offsetHeight + 12 : 80;
+        var offset = navEl ? navEl.offsetHeight + 28 : 100;
         target.style.scrollMarginTop = offset + 'px';
         target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });

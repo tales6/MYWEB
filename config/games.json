@@ -3,21 +3,30 @@
     "id": "snake",
     "icon": "🐍",
     "title": "贪吃蛇",
+    "shortTitle": "贪吃蛇",
     "desc": "经典诺基亚风格，键盘方向键控制。",
-    "file": "games/snake.html"
+    "dropdownDesc": "经典诺基亚贪吃蛇",
+    "tags": ["游戏"],
+    "file": "games/snake/index.html"
   },
   {
     "id": "2048",
     "icon": "🧩",
     "title": "2048",
+    "shortTitle": "2048",
     "desc": "合并方块，挑战 2048！",
-    "file": "games/2048.html"
+    "dropdownDesc": "合并方块挑战高分",
+    "tags": ["游戏"],
+    "file": "games/2048/index.html"
   },
   {
-    "id": "breakout",
+    "id": "tetris",
     "icon": "🕹️",
     "title": "俄罗斯方块",
+    "shortTitle": "俄罗斯方块",
     "desc": "经典益智消除，堆叠方块消除行。",
-    "file": "games/breakout.html"
+    "dropdownDesc": "经典俄罗斯方块",
+    "tags": ["游戏"],
+    "file": "games/breakout/index.html"
   }
 ]
