@@ -24,7 +24,39 @@
     return SITE_ROOT + "/" + u;
   }
 
+  // ===== 页面生命周期管理器 =====
+  var _pageHandlers = {};
+  var _currentPage = null;
+
+  window.AppLifecycle = {
+    register: function(name, handler) {
+      _pageHandlers[name] = handler;
+    },
+    navigateTo: function(name) {
+      if (_currentPage && _currentPage !== name && _pageHandlers[_currentPage]) {
+        if (_pageHandlers[_currentPage].destroy) _pageHandlers[_currentPage].destroy();
+      }
+      _currentPage = name;
+      if (_pageHandlers[name] && _pageHandlers[name].init) _pageHandlers[name].init();
+    },
+    getCurrent: function() { return _currentPage; }
+  };
+
+  // ===== 注册页面处理器 =====
+  AppLifecycle.register('index', {
+    init: function() {
+      var splash = document.getElementById('splash');
+      var hero = document.getElementById('heroContent');
+      if (sessionStorage.getItem('splashShown')) {
+        if (splash) splash.classList.add('hide');
+        if (hero) hero.classList.add('loaded');
+      }
+    },
+    destroy: function() {}
+  });
+
   function loadPage(url) {
+    AppLifecycle.navigateTo('subpage');
     var mainView = document.getElementById("main-view");
     var subView = document.getElementById("sub-view");
     if (!mainView || !subView) return;
@@ -49,9 +81,11 @@
         if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 100);
     }
+    AppLifecycle.navigateTo('index');
   }
 
   function loadGame(url) {
+    AppLifecycle.navigateTo('subpage');
     var mainView = document.getElementById("main-view");
     var subView = document.getElementById("sub-view");
     if (!mainView || !subView) return;
@@ -117,6 +151,7 @@
     if (e.state && e.state.action === "home") {
       mainView.style.display = "";
       subView.style.display = "none";
+      AppLifecycle.navigateTo('index');
     } else if (e.state && e.state.action === "game") {
       loadGame(e.state.url);
     } else if (e.state && e.state.url) {
@@ -124,6 +159,7 @@
     } else {
       mainView.style.display = "";
       subView.style.display = "none";
+      AppLifecycle.navigateTo('index');
     }
   });
 

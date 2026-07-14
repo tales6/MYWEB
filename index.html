@@ -812,26 +812,26 @@ body.dark .bmb-wrap.collapsed { background: rgba(180,150,90,0.2); }
   // 主题切换、滚动显现、SPA 导航已移到 assets/js/*.js
   // 开机语录和音乐播放器从 config/*.json 异步加载
   SiteConfig.ready().then(function(cfg) {
-    // 初始化语录
-    var quotes = cfg.quotes;
-    var q = quotes[Math.floor(Math.random() * quotes.length)];
-    document.getElementById('splashQuote').innerHTML = q.o ? '「' + q.o + '」<br>&emsp;' + q.t : '「' + q.t + '」';
-    document.getElementById('splashAuthor').textContent = q.a;
-    setTimeout(function() {
+    if (sessionStorage.getItem('splashShown')) {
       document.getElementById('splash').classList.add('hide');
       document.getElementById('heroContent').classList.add('loaded');
-      sessionStorage.setItem('splashShown', '1');
-    }, 3600);
-
+    } else {
+      var quotes = cfg.quotes;
+      var q = quotes[Math.floor(Math.random() * quotes.length)];
+      document.getElementById('splashQuote').innerHTML = q.o ? '「' + q.o + '」<br>&emsp;' + q.t : '「' + q.t + '」';
+      document.getElementById('splashAuthor').textContent = q.a;
+      setTimeout(function() {
+        document.getElementById('splash').classList.add('hide');
+        document.getElementById('heroContent').classList.add('loaded');
+        sessionStorage.setItem('splashShown', '1');
+      }, 3600);
+    }
     // 初始化音乐播放器
     initMusicPlayer(cfg.music);
   }).catch(function(err) {
     console.error('Failed to load site config:', err);
-    // 即使配置加载失败也隐藏 splash，避免卡住
-    setTimeout(function() {
-      document.getElementById('splash').classList.add('hide');
-      document.getElementById('heroContent').classList.add('loaded');
-    }, 3600);
+    document.getElementById('splash').classList.add('hide');
+    document.getElementById('heroContent').classList.add('loaded');
   });
 
   // ===== Digital Clock =====
@@ -1065,25 +1065,32 @@ body.dark .bmb-wrap.collapsed { background: rgba(180,150,90,0.2); }
     // Collapse/expand logic
     (function() {
       var bar = document.getElementById("bottomMusicBar");
-      var collapseTimer = null;
+      var _timer = null;
       function collapseBar() {
         bar.classList.add("collapsed");
         bar.classList.remove("expanded");
       }
       function expandBar() {
+        if (_timer) { clearTimeout(_timer); _timer = null; }
         bar.classList.add("expanded");
         bar.classList.remove("collapsed");
       }
-      bar.addEventListener("mouseenter", function() {
-        if (collapseTimer) { clearTimeout(collapseTimer); collapseTimer = null; }
+      var onEnter = function() {
+        if (_timer) { clearTimeout(_timer); _timer = null; }
         expandBar();
-      });
-      bar.addEventListener("mouseleave", function() {
-        if (collapseTimer) clearTimeout(collapseTimer);
-        collapseTimer = setTimeout(collapseBar, 1000);
-      });
-      // Start collapsed
-      collapseTimer = setTimeout(collapseBar, 1000);
+      };
+      var onLeave = function() {
+        if (_timer) clearTimeout(_timer);
+        _timer = setTimeout(collapseBar, 1000);
+      };
+      bar.addEventListener("mouseenter", onEnter);
+      bar.addEventListener("mouseleave", onLeave);
+      _timer = setTimeout(collapseBar, 1000);
+      window._bottomBarCleanup = function() {
+        if (_timer) { clearTimeout(_timer); _timer = null; }
+        bar.removeEventListener("mouseenter", onEnter);
+        bar.removeEventListener("mouseleave", onLeave);
+      };
     })();
     document.getElementById("bmbPlayBtn").addEventListener("click", togglePlay);
     document.getElementById("bmbPrevBtn").addEventListener("click", function() { closeTrackList(); prevTrack(); });
