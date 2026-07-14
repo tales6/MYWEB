@@ -50,7 +50,7 @@
   function loadJSON(path) {
     return new Promise(function(resolve, reject) {
       var xhr = new XMLHttpRequest();
-      xhr.open("GET", absUrl(path), true);
+      xhr.open("GET", resUrl(path), true);
       xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
           if (xhr.status === 200) {
@@ -59,6 +59,8 @@
             } catch (e) {
               reject(e);
             }
+          } else if (xhr.status === 404) {
+            resolve(null);
           } else {
             reject(new Error("Failed to load " + path + ": " + xhr.status));
           }
@@ -80,11 +82,11 @@
       loadJSON("config/quotes.json")
     ]).then(function(results) {
       cache = {
-        site: results[0],
-        projects: results[1],
-        games: results[2],
-        music: results[3],
-        quotes: results[4]
+        site: results[0] || {},
+        projects: results[1] || [],
+        games: results[2] || [],
+        music: results[3] || [],
+        quotes: results[4] || []
       };
       return cache;
     });
